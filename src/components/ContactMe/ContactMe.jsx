@@ -39,7 +39,7 @@ export default function ContactMe(props) {
         </div>
 
         <div className="contact-content">
-          {/* LEFT — INFO */}
+          {/* Left: info */}
           <div className="contact-info glass-card fade-in-scroll">
             <h3>Let’s Connect</h3>
             <p className="contact-description">
@@ -50,7 +50,7 @@ export default function ContactMe(props) {
             <div className="email-section">
               <p className="email-text">Or reach me directly here:</p>
 
-              {/* Envelope animation preserved */}
+              {/* Envelope animation */}
               <div className="mail">
                 <div className="cover"></div>
                 <div className="letter">
@@ -66,7 +66,7 @@ export default function ContactMe(props) {
             </div>
           </div>
 
-          {/* RIGHT — FORM */}
+          {/* Right: form */}
           <div className="contact-form-wrapper glass-card fade-in-scroll">
             <form ref={formRef} onSubmit={handleSubmit}>
               <div className="form-group">
@@ -100,7 +100,7 @@ export default function ContactMe(props) {
                 />
               </div>
 
-              {/* CTA — MATCHES VIEW PROJECTS */}
+              {/* CTA */}
               <button
                 type="submit"
                 className="btn btn-arrow contact-btn"

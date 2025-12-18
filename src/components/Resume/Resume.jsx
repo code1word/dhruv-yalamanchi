@@ -61,28 +61,9 @@ export default function Resume(props) {
       logo: "buildlab.svg",
       bg: "#000000",
     },
-    // {
-    //   company: "Columbia Imaging and Vision Laboratory",
-    //   role: "Student Researcher",
-    //   date: "Aug 2024 - Present",
-    //   desc: "Conducting research on computational imaging systems to optimize visual information capture for low-power machine vision applications.",
-    //   logo: "columbia.jpeg", // Using JPEG, so no 'color' prop needed
-    //   bg: "#ffffff",
-    // },
-    // {
-    //   company: "Columbia University",
-    //   role: "Teaching Assistant",
-    //   date: "Sep 2023 - Present",
-    //   desc: "Supporting graduate-level AI and Computer Vision courses by mentoring students through theoretical concepts and practical assignments.",
-    //   logo: "columbia.jpeg",
-    //   // Example: If you had a 'crown.svg' and wanted it Blue, you would uncomment this:
-    //   // logo: "crown.svg",
-    //   // color: "#04c3ff",
-    //   bg: "#ffffff",
-    // },
   ];
 
-  /* 🎨 SKILLS DATA */
+  /* Skills data */
   const skillCategories = {
     languages: [
       { skill: "Python", img: "python.svg" },
@@ -138,7 +119,7 @@ export default function Resume(props) {
         </div>
 
         <div className="resume-content fade-in-scroll">
-          {/* LEFT SIDE: Navigation */}
+          {/* Left: navigation */}
           <div className="resume-card glass-card">
             <div className="resume-sidebar">
               {tabs.map((tab) => (
@@ -156,9 +137,9 @@ export default function Resume(props) {
               ))}
             </div>
 
-            {/* RIGHT SIDE: Content */}
+            {/* Right: content */}
             <div className="resume-details">
-              {/* --- EDUCATION TAB --- */}
+              {/* Education tab */}
               {activeTab === "education" && (
                 <div className="content-panel fade-in">
                   <div className="education-layout">
@@ -229,7 +210,7 @@ export default function Resume(props) {
                 </div>
               )}
 
-              {/* --- EXPERIENCE TAB --- */}
+              {/* Experience tab */}
               {activeTab === "experience" && (
                 <div className="content-panel fade-in">
                   <div className="timeline-list">
@@ -240,7 +221,7 @@ export default function Resume(props) {
                           <div className="timeline-marker"></div>
                           <div className="timeline-content">
                             <div className="timeline-flex">
-                              {/* Logo Box with Color/BG Logic */}
+                              {/* Logo box */}
                               <div
                                 className="timeline-logo"
                                 style={{
@@ -283,7 +264,7 @@ export default function Resume(props) {
                 </div>
               )}
 
-              {/* --- SKILLS TAB --- */}
+              {/* Skills tab */}
               {activeTab === "skills" && (
                 <div className="content-panel fade-in">
                   {[

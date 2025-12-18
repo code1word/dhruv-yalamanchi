@@ -1,9 +1,7 @@
 import React from "react";
 import "./Projects.css";
 
-// Import all project images from the assets folder and map them by filename -> url.
-// This uses Vite's import.meta.glob so images are bundled and available at runtime.
-// Note: use query '?url' + import: 'default' to get URLs (preferred over the deprecated `as: 'url'`).
+// Load project images via Vite's import.meta.glob (bundles assets).
 const _images = import.meta.glob("../../assets/Projects/*.{png,jpg,jpeg,svg}", {
   eager: true,
   query: "?url",
@@ -167,7 +165,7 @@ export default function Projects(props) {
                   src={imageMap[project.image] || ""}
                   alt={project.title}
                   onError={(e) => {
-                    // hide the image element if it failed to load
+                    // hide image on error
                     e.target.style.display = "none";
                   }}
                 />

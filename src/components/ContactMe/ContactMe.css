@@ -1,6 +1,4 @@
-/* =========================
-   SECTION LAYOUT
-   ========================= */
+/* Section: layout */
 
 .contact-section {
   min-height: 100vh;
@@ -16,9 +14,7 @@
   margin: 0 auto;
 }
 
-/* =========================
-   CONTENT GRID
-   ========================= */
+/* Content grid */
 
 .contact-content {
   display: grid;
@@ -26,9 +22,7 @@
   gap: 40px;
 }
 
-/* =========================
-   LEFT — CONTACT INFO
-   ========================= */
+/* Left: contact info */
 
 .contact-info {
   padding: 40px;
@@ -53,9 +47,7 @@
   color: var(--text-gray);
 }
 
-/* =========================
-   EMAIL + ENVELOPE
-   ========================= */
+/* Email + envelope */
 
 .email-text {
   font-size: 18px;
@@ -63,9 +55,7 @@
   margin-bottom: 30px;
 }
 
-/* =========================
-   SETUP & VARIABLES
-   ========================= */
+/* Variables */
 :root {
   --envelope-color: #4a90e2;
   --envelope-inside: #205c9e;
@@ -74,9 +64,7 @@
   --shadow-color: rgba(0, 0, 0, 0.5);
 }
 
-/* =========================
-   ENVELOPE CONTAINER
-   ========================= */
+/* Envelope container */
 /* Update .mail to have cursor: pointer (Vital for iOS tap detection) */
 .mail {
   position: relative;
@@ -126,7 +114,7 @@
   animation-play-state: paused;
 }
 
-/* FLOAT: Uses 'top' so it doesn't conflict with the shake rotation */
+/* Float animation */
 @keyframes float {
   0%,
   100% {
@@ -137,7 +125,7 @@
   }
 }
 
-/* SHAKE: Smoother, decaying wobble every 2 seconds */
+/* Shake animation */
 @keyframes shake {
   /* Stay still for the first 70% of the time (Wait approx 2.1s) */
   0%,
@@ -171,9 +159,7 @@
   }
 }
 
-/* =========================
-   LAYER 3: THE POCKET (Unified Body)
-   ========================= */
+/* Layer 3: pocket */
 .mail::before {
   content: "";
   position: absolute;
@@ -188,9 +174,7 @@
   z-index: 10;
 }
 
-/* =========================
-   LAYER 2: THE LETTER
-   ========================= */
+/* Layer 2: letter */
 .letter {
   position: absolute;
   top: 5px;
@@ -683,7 +667,14 @@ form {
 
   /* 6. Hide the "Click Hint" text/hand on very small screens if it gets in the way */
   .click-hint {
-    display: none;
+    display: flex; /* Bring it back */
+    transform: scale(0.6); /* Shrink hand/ripple to 60% size */
+
+    /* Re-center it because scaling messes up alignment slightly */
+    margin-left: 0;
+    margin-top: 0;
+    top: 50%;
+    left: 50%;
   }
 
   /* Update this specific rule to include the class */

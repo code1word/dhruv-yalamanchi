@@ -6,7 +6,7 @@ export default function Profile() {
   return (
     <div className="profile-container fade-in-scroll">
       <div className="profile-content">
-        {/* TEXT */}
+        {/* Profile text */}
         <div className="profile-text">
           <div className="greeting">
             <h1>
@@ -32,7 +32,7 @@ export default function Profile() {
             computer vision, and building things that matter.
           </p>
 
-          {/* SOCIAL ICONS — MATCHING SAMPLE EFFECT */}
+          {/* Social links */}
           <div className="social-links">
             <p className="social-text">You can find me here:</p>
 
@@ -67,7 +67,7 @@ export default function Profile() {
             </div>
           </div>
 
-          {/* CTA */}
+          {/* Call-to-action */}
           <div className="cta-buttons">
             <button
               className="btn btn-chat"
@@ -85,7 +85,7 @@ export default function Profile() {
           </div>
         </div>
 
-        {/* IMAGE */}
+        {/* Image */}
         <div className="profile-image-container">
           <div className="profile-image">
             <div className="image-wrapper">
@@ -96,7 +96,7 @@ export default function Profile() {
         </div>
       </div>
 
-      {/* Scroll Indicator */}
+      {/* Scroll indicator */}
       <div className="scroll-arrows">
         <span></span>
         <span></span>

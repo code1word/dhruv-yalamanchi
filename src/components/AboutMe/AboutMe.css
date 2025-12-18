@@ -1,6 +1,4 @@
-/* =========================
-   SECTION LAYOUT
-   ========================= */
+/* Section: layout */
 
 .about-section {
   min-height: 100vh;
@@ -17,9 +15,7 @@
   padding: 0 48px;
 }
 
-/* =========================
-   HEADING
-   ========================= */
+/* Heading */
 
 .screen-heading h2 {
   font-size: 42px;
@@ -28,9 +24,7 @@
   margin-bottom: 40px;
 }
 
-/* =========================
-   CONTENT CARD (GLASS)
-   ========================= */
+/* Content card (glass) */
 
 .about-card {
   display: grid;
@@ -50,9 +44,7 @@
   animation: fadeInUp 1s ease-out;
 }
 
-/* =========================
-   IMAGE (STRETCHES WITH CARD)
-   ========================= */
+/* Image (stretches with card) */
 
 .about-image {
   position: relative;
@@ -91,9 +83,7 @@
   opacity: 1;
 }
 
-/* =========================
-   DETAILS COLUMN
-   ========================= */
+/* Details column */
 
 .about-details {
   display: flex;
@@ -102,9 +92,7 @@
   gap: 36px;
 }
 
-/* =========================
-   ABOUT TEXT
-   ========================= */
+/* About text */
 
 .about-text p {
   font-size: 18px;
@@ -117,9 +105,7 @@
   margin-bottom: 0;
 }
 
-/* =========================
-   HIGHLIGHTS
-   ========================= */
+/* Highlights */
 
 .highlights-heading {
   font-size: 18px;
@@ -197,9 +183,7 @@
   transition: color 0.3s ease;
 }
 
-/* =========================
-   ANIMATIONS
-   ========================= */
+/* Animations */
 
 @keyframes fadeInUp {
   from {
@@ -212,9 +196,7 @@
   }
 }
 
-/* =========================
-   RESPONSIVE
-   ========================= */
+/* Responsive */
 
 @media screen and (max-width: 1024px) {
   .about-card {

@@ -31,7 +31,6 @@ export default function AboutMe(props) {
             <div className="about-details">
               <div className="about-text">
                 <p>
-                  {/* I’m Dhruv, a software engineer at Bloomberg in New York City. */}
                   I'm Dhruv, a software engineer at REDACTED. I graduated with
                   highest honors from Columbia University, earning a bachelor’s
                   degree in computer science and applied math and a master’s
@@ -60,7 +59,7 @@ export default function AboutMe(props) {
                 </div>
               </div>
             </div>
-            {/* end about-details */}
+            {/* end details */}
           </div>
         </div>
       </div>

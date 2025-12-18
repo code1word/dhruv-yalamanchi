@@ -1,6 +1,4 @@
-/* =========================
-   SECTION LAYOUT
-   ========================= */
+/* Section: layout */
 
 .resume-section {
   min-height: 100vh;
@@ -33,9 +31,7 @@
   border-radius: 2px;
 }
 
-/* =========================
-   MAIN GLASS CARD
-   ========================= */
+/* Main glass card */
 
 .resume-card {
   display: flex;
@@ -56,9 +52,7 @@
   box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
 }
 
-/* =========================
-   SIDEBAR (TABS)
-   ========================= */
+/* Sidebar (tabs) */
 
 .resume-sidebar {
   flex: 0 0 260px;
@@ -157,9 +151,7 @@
   z-index: 2;
 }
 
-/* =========================
-   RIGHT CONTENT AREA
-   ========================= */
+/* Right content area */
 
 .resume-details {
   flex: 1;
@@ -198,9 +190,7 @@
   }
 }
 
-/* =========================
-   EDUCATION HEADER
-   ========================= */
+/* Education header */
 
 .education-layout {
   display: flex;
