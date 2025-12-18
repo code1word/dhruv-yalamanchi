@@ -1,0 +1,16 @@
+.home-container {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
+  padding: 40px 20px;
+  background: #0a0e27;
+}
+
+@media screen and (max-width: 768px) {
+  .home-container {
+    padding: 60px 20px;
+  }
+}

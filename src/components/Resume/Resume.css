@@ -1,0 +1,648 @@
+/* =========================
+   SECTION LAYOUT
+   ========================= */
+
+.resume-section {
+  min-height: 100vh;
+  padding: 40px 20px;
+  background: #0a0e27;
+
+  /* Desktop: Center the card vertically */
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.resume-container {
+  max-width: 1200px;
+  width: 100%;
+  margin: 0 auto;
+}
+
+.heading-separator {
+  display: flex;
+  justify-content: center;
+  margin-top: -30px;
+  margin-bottom: 40px;
+}
+.heading-separator span {
+  width: 100px;
+  height: 2px;
+  background: #04c3ff;
+  border-radius: 2px;
+}
+
+/* =========================
+   MAIN GLASS CARD
+   ========================= */
+
+.resume-card {
+  display: flex;
+
+  /* DESKTOP SCROLL FIX: Fixed height relative to viewport */
+  height: 85vh;
+  min-height: 600px; /* Prevent it from getting too small on short screens */
+
+  background: rgba(255, 255, 255, 0.04);
+  border: 2px solid rgba(4, 195, 255, 0.2);
+  border-radius: 24px;
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  overflow: hidden; /* Contains the scrollbar inside */
+  -webkit-mask-image: -webkit-radial-gradient(white, black);
+  mask-image: radial-gradient(white, black);
+
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+}
+
+/* =========================
+   SIDEBAR (TABS)
+   ========================= */
+
+.resume-sidebar {
+  flex: 0 0 260px;
+  background: rgba(255, 255, 255, 0.02);
+  border-right: 1px solid rgba(255, 255, 255, 0.1);
+  display: flex;
+  flex-direction: column;
+  padding: 30px 0;
+  gap: 10px;
+  overflow-y: auto;
+}
+
+.tab-button {
+  position: relative;
+  width: 100%;
+  border: none;
+  background: transparent;
+  padding: 18px 30px;
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  font-family: inherit;
+  font-size: 16px;
+  font-weight: 600;
+  color: #a0a0a0;
+  cursor: pointer;
+  overflow: hidden;
+  flex-shrink: 0;
+  z-index: 1;
+  transition: padding 0.3s ease, color 0.3s ease;
+}
+
+/* --- 1. THE SWEEPING GLOSSY BACKGROUND (::after) --- */
+.tab-button::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  width: 0%;
+  z-index: -1;
+
+  /* Glossy Gradient */
+  background: linear-gradient(
+    135deg,
+    rgba(4, 195, 255, 0.15) 0%,
+    rgba(4, 195, 255, 0.05) 100%
+  );
+
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.1);
+  transition: width 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+}
+
+/* Apply sweep to Hover OR Active */
+.tab-button:hover::after,
+.tab-button.active::after {
+  width: 100%;
+}
+
+/* --- 2. THE MECHANICAL ICON SPIN --- */
+.tab-button i {
+  font-size: 18px;
+  width: 24px;
+  text-align: center;
+  transition: transform 0.5s; /* Matches Profile.css speed */
+  backface-visibility: hidden; /* Sharp 3D effect */
+}
+
+/* RotateY 360deg ONLY if NOT active */
+.tab-button:not(.active):hover i {
+  transform: rotateY(360deg);
+}
+
+/* --- 3. ACTIVE/HOVER STATES --- */
+.tab-button:hover,
+.tab-button.active {
+  color: #ffffff;
+  padding-left: 35px;
+}
+
+.tab-button:hover i,
+.tab-button.active i {
+  color: #04c3ff;
+}
+
+/* --- 4. THE ACTIVE INDICATOR LINE (::before) --- */
+.tab-button.active::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0;
+  height: 100%;
+  width: 4px;
+  background: #04c3ff;
+  box-shadow: 0 0 10px #04c3ff;
+  z-index: 2;
+}
+
+/* =========================
+   RIGHT CONTENT AREA
+   ========================= */
+
+.resume-details {
+  flex: 1;
+  padding: 40px;
+
+  /* CORE SCROLL LOGIC */
+  overflow-y: auto; /* Scroll ONLY this panel */
+  height: 100%; /* Fill the .resume-card height */
+  scroll-behavior: smooth;
+}
+
+/* Scrollbar styling */
+.resume-details::-webkit-scrollbar {
+  width: 6px;
+}
+.resume-details::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.02);
+}
+.resume-details::-webkit-scrollbar-thumb {
+  background: rgba(4, 195, 255, 0.3);
+  border-radius: 10px;
+}
+
+.content-panel {
+  animation: fadeIn 0.6s ease-out forwards;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* =========================
+   EDUCATION HEADER
+   ========================= */
+
+.education-layout {
+  display: flex;
+  flex-direction: column;
+}
+
+.edu-school-header {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  padding-bottom: 25px;
+  margin-bottom: 30px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.school-logo {
+  width: 80px;
+  height: 80px;
+  border-radius: 12px;
+  border: 2px solid white; /* User Requested White Border */
+  overflow: hidden;
+  flex-shrink: 0;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+  background: #fff;
+}
+
+.school-logo img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.school-info h3 {
+  font-size: 26px;
+  font-weight: 700;
+  color: #ffffff;
+  margin: 0 0 6px 0;
+}
+
+.school-info span {
+  font-size: 16px;
+  color: #a0a0a0;
+  font-style: italic;
+}
+
+.degree-sub {
+  color: #b0b0b0;
+  font-weight: 400;
+  margin-top: 5px;
+}
+
+.coursework-section {
+  margin-top: 20px;
+}
+
+.coursework-section h5 {
+  font-size: 14px;
+  color: #ffffff;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-bottom: 10px;
+  font-weight: 700;
+}
+
+.coursework-section p {
+  font-size: 15px;
+  line-height: 1.7;
+  color: #a0a0a0;
+}
+
+/* =========================
+   TIMELINE (SHARED)
+   ========================= */
+
+.timeline-list {
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+  position: relative;
+}
+
+/* 1. The Line */
+.timeline-list::before {
+  content: "";
+  position: absolute;
+  top: 8px;
+  bottom: 0;
+  /* Center math: 20px center. Width 2px. Left = 19px */
+  left: 19px;
+  width: 2px;
+  background: rgba(255, 255, 255, 0.1);
+}
+
+/* 2. The Item */
+.timeline-item {
+  position: relative;
+  padding-left: 50px; /* Leave room for dots */
+}
+
+/* 3. The Marker */
+.timeline-marker {
+  position: absolute;
+  top: 5px;
+  /* Center math: 20px center. Width 14px. Left = 13px */
+  left: 13px;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: #0a0e27;
+  border: 2px solid #04c3ff;
+  box-shadow: 0 0 8px rgba(4, 195, 255, 0.5);
+  z-index: 2;
+  transition: all 0.3s ease;
+  box-sizing: border-box;
+}
+
+/* Hover Effects */
+.timeline-item:hover .timeline-marker {
+  background: #04c3ff;
+  transform: scale(1.2);
+  box-shadow: 0 0 15px rgba(4, 195, 255, 0.8);
+}
+
+.timeline-content {
+  transition: transform 0.3s ease;
+}
+
+.timeline-item:hover .timeline-content {
+  transform: translateX(5px);
+}
+
+/* === NEW FLEX STYLES FOR EXPERIENCE LOGOS === */
+.timeline-flex {
+  display: flex;
+  align-items: flex-start;
+  gap: 15px;
+}
+
+.timeline-logo {
+  width: 48px;
+  height: 48px;
+  background: #fff;
+  border-radius: 8px; /* Rounded square */
+  border: 2px solid white;
+  overflow: hidden;
+  flex-shrink: 0;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+  /* Optional: Center logos */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.timeline-logo img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.timeline-info {
+  flex: 1;
+}
+
+/* =========================================== */
+
+.timeline-header-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 2px;
+}
+
+.timeline-header-row h3,
+.timeline-header-row h4 {
+  font-size: 18px;
+  font-weight: 700;
+  color: #ffffff;
+  margin: 0;
+}
+
+.role-title {
+  font-size: 15px;
+  font-weight: 600;
+  color: #04c3ff;
+  margin: 0 0 6px 0;
+  font-style: italic;
+}
+
+.date-badge {
+  background: rgba(4, 195, 255, 0.1); /* Subtle blue tint background */
+  color: #04c3ff; /* Bright neon blue text */
+  font-size: 0.85rem;
+  font-weight: 600;
+  padding: 5px 12px;
+  border-radius: 20px;
+  border: 1px solid rgba(4, 195, 255, 0.4); /* Semi-transparent border */
+  white-space: nowrap;
+
+  /* The "Blue Blurry Shadow" effect */
+  box-shadow: 0 0 12px rgba(4, 195, 255, 0.3);
+  text-shadow: 0 0 8px rgba(4, 195, 255, 0.5); /* Makes text pop too */
+}
+
+.timeline-desc {
+  font-size: 15px;
+  line-height: 1.6;
+  color: #b0b0b0;
+  margin-top: 8px;
+}
+
+/* =========================
+   SKILLS GRID (Robust Coloring)
+   ========================= */
+
+.skill-category-title {
+  font-size: 18px;
+  color: #ffffff;
+  margin: 30px 0 15px 0;
+  font-weight: 700;
+  border-left: 3px solid #04c3ff;
+  padding-left: 10px;
+}
+.skill-category-title:first-child {
+  margin-top: 0;
+}
+
+.skills-grid-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(110px, 1fr));
+  gap: 15px;
+}
+
+.skill-tile {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  border-radius: 12px;
+  padding: 20px 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+  cursor: default;
+}
+
+.skill-tile:hover {
+  background: rgba(255, 255, 255, 0.08);
+  border-color: rgba(4, 195, 255, 0.4);
+  transform: translateY(-5px);
+  box-shadow: 0 0 22px rgba(4, 195, 255, 0.15);
+}
+
+.img-box {
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.3s ease;
+
+  /* Vital: hide the original image that we push out of frame */
+  overflow: hidden;
+}
+
+/* 1. Original (Multi-color) Icon Style */
+.icon-original {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+/* 2. Flat Color Icon Style (The "Drop-Shadow" Hack) */
+.icon-colored {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+
+  /* Step A: Move the real image to the left, out of the box */
+  transform: translateX(-100px);
+
+  /* Step B: Cast a shadow to the right (back into the box) with the desired color */
+  /* The shadow preserves the alpha channel (shape) perfectly */
+  filter: drop-shadow(100px 0 0 var(--icon-color));
+}
+
+.placeholder-icon {
+  color: #555;
+  font-size: 24px;
+}
+
+.skill-tile:hover .img-box {
+  transform: scale(1.1);
+}
+
+.skill-name {
+  font-size: 13px;
+  font-weight: 600;
+  color: #ffffff;
+  text-align: center;
+  letter-spacing: 0.5px;
+}
+
+/* =========================
+   RESPONSIVE DESIGN (MOBILE)
+   ========================= */
+
+@media screen and (max-width: 900px) {
+  /* MOBILE STRATEGY:
+     Unlock the container heights.
+     Remove centering.
+     Let the user scroll the full page naturally.
+  */
+
+  .resume-section {
+    display: block; /* Removes flex centering logic */
+    height: auto;
+    padding-top: 80px; /* Space for Navbar */
+  }
+
+  .resume-card {
+    flex-direction: column;
+    height: auto; /* Grow with content */
+    max-height: none; /* Remove desktop limit */
+    overflow: visible; /* No internal scrollbar */
+  }
+
+  .resume-sidebar {
+    flex: none;
+    flex-direction: row;
+    overflow-x: auto; /* Horizontal scroll for tabs */
+    width: 100%;
+
+    /* MODIFIED: Reset vertical padding, but add Left Padding */
+    padding: 0;
+    padding-left: 25px; /* Pushes the first tab past the 24px border-radius */
+    gap: 0;
+    border-right: none;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+
+    /* Optional: Hide scrollbar for cleaner look */
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
+
+  .resume-sidebar::-webkit-scrollbar {
+    display: none;
+  }
+
+  .resume-details {
+    padding: 25px;
+    height: auto; /* Grow with content */
+    overflow-y: visible; /* Use page scroll */
+  }
+
+  .tab-button {
+    padding: 15px 20px;
+    white-space: nowrap;
+    width: auto;
+    gap: 10px;
+  }
+
+  .tab-button::after {
+    box-shadow: none;
+  }
+
+  .tab-button span {
+    display: inline-block;
+  }
+
+  /* Adjust the active Line (::before) to be on the bottom for mobile */
+  .tab-button.active::before {
+    height: 3px;
+    width: 100%;
+    top: auto;
+    bottom: 0;
+    left: 0;
+  }
+
+  /* Fix padding slide for mobile top-bar */
+  .tab-button.active,
+  .tab-button:hover {
+    padding-left: 20px; /* Less drastic slide on mobile */
+  }
+
+  .skills-grid-container {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media screen and (max-width: 600px) {
+  /* 1. Container Adjustments */
+  .edu-school-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 15px;
+  }
+
+  .timeline-header-row {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .date-badge {
+    margin-bottom: 10px;
+  }
+
+  .skills-grid-container {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  /* 2. THE EXPANDING TABS LOGIC */
+  .tab-button {
+    padding: 12px 15px;
+    width: auto;
+    justify-content: center;
+    gap: 0;
+  }
+
+  .tab-button span {
+    max-width: 0;
+    opacity: 0;
+    overflow: hidden;
+    white-space: nowrap;
+    margin-left: 0;
+    transition: max-width 0.5s cubic-bezier(0.25, 0.8, 0.25, 1),
+      opacity 0.4s ease, margin-left 0.4s ease;
+  }
+
+  /* 3. Trigger Expansion on Hover OR Active */
+  .tab-button:hover span,
+  .tab-button.active span {
+    max-width: 100px;
+    opacity: 1;
+    margin-left: 10px;
+  }
+
+  /* Stop the padding slide completely on small screens to keep it centered */
+  .tab-button:hover,
+  .tab-button.active {
+    padding-left: 15px !important;
+  }
+}

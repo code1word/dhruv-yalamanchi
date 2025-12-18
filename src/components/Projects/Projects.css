@@ -1,0 +1,404 @@
+.projects-section {
+  min-height: 100vh;
+  padding: 40px 20px;
+  background: #0a0e27;
+}
+
+.projects-container {
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+/* =========================
+   FEATURED NOTE (CENTERED)
+   ========================= */
+
+.featured-note {
+  width: fit-content; /* 👈 shrink to content */
+  margin: -20px auto 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center; /* 🔑 restores horizontal centering */
+  gap: 0;
+  cursor: pointer;
+}
+
+/* =========================
+   STAR + QUESTION ICON
+   ========================= */
+
+.featured-icon {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  transition: transform 0.4s ease;
+}
+
+/* star */
+.featured-icon .fa-star {
+  color: #fbbf24;
+  font-size: 38px;
+  animation: twinkle 2s ease-in-out infinite;
+}
+
+/* question icon (Font Awesome) */
+.question-mark {
+  position: absolute;
+  right: -18px;
+  top: 6px;
+
+  font-size: 16px;
+  color: rgba(255, 255, 255, 0.6);
+
+  animation: questionPulse 1.6s ease-in-out infinite;
+  transition: opacity 0.35s ease 0.08s;
+
+  pointer-events: none;
+}
+
+/* pulse */
+@keyframes questionPulse {
+  0%,
+  100% {
+    opacity: 0.3;
+  }
+  50% {
+    opacity: 0.9;
+  }
+}
+
+/* =========================
+   TEXT (REVEALED BY EXPANSION)
+   ========================= */
+
+.featured-text {
+  max-width: 0;
+  overflow: hidden;
+  white-space: nowrap;
+
+  opacity: 0;
+  margin-left: 0;
+
+  font-size: 26px;
+  font-weight: 600;
+  color: var(--white);
+
+  transition: max-width 0.7s ease, opacity 0.25s ease, margin-left 0.35s ease;
+}
+
+/* =========================
+   HOVER INTERACTION
+   ========================= */
+
+/* hide question mark on hover */
+.featured-note:hover .question-mark {
+  animation: none;
+  opacity: 0;
+}
+
+/* reveal text */
+.featured-note:hover .featured-text {
+  max-width: 220px;
+  opacity: 1;
+  margin-left: 10px;
+}
+
+/* =========================
+   EXISTING STAR ANIMATION
+   ========================= */
+
+@keyframes twinkle {
+  0%,
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.5;
+    transform: scale(0.9);
+  }
+}
+
+.projects-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+  gap: 30px;
+  margin-top: 40px;
+}
+
+.project-card {
+  position: relative;
+  overflow: hidden;
+  aspect-ratio: 1;
+  transition: all 0.4s ease;
+  cursor: pointer;
+  border: 2px solid rgba(4, 195, 255, 0.2);
+  background-clip: padding-box, border-box;
+}
+
+.project-card:hover {
+  transform: translateY(-10px);
+  box-shadow: 0 15px 40px rgba(4, 195, 255, 0.2);
+}
+
+.featured-badge {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  width: 50px;
+  height: 50px;
+  background: linear-gradient(135deg, #fbbf24, #f59e0b);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10;
+  box-shadow: 0 4px 15px rgba(251, 191, 36, 0.4);
+  animation: pulse 2s ease-in-out infinite;
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+.featured-badge i {
+  color: var(--white);
+  font-size: 24px;
+}
+
+@keyframes pulse {
+  0%,
+  100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.1);
+  }
+}
+
+.project-image {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  overflow: hidden;
+}
+
+.project-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.4s ease;
+}
+
+.project-card:hover .project-image img {
+  transform: scale(1.1);
+  filter: blur(3px);
+}
+
+.project-card:hover .featured-badge {
+  opacity: 0;
+  transform: scale(0.85);
+  pointer-events: none;
+}
+
+.project-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to bottom,
+    rgba(10, 14, 39, 0.7),
+    rgba(10, 14, 39, 0.95)
+  );
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 30px;
+  opacity: 0;
+  transition: opacity 0.4s ease;
+}
+
+.project-card:hover .project-overlay {
+  opacity: 1;
+}
+
+.project-info {
+  text-align: center;
+  transform: translateY(20px);
+  transition: transform 0.4s ease;
+}
+
+.project-card:hover .project-info {
+  transform: translateY(0);
+}
+
+.project-info h3 {
+  font-size: 24px;
+  font-weight: 700;
+  color: var(--white);
+  margin-bottom: 10px;
+}
+
+.project-tech {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--light-blue);
+  margin-bottom: 15px;
+  font-style: italic;
+}
+
+.project-description {
+  font-size: 14px;
+  line-height: 1.6;
+  color: var(--text-gray);
+  margin-bottom: 20px;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* =========================
+   PROJECT LINKS — MATCH SOCIAL ICON STYLE
+   ========================= */
+
+.project-links {
+  display: flex;
+  gap: 14px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.project-link {
+  position: relative;
+  overflow: hidden;
+
+  height: 50px;
+  min-width: 50px; /* initial circle */
+  padding: 0;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 999px;
+  border: 2px solid white;
+  background-color: #1f2235;
+
+  color: white;
+  text-decoration: none;
+  font-size: 13px;
+  font-weight: 600;
+
+  transition: padding 0.4s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.35s ease,
+    transform 0.35s ease;
+}
+
+/* icon — MATCH social icon sizing exactly */
+.project-link i {
+  font-size: 25px; /* ⬅ matches .colz a */
+  line-height: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  position: relative;
+  z-index: 3;
+
+  transition: transform 0.5s; /* same duration */
+}
+
+/* rotate icon */
+.project-link:hover i {
+  transform: rotateY(360deg);
+}
+
+/* hidden text */
+.project-link span {
+  max-width: 0;
+  opacity: 0;
+  overflow: hidden;
+  white-space: nowrap;
+  margin-left: 0;
+
+  transition: max-width 0.4s ease, opacity 0.25s ease, margin-left 0.35s ease;
+
+  position: relative;
+  z-index: 3;
+}
+
+/* glossy fill — SAME logic as .colz */
+.project-link::before {
+  content: "";
+  position: absolute;
+  right: 100%;
+  top: 0;
+
+  width: 100%;
+  height: 100%;
+
+  z-index: 2;
+
+  background-image: linear-gradient(
+    to bottom,
+    rgba(255, 255, 255, 0.45) 0%,
+    rgba(255, 255, 255, 0.25) 18%,
+    rgba(255, 255, 255, 0) 45%
+  );
+
+  transition: right 0.5s ease;
+}
+
+/* =========================
+   HOVER STATE
+   ========================= */
+
+.project-link:hover {
+  padding: 0 10px;
+  box-shadow: 0 0 22px rgba(4, 195, 255, 0.45);
+  transform: translateY(-2px);
+}
+
+/* fill slides in (same as socials) */
+.project-link:hover::before {
+  right: 0;
+}
+
+/* reveal text */
+.project-link:hover span {
+  max-width: 160px;
+  opacity: 1;
+  margin-left: 10px;
+}
+
+/* =========================
+   VARIANTS
+   ========================= */
+
+.project-link.github-link::before {
+  background-color: black;
+}
+
+.project-link:not(.github-link)::before {
+  background-color: var(--light-blue);
+}
+
+/* =========================
+   RESPONSIVE
+   ========================= */
+
+@media screen and (max-width: 1200px) {
+  .projects-grid {
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .projects-grid {
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 20px;
+  }
+}
+
+@media screen and (max-width: 640px) {
+  .projects-grid {
+    grid-template-columns: 1fr;
+  }
+}
