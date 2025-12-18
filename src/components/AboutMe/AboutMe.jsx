@@ -31,14 +31,13 @@ export default function AboutMe(props) {
             <div className="about-details">
               <div className="about-text">
                 <p>
-                  I'm Dhruv, a software engineer at REDACTED. I graduated with
-                  highest honors from Columbia University, earning a bachelor’s
-                  degree in computer science and applied math and a master’s
-                  degree in computer science. My interests sit at the
-                  intersection of applied AI, computer vision, and large-scale
-                  software systems. Outside of work, I enjoy going on walks,
-                  making origami, playing open-world adventure games, and
-                  meeting new people!
+                  I'm Dhruv, a ____. I graduated with highest honors from
+                  Columbia University, earning a bachelor’s degree in computer
+                  science and applied math and a master’s degree in computer
+                  science. My interests sit at the intersection of applied AI,
+                  computer vision, and large-scale software systems. Outside of
+                  work, I enjoy going on walks, making origami, playing
+                  open-world adventure games, and meeting new people!
                 </p>
               </div>
 
