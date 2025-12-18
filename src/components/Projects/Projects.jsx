@@ -30,7 +30,7 @@ export default function Projects(props) {
       description:
         "The site you're viewing right now. A fully responsive personal portfolio website with email functionality that showcases some of my latest projects.",
       technologies: "React, Figma, EmailJS",
-      github: "https://github.com/code1word/Personal-Portfolio-Website-V2",
+      github: "https://github.com/code1word/dhruv-yalamanchi",
       image: "DY Logo2.png",
       featured: true,
     },
