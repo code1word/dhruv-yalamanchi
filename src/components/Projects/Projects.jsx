@@ -43,6 +43,16 @@ export default function Projects(props) {
       featured: true,
     },
     {
+      title: "EmotiStick",
+      description:
+        "A computer vision pipeline that converts photos of people into privacy-preserving stick figures with expressive, emotion-aware cartoon faces. The system extracts pose and facial landmarks, classifies emotion with a lightweight deep learning model, and renders a stylized abstraction combining pose, affect, and minimal graphics.",
+      technologies:
+        "Python, OpenCV, MediaPipe Holistic, PyTorch, Torchvision, MobileNetV2, NumPy, Pillow",
+      github: "https://github.com/code1word/DLCV-Final-Project",
+      image: "EmotiStick Logo.png",
+      featured: true,
+    },
+    {
       title: "Dance Dance Revolution",
       description:
         "A recreation of Dance Dance Revolution on Arduino that prompts user input through joystick tilts and button presses, gradually becomes more difficult as the game progresses, plays music, and more!",

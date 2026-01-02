@@ -30,13 +30,13 @@ export default function Resume(props) {
      - bg: (Optional) Background color for the logo box. Defaults to white.
   */
   const experienceData = [
-    // {
-    //   company: "REDACTED",
-    //   role: "Software Engineer",
-    //   date: "Incoming", // or "July 2026 - Present"
-    //   desc: "Joining as a full-time software engineer.",
-    //   logo: "redacted.png",
-    // },
+    {
+      company: "REDACTED",
+      role: "Software Engineer",
+      date: "Incoming", // or "July 2026 - Present"
+      desc: "Joining as a full-time software engineer.",
+      logo: "redacted.png",
+    },
     {
       company: "Intuit",
       role: "Software Engineer Intern",
