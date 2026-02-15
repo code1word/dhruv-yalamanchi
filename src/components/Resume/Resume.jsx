@@ -31,11 +31,11 @@ export default function Resume(props) {
   */
   const experienceData = [
     {
-      company: "REDACTED",
+      company: "Bloomberg",
       role: "Software Engineer",
-      date: "Incoming", // or "July 2026 - Present"
-      desc: "Joining as a full-time software engineer.",
-      logo: "redacted.png",
+      date: "July 2026 - Present",
+      desc: "Working as a full-time software engineer.",
+      logo: "bloomberg.jpeg",
     },
     {
       company: "Intuit",
