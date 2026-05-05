@@ -8,19 +8,19 @@ const _images = import.meta.glob("../../assets/Projects/*.{png,jpg,jpeg,svg}", {
   import: "default",
 });
 const imageMap = Object.fromEntries(
-  Object.entries(_images).map(([path, url]) => [path.split("/").pop(), url])
+  Object.entries(_images).map(([path, url]) => [path.split("/").pop(), url]),
 );
 
 export default function Projects(props) {
   const projects = [
     {
-      title: "Exposure Explorer",
+      title: "KudosChain",
       description:
-        "An educational, interactive web application designed to help users grasp the fundamentals of manual photography — including aperture, shutter speed, and ISO — through hands-on simulations, intuitive sliders, engaging quizzes, and practical cheat sheets.",
-      technologies: "OpenCV, React, Flask, Bootstrap",
-      github: "https://github.com/code1word/Exposure-Explorer",
-      image: "Exposure Explorer Logo.png",
-      website: "https://exposure-explorer.netlify.app/",
+        "A decentralized ledger of kindness — a peer-to-peer blockchain where the only spendable resource is appreciation. Implements Ed25519-signed transactions, SHA-256 proof-of-work, Merkle commitments, longest-chain fork resolution with deterministic state replay, and WebSocket gossip across multiple full nodes — all wrapped in a hand-crafted letterpress UI that makes the chain feel like a physical artifact.",
+      technologies:
+        "Python, asyncio, websockets, aiohttp, PyNaCl, React, Ed25519",
+      github: "https://github.com/code1word/KudosChain",
+      image: "KudosChain Logo.png",
       featured: true,
     },
     {
@@ -30,6 +30,16 @@ export default function Projects(props) {
       technologies: "React, Figma, EmailJS",
       github: "https://github.com/code1word/dhruv-yalamanchi",
       image: "DY Logo2.png",
+      featured: true,
+    },
+    {
+      title: "Exposure Explorer",
+      description:
+        "An educational, interactive web application designed to help users grasp the fundamentals of manual photography — including aperture, shutter speed, and ISO — through hands-on simulations, intuitive sliders, engaging quizzes, and practical cheat sheets.",
+      technologies: "OpenCV, React, Flask, Bootstrap",
+      github: "https://github.com/code1word/Exposure-Explorer",
+      image: "Exposure Explorer Logo.png",
+      website: "https://exposure-explorer.netlify.app/",
       featured: true,
     },
     {
