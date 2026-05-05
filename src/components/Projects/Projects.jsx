@@ -80,7 +80,7 @@ export default function Projects(props) {
         "React, Redux, Cloud Firestore, Firebase Authentication, TMDB API, Stripe Checkout",
       github: "https://github.com/code1word/notflix",
       image: "Notflix Logo.png",
-      featured: true,
+      featured: false,
     },
     {
       title: "HTTP Web Server",
@@ -90,7 +90,7 @@ export default function Projects(props) {
       github:
         "https://gist.github.com/code1word/49f78efc1657aa19bd9b4d8caff2cecb",
       image: "Web Server.png",
-      featured: true,
+      featured: false,
     },
     {
       title: "Schmaker",
@@ -100,7 +100,7 @@ export default function Projects(props) {
       github: "https://github.com/code1word/schmaker",
       demo: "https://www.youtube.com/watch?v=MNKOXxwGdDM",
       image: "Schmaker Logo.png",
-      featured: true,
+      featured: false,
     },
     {
       title: "Nintendo Gamepedia",
