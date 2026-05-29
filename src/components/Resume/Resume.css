@@ -1,63 +1,44 @@
-/* Section: layout */
+/* =====================================================================
+   RESUME
+   ===================================================================== */
 
 .resume-section {
   min-height: 100vh;
   padding: 40px 20px;
-  background: #0a0e27;
+  background-color: var(--p5-ink);
+  background-image: linear-gradient(135deg, #07090f 0%, #0a1426 50%, #07090f 100%);
 
-  /* Desktop: Center the card vertically */
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
 }
 
-.resume-container {
-  max-width: 1200px;
-  width: 100%;
-  margin: 0 auto;
-}
+.resume-container { max-width: 1200px; width: 100%; margin: 0 auto; }
 
-.heading-separator {
-  display: flex;
-  justify-content: center;
-  margin-top: -30px;
-  margin-bottom: 40px;
-}
-.heading-separator span {
-  width: 100px;
-  height: 2px;
-  background: #04c3ff;
-  border-radius: 2px;
-}
+.resume-content { width: 100%; }
 
-/* Main glass card */
+/* ---------- Main comic-panel card (compound beats .glass-card) ---------- */
 
+.resume-card.glass-card,
 .resume-card {
   display: flex;
-
-  /* DESKTOP SCROLL FIX: Fixed height relative to viewport */
   height: 85vh;
-  min-height: 600px; /* Prevent it from getting too small on short screens */
+  min-height: 600px;
 
-  background: rgba(255, 255, 255, 0.04);
-  border: 2px solid rgba(4, 195, 255, 0.2);
-  border-radius: 24px;
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
-  overflow: hidden; /* Contains the scrollbar inside */
-  -webkit-mask-image: -webkit-radial-gradient(white, black);
-  mask-image: radial-gradient(white, black);
-
-  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+  background: var(--panel-bg);
+  border: 3px solid var(--p5-ink);
+  box-shadow: 0 0 0 2px var(--p5-blue), 0 18px 55px rgba(0, 0, 0, 0.6);
+  overflow: hidden;
+  clip-path: none;            /* full rectangle for the split layout */
 }
 
-/* Sidebar (tabs) */
+/* ---------- Sidebar tabs ---------- */
 
 .resume-sidebar {
   flex: 0 0 260px;
-  background: rgba(255, 255, 255, 0.02);
-  border-right: 1px solid rgba(255, 255, 255, 0.1);
+  background: rgba(0, 0, 0, 0.4);
+  border-right: 3px solid var(--p5-blue);
   display: flex;
   flex-direction: column;
   padding: 30px 0;
@@ -74,128 +55,106 @@
   display: flex;
   align-items: center;
   gap: 15px;
-  font-family: inherit;
+
+  font-family: var(--font-ui);
   font-size: 16px;
   font-weight: 600;
-  color: #a0a0a0;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: var(--text-gray);
+
   cursor: pointer;
   overflow: hidden;
   flex-shrink: 0;
   z-index: 1;
-  transition: padding 0.3s ease, color 0.3s ease;
+  transition: padding 0.3s var(--ease-snap), color 0.3s ease;
 }
 
-/* --- 1. THE SWEEPING GLOSSY BACKGROUND (::after) --- */
+/* unused helper div in markup — keep it out of the way */
+.tab-bg-hover { display: none; }
+
+/* slanted blue slab that wipes across (P5 selection sweep) */
 .tab-button::after {
   content: "";
   position: absolute;
-  top: 0;
-  left: 0;
-  bottom: 0;
-  width: 0%;
+  top: 0; bottom: 0;
+  left: -12%;
+  width: 0;
   z-index: -1;
-
-  /* Glossy Gradient */
-  background: linear-gradient(
-    135deg,
-    rgba(4, 195, 255, 0.15) 0%,
-    rgba(4, 195, 255, 0.05) 100%
-  );
-
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.1);
-  transition: width 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+  background: var(--p5-blue);
+  transform: skewX(-12deg);
+  transform-origin: left;
+  box-shadow: 0 0 18px rgba(31, 143, 255, 0.5);
+  transition: width 0.28s var(--ease-slam);
 }
-
-/* Apply sweep to Hover OR Active */
 .tab-button:hover::after,
-.tab-button.active::after {
-  width: 100%;
-}
+.tab-button.active::after { width: 135%; }
 
-/* --- 2. THE MECHANICAL ICON SPIN --- */
 .tab-button i {
   font-size: 18px;
   width: 24px;
   text-align: center;
-  transition: transform 0.5s; /* Matches Profile.css speed */
-  backface-visibility: hidden; /* Sharp 3D effect */
+  transition: transform 0.5s var(--ease-snap), color 0.3s ease;
+  backface-visibility: hidden;
 }
+.tab-button:not(.active):hover i { transform: rotateY(360deg); }
 
-/* RotateY 360deg ONLY if NOT active */
-.tab-button:not(.active):hover i {
-  transform: rotateY(360deg);
-}
-
-/* --- 3. ACTIVE/HOVER STATES --- */
+/* INVERSION: dark text + icon on the bright blue slab — the strong Persona look */
 .tab-button:hover,
 .tab-button.active {
-  color: #ffffff;
-  padding-left: 35px;
+  color: var(--p5-ink);
+  font-weight: 700;
+  padding-left: 42px;
 }
-
 .tab-button:hover i,
 .tab-button.active i {
-  color: #04c3ff;
+  color: var(--p5-ink);
+  transform: scale(1.15);
 }
 
-/* --- 4. THE ACTIVE INDICATOR LINE (::before) --- */
-.tab-button.active::before {
+/* bold slanted pointer that snaps in on the left */
+.tab-button::before {
   content: "";
   position: absolute;
-  left: 0;
-  top: 0;
-  height: 100%;
-  width: 4px;
-  background: #04c3ff;
-  box-shadow: 0 0 10px #04c3ff;
+  left: 14px;
+  top: 50%;
+  width: 0;
+  height: 0;
+  border-top: 7px solid transparent;
+  border-bottom: 7px solid transparent;
+  border-left: 10px solid var(--p5-ink);
+  transform: translate(-14px, -50%);
+  opacity: 0;
   z-index: 2;
+  transition: transform 0.28s var(--ease-pop) 0.06s, opacity 0.2s ease 0.06s;
+}
+.tab-button:hover::before,
+.tab-button.active::before {
+  transform: translate(0, -50%);
+  opacity: 1;
 }
 
-/* Right content area */
+/* ---------- Content area ---------- */
 
 .resume-details {
   flex: 1;
   padding: 40px;
-
-  /* CORE SCROLL LOGIC */
-  overflow-y: auto; /* Scroll ONLY this panel */
-  height: 100%; /* Fill the .resume-card height */
+  overflow-y: auto;
+  height: 100%;
   scroll-behavior: smooth;
 }
-
-/* Scrollbar styling */
-.resume-details::-webkit-scrollbar {
-  width: 6px;
-}
-.resume-details::-webkit-scrollbar-track {
-  background: rgba(255, 255, 255, 0.02);
-}
+.resume-details::-webkit-scrollbar { width: 8px; }
+.resume-details::-webkit-scrollbar-track { background: rgba(0, 0, 0, 0.3); }
 .resume-details::-webkit-scrollbar-thumb {
-  background: rgba(4, 195, 255, 0.3);
-  border-radius: 10px;
+  background: var(--p5-blue);
+  border: 1px solid var(--p5-black);
 }
 
-.content-panel {
-  animation: fadeIn 0.6s ease-out forwards;
-}
+.content-panel { animation: panelIn 0.45s var(--ease-slam) both; }
 
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(10px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
+/* ---------- Education header ---------- */
 
-/* Education header */
-
-.education-layout {
-  display: flex;
-  flex-direction: column;
-}
+.education-layout { display: flex; flex-direction: column; }
 
 .edu-school-header {
   display: flex;
@@ -203,67 +162,59 @@
   gap: 20px;
   padding-bottom: 25px;
   margin-bottom: 30px;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  border-bottom: 3px solid var(--p5-blue);
 }
 
 .school-logo {
-  width: 80px;
-  height: 80px;
-  border-radius: 12px;
-  border: 2px solid white; /* User Requested White Border */
+  width: 82px;
+  height: 82px;
+  border-radius: 0;
+  border: 3px solid var(--p5-paper);
   overflow: hidden;
   flex-shrink: 0;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+  box-shadow: 4px 4px 0 var(--p5-blue);
   background: #fff;
+  transform: rotate(-3deg);
 }
-
-.school-logo img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
+.school-logo img { width: 100%; height: 100%; object-fit: cover; }
 
 .school-info h3 {
+  font-family: var(--font-display);
   font-size: 26px;
-  font-weight: 700;
-  color: #ffffff;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  color: var(--p5-paper);
   margin: 0 0 6px 0;
 }
-
 .school-info span {
+  font-family: var(--font-ui);
   font-size: 16px;
-  color: #a0a0a0;
-  font-style: italic;
+  color: var(--text-gray);
+  letter-spacing: 0.5px;
 }
 
-.degree-sub {
-  color: #b0b0b0;
-  font-weight: 400;
-  margin-top: 5px;
-}
+.degree-sub { color: var(--text-gray); font-weight: 400; margin-top: 5px; }
 
-.coursework-section {
-  margin-top: 20px;
-}
-
+.coursework-section { margin-top: 20px; }
 .coursework-section h5 {
+  font-family: var(--font-ui);
   font-size: 14px;
-  color: #ffffff;
+  color: var(--p5-paper);
   text-transform: uppercase;
-  letter-spacing: 1px;
+  letter-spacing: 2px;
   margin-bottom: 10px;
   font-weight: 700;
+  padding-left: 10px;
+  border-left: 4px solid var(--p5-blue);
 }
-
 .coursework-section p {
+  font-family: var(--font-body);
   font-size: 15px;
   line-height: 1.7;
-  color: #a0a0a0;
+  color: var(--text-gray);
 }
 
-/* =========================
-   TIMELINE (SHARED)
-   ========================= */
+/* ---------- Timeline ---------- */
 
 .timeline-list {
   display: flex;
@@ -271,90 +222,61 @@
   gap: 40px;
   position: relative;
 }
-
-/* 1. The Line */
 .timeline-list::before {
   content: "";
   position: absolute;
-  top: 8px;
-  bottom: 0;
-  /* Center math: 20px center. Width 2px. Left = 19px */
+  top: 8px; bottom: 0;
   left: 19px;
-  width: 2px;
-  background: rgba(255, 255, 255, 0.1);
+  width: 3px;
+  background: var(--p5-blue);
+  box-shadow: 0 0 10px rgba(31, 143, 255, 0.5);
 }
 
-/* 2. The Item */
-.timeline-item {
-  position: relative;
-  padding-left: 50px; /* Leave room for dots */
-}
+.timeline-item { position: relative; padding-left: 50px; }
 
-/* 3. The Marker */
 .timeline-marker {
   position: absolute;
   top: 5px;
-  /* Center math: 20px center. Width 14px. Left = 13px */
-  left: 13px;
-  width: 14px;
-  height: 14px;
-  border-radius: 50%;
-  background: #0a0e27;
-  border: 2px solid #04c3ff;
-  box-shadow: 0 0 8px rgba(4, 195, 255, 0.5);
+  left: 12px;
+  width: 16px;
+  height: 16px;
+  border-radius: 0;
+  background: var(--p5-ink);
+  border: 3px solid var(--p5-blue);
+  transform: rotate(45deg);          /* diamond */
+  box-shadow: 0 0 8px rgba(31, 143, 255, 0.6);
   z-index: 2;
-  transition: all 0.3s ease;
+  transition: all 0.3s var(--ease-pop);
   box-sizing: border-box;
 }
-
-/* Hover Effects */
 .timeline-item:hover .timeline-marker {
-  background: #04c3ff;
-  transform: scale(1.2);
-  box-shadow: 0 0 15px rgba(4, 195, 255, 0.8);
+  background: var(--p5-blue);
+  transform: rotate(45deg) scale(1.25);
+  box-shadow: 0 0 16px rgba(31, 143, 255, 0.9);
 }
 
-.timeline-content {
-  transition: transform 0.3s ease;
-}
+.timeline-content { transition: transform 0.3s var(--ease-snap); }
+.timeline-item:hover .timeline-content { transform: translateX(6px); }
 
-.timeline-item:hover .timeline-content {
-  transform: translateX(5px);
-}
-
-/* === NEW FLEX STYLES FOR EXPERIENCE LOGOS === */
-.timeline-flex {
-  display: flex;
-  align-items: flex-start;
-  gap: 15px;
-}
+.timeline-flex { display: flex; align-items: flex-start; gap: 15px; }
 
 .timeline-logo {
-  width: 48px;
-  height: 48px;
+  width: 50px;
+  height: 50px;
   background: #fff;
-  border-radius: 8px; /* Rounded square */
-  border: 2px solid white;
+  border-radius: 0;
+  border: 3px solid var(--p5-paper);
   overflow: hidden;
   flex-shrink: 0;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-  /* Optional: Center logos */
+  box-shadow: 3px 3px 0 var(--p5-blue);
   display: flex;
   align-items: center;
   justify-content: center;
+  transform: rotate(-3deg);
 }
+.timeline-logo img { width: 100%; height: 100%; object-fit: contain; }
 
-.timeline-logo img {
-  width: 100%;
-  height: 100%;
-  object-fit: contain;
-}
-
-.timeline-info {
-  flex: 1;
-}
-
-/* =========================================== */
+.timeline-info { flex: 1; }
 
 .timeline-header-row {
   display: flex;
@@ -364,60 +286,63 @@
   gap: 10px;
   margin-bottom: 2px;
 }
-
 .timeline-header-row h3,
 .timeline-header-row h4 {
-  font-size: 18px;
+  font-family: var(--font-ui);
+  font-size: 19px;
   font-weight: 700;
-  color: #ffffff;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  color: var(--p5-paper);
   margin: 0;
 }
 
 .role-title {
+  font-family: var(--font-ui);
   font-size: 15px;
   font-weight: 600;
-  color: #04c3ff;
+  color: var(--p5-blue);
   margin: 0 0 6px 0;
-  font-style: italic;
+  letter-spacing: 0.5px;
 }
 
+/* notched blue date flag */
 .date-badge {
-  background: rgba(4, 195, 255, 0.1); /* Subtle blue tint background */
-  color: #04c3ff; /* Bright neon blue text */
-  font-size: 0.85rem;
+  background: var(--p5-blue);
+  color: var(--p5-paper);
+  font-family: var(--font-ui);
+  font-size: 0.82rem;
   font-weight: 600;
-  padding: 5px 12px;
-  border-radius: 20px;
-  border: 1px solid rgba(4, 195, 255, 0.4); /* Semi-transparent border */
+  letter-spacing: 0.5px;
+  padding: 5px 14px;
+  border-radius: 0;
   white-space: nowrap;
-
-  /* The "Blue Blurry Shadow" effect */
-  box-shadow: 0 0 12px rgba(4, 195, 255, 0.3);
-  text-shadow: 0 0 8px rgba(4, 195, 255, 0.5); /* Makes text pop too */
+  transform: skewX(-10deg);
+  box-shadow: 2px 2px 0 var(--p5-black);
 }
 
 .timeline-desc {
+  font-family: var(--font-body);
   font-size: 15px;
   line-height: 1.6;
-  color: #b0b0b0;
+  color: var(--text-gray);
   margin-top: 8px;
 }
 
-/* =========================
-   SKILLS GRID (Robust Coloring)
-   ========================= */
+/* ---------- Skills ---------- */
 
 .skill-category-title {
+  font-family: var(--font-ui);
   font-size: 18px;
-  color: #ffffff;
+  color: var(--p5-paper);
   margin: 30px 0 15px 0;
   font-weight: 700;
-  border-left: 3px solid #04c3ff;
-  padding-left: 10px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  border-left: 5px solid var(--p5-blue);
+  padding-left: 12px;
 }
-.skill-category-title:first-child {
-  margin-top: 0;
-}
+.skill-category-title:first-child { margin-top: 0; }
 
 .skills-grid-container {
   display: grid;
@@ -427,23 +352,23 @@
 
 .skill-tile {
   background: rgba(255, 255, 255, 0.03);
-  border: 1px solid rgba(255, 255, 255, 0.05);
-  border-radius: 12px;
+  border: 2px solid rgba(31, 143, 255, 0.25);
+  border-radius: 0;
   padding: 20px 10px;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   gap: 12px;
-  transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+  clip-path: polygon(0 0, 100% 0, 100% calc(100% - 12px), calc(100% - 12px) 100%, 0 100%);
+  transition: all 0.3s var(--ease-pop);
   cursor: default;
 }
-
 .skill-tile:hover {
-  background: rgba(255, 255, 255, 0.08);
-  border-color: rgba(4, 195, 255, 0.4);
-  transform: translateY(-5px);
-  box-shadow: 0 0 22px rgba(4, 195, 255, 0.15);
+  background: rgba(31, 143, 255, 0.12);
+  border-color: var(--p5-blue);
+  transform: translateY(-6px) rotate(-2deg);
+  box-shadow: 5px 7px 0 var(--p5-blue-deep);
 }
 
 .img-box {
@@ -452,187 +377,88 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: transform 0.3s ease;
-
-  /* Vital: hide the original image that we push out of frame */
+  transition: transform 0.3s var(--ease-snap);
   overflow: hidden;
 }
 
-/* 1. Original (Multi-color) Icon Style */
-.icon-original {
-  width: 100%;
-  height: 100%;
-  object-fit: contain;
-}
+.icon-original { width: 100%; height: 100%; object-fit: contain; }
 
-/* 2. Flat Color Icon Style (The "Drop-Shadow" Hack) */
+/* recolor hack preserved (per-skill --icon-color set inline) */
 .icon-colored {
   width: 100%;
   height: 100%;
   object-fit: contain;
-
-  /* Step A: Move the real image to the left, out of the box */
   transform: translateX(-100px);
-
-  /* Step B: Cast a shadow to the right (back into the box) with the desired color */
-  /* The shadow preserves the alpha channel (shape) perfectly */
   filter: drop-shadow(100px 0 0 var(--icon-color));
 }
 
-.placeholder-icon {
-  color: #555;
-  font-size: 24px;
-}
+.placeholder-icon { color: var(--p5-blue); font-size: 24px; }
 
-.skill-tile:hover .img-box {
-  transform: scale(1.1);
-}
+.skill-tile:hover .img-box { transform: scale(1.15) rotate(-4deg); }
 
 .skill-name {
+  font-family: var(--font-ui);
   font-size: 13px;
   font-weight: 600;
-  color: #ffffff;
+  color: var(--p5-paper);
   text-align: center;
   letter-spacing: 0.5px;
+  text-transform: uppercase;
 }
 
-/* =========================
-   RESPONSIVE DESIGN (MOBILE)
-   ========================= */
+/* =====================================================================
+   RESPONSIVE
+   ===================================================================== */
 
 @media screen and (max-width: 900px) {
-  /* MOBILE STRATEGY:
-     Unlock the container heights.
-     Remove centering.
-     Let the user scroll the full page naturally.
-  */
+  .resume-section { display: block; height: auto; padding-top: 80px; }
 
-  .resume-section {
-    display: block; /* Removes flex centering logic */
-    height: auto;
-    padding-top: 80px; /* Space for Navbar */
-  }
-
+  .resume-card.glass-card,
   .resume-card {
     flex-direction: column;
-    height: auto; /* Grow with content */
-    max-height: none; /* Remove desktop limit */
-    overflow: visible; /* No internal scrollbar */
+    height: auto;
+    max-height: none;
+    overflow: visible;
   }
 
   .resume-sidebar {
     flex: none;
     flex-direction: row;
-    overflow-x: auto; /* Horizontal scroll for tabs */
+    overflow-x: auto;
     width: 100%;
-
-    /* MODIFIED: Reset vertical padding, but add Left Padding */
-    padding: 0;
-    padding-left: 25px; /* Pushes the first tab past the 24px border-radius */
+    padding: 0 0 0 25px;
     gap: 0;
     border-right: none;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-
-    /* Optional: Hide scrollbar for cleaner look */
+    border-bottom: 3px solid var(--p5-blue);
     scrollbar-width: none;
     -ms-overflow-style: none;
   }
+  .resume-sidebar::-webkit-scrollbar { display: none; }
 
-  .resume-sidebar::-webkit-scrollbar {
-    display: none;
-  }
+  .resume-details { padding: 25px; height: auto; overflow-y: visible; }
 
-  .resume-details {
-    padding: 25px;
-    height: auto; /* Grow with content */
-    overflow-y: visible; /* Use page scroll */
-  }
-
-  .tab-button {
-    padding: 15px 20px;
-    white-space: nowrap;
-    width: auto;
-    gap: 10px;
-  }
-
-  .tab-button::after {
-    box-shadow: none;
-  }
-
-  .tab-button span {
-    display: inline-block;
-  }
-
-  /* Adjust the active Line (::before) to be on the bottom for mobile */
-  .tab-button.active::before {
-    height: 3px;
-    width: 100%;
-    top: auto;
-    bottom: 0;
-    left: 0;
-  }
-
-  /* Fix padding slide for mobile top-bar */
+  .tab-button { padding: 15px 20px; white-space: nowrap; width: auto; gap: 10px; }
+  .tab-button span { display: inline-block; }
+  .tab-button::before { display: none; }
   .tab-button.active,
-  .tab-button:hover {
-    padding-left: 20px; /* Less drastic slide on mobile */
-  }
+  .tab-button:hover { padding-left: 20px; }
 
-  .skills-grid-container {
-    grid-template-columns: repeat(3, 1fr);
-  }
+  .skills-grid-container { grid-template-columns: repeat(3, 1fr); }
 }
 
 @media screen and (max-width: 600px) {
-  /* 1. Container Adjustments */
-  .edu-school-header {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 15px;
-  }
+  .edu-school-header { flex-direction: column; align-items: flex-start; gap: 15px; }
+  .timeline-header-row { flex-direction: column; align-items: flex-start; }
+  .date-badge { margin-bottom: 10px; }
+  .skills-grid-container { grid-template-columns: repeat(2, 1fr); }
 
-  .timeline-header-row {
-    flex-direction: column;
-    align-items: flex-start;
-  }
-
-  .date-badge {
-    margin-bottom: 10px;
-  }
-
-  .skills-grid-container {
-    grid-template-columns: repeat(2, 1fr);
-  }
-
-  /* 2. THE EXPANDING TABS LOGIC */
-  .tab-button {
-    padding: 12px 15px;
-    width: auto;
-    justify-content: center;
-    gap: 0;
-  }
-
+  .tab-button { padding: 12px 15px; width: auto; justify-content: center; gap: 0; }
   .tab-button span {
-    max-width: 0;
-    opacity: 0;
-    overflow: hidden;
-    white-space: nowrap;
-    margin-left: 0;
-    transition: max-width 0.5s cubic-bezier(0.25, 0.8, 0.25, 1),
-      opacity 0.4s ease, margin-left 0.4s ease;
+    max-width: 0; opacity: 0; overflow: hidden; white-space: nowrap; margin-left: 0;
+    transition: max-width 0.4s var(--ease-slam), opacity 0.4s ease, margin-left 0.4s ease;
   }
-
-  /* 3. Trigger Expansion on Hover OR Active */
   .tab-button:hover span,
-  .tab-button.active span {
-    max-width: 100px;
-    opacity: 1;
-    margin-left: 10px;
-  }
-
-  /* Stop the padding slide completely on small screens to keep it centered */
+  .tab-button.active span { max-width: 100px; opacity: 1; margin-left: 10px; }
   .tab-button:hover,
-  .tab-button.active {
-    padding-left: 15px !important;
-  }
+  .tab-button.active { padding-left: 15px !important; }
 }

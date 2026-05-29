@@ -1,12 +1,51 @@
+/* =====================================================================
+   PHANTOM THIEVES THEME — global system (App.css)
+   Persona-style: ELECTRIC BLUE / black / white, oblique "papercut"
+   geometry, layered comic typography, snappy kinetic motion.
+   ===================================================================== */
+
+@import url("https://fonts.googleapis.com/css2?family=Anton&family=Oswald:wght@200;300;400;500;600;700&display=swap");
+
 :root {
-  --light-blue: #04c3ff;
-  --light-blue-shadow: rgb(69 211 255 / 27%);
-  --dark-bg: #0a0e27;
-  --card-bg: rgba(31, 34, 53, 0.7);
-  --glass-bg: rgba(255, 255, 255, 0.05);
-  --glass-border: rgba(255, 255, 255, 0.1);
-  --white: #ffffff;
-  --text-gray: #b8b8b8;
+  /* --- core palette: one commanding blue, plus ink + paper --- */
+  --p5-blue: #1f8fff;          /* the one true accent */
+  --p5-blue-bright: #5cb0ff;   /* glows / hovers */
+  --p5-blue-deep: #0a3f9e;     /* shadows / pressed */
+  --p5-ink: #0b0d14;           /* near-black surfaces (blue-black) */
+  --p5-black: #050608;
+  --p5-paper: #eef3fb;         /* cool off-white "paper" */
+  --p5-gray: #aeb6c4;
+
+  /* --- backwards-compatible aliases (old class names keep working) --- */
+  --light-blue: var(--p5-blue);
+  --light-blue-shadow: rgb(31 143 255 / 30%);
+  --dark-bg: var(--p5-ink);
+  --card-bg: rgba(11, 13, 20, 0.72);
+  --glass-bg: rgba(255, 255, 255, 0.04);
+  --glass-border: rgba(31, 143, 255, 0.35);
+  --white: var(--p5-paper);
+  --text-gray: var(--p5-gray);
+
+  /* --- type: Anton (display) + Oswald (everything else). One cohesive P5 system. --- */
+  --font-display: "Anton", "Oswald", Impact, sans-serif;
+  --font-ui: "Oswald", sans-serif;
+  --font-body: "Oswald", sans-serif;
+
+  /* --- geometry & motion --- */
+  --skew: -8deg;
+  --ease-slam: cubic-bezier(0.85, 0, 0.15, 1);
+  --ease-pop: cubic-bezier(0.22, 1.5, 0.36, 1);
+  --ease-snap: cubic-bezier(0.22, 1, 0.36, 1);
+
+  /* atmosphere layers */
+  --halftone:
+    radial-gradient(circle at center, rgba(31, 143, 255, 0.11) 1.4px, transparent 1.6px);
+  --speedlines:
+    repeating-linear-gradient(-45deg, transparent 0 38px, rgba(31, 143, 255, 0.05) 38px 39px);
+  --panel-bg: rgba(9, 11, 18, 0.82);
+
+  /* notched-flag clip for chips/badges (cut both ends) */
+  --flag-clip: polygon(8px 0, 100% 0, calc(100% - 8px) 100%, 0 100%);
 }
 
 * {
@@ -18,17 +57,18 @@
 
 html {
   scroll-behavior: smooth;
-  background: var(--dark-bg);
+  background: var(--p5-black);
 }
 
 body {
   margin: 0;
-  font-family: "Raleway", -apple-system, BlinkMacSystemFont, "Segoe UI",
-    sans-serif;
+  font-family: var(--font-body);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  background: linear-gradient(135deg, #0a0e27 0%, #1a1d35 50%, #0a0e27 100%);
   color: var(--white);
+  background-color: var(--p5-black);
+  background-image: linear-gradient(135deg, #06070b 0%, #0a1224 50%, #06070b 100%);
+  background-attachment: fixed;
   overflow-x: hidden;
 }
 
@@ -37,169 +77,332 @@ body {
   position: relative;
 }
 
-/* Glassmorphism effect */
-.glass-card {
-  background: var(--glass-bg);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
-  border: 1px solid var(--glass-border);
-  border-radius: 20px;
-  box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
-}
-
-/* Scrollbar styling */
-::-webkit-scrollbar {
-  width: 10px;
-}
-
-::-webkit-scrollbar-track {
-  background: var(--dark-bg);
-}
-
-::-webkit-scrollbar-thumb {
-  background: linear-gradient(180deg, var(--light-blue), #0066ff);
-  border-radius: 10px;
-}
-
-::-webkit-scrollbar-thumb:hover {
-  background: var(--light-blue);
-}
-
-/* Button styles */
-.btn {
-  border-radius: 50px;
-  padding: 14px 32px;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  font-family: "Raleway", sans-serif;
-  font-weight: 600;
-  font-size: 14px;
-  border: none;
+/* =========================================================
+   SHARED SECTION ATMOSPHERE
+   Each section gets a static base + a drifting texture layer
+   (::before) + a giant outlined watermark (::after).
+   Apply via the section classes below.
+   ========================================================= */
+.about-section,
+.projects-section,
+.resume-section,
+.contact-section,
+.home-container {
   position: relative;
   overflow: hidden;
 }
 
-.btn:active {
-  transform: translateY(2px);
-}
-
-.primary-btn {
-  background: linear-gradient(135deg, var(--light-blue), #0066ff);
-  color: var(--white);
-  border: 2px solid transparent;
-  box-shadow: 0 4px 15px rgba(4, 195, 255, 0.3);
-}
-
-.primary-btn:hover {
-  box-shadow: 0 6px 25px rgba(4, 195, 255, 0.5);
-  transform: translateY(-2px);
-}
-
-.outlined-btn {
-  background: transparent;
-  color: var(--light-blue);
-  border: 2px solid var(--light-blue);
-}
-
-.outlined-btn:hover {
-  background: var(--light-blue);
-  color: var(--white);
-}
-
-/* Fade in animations */
-.fade-in-scroll {
-  opacity: 0;
-  transform: translateY(60px);
-  transition: opacity 0.8s ease, transform 0.8s ease;
-}
-
-.fade-in-scroll.fade-in-visible {
-  opacity: 1;
-  transform: translateY(0);
-}
-
-/* Stagger animation delays */
-.fade-in-scroll:nth-child(1) {
-  transition-delay: 0.1s;
-}
-.fade-in-scroll:nth-child(2) {
-  transition-delay: 0.2s;
-}
-.fade-in-scroll:nth-child(3) {
-  transition-delay: 0.3s;
-}
-.fade-in-scroll:nth-child(4) {
-  transition-delay: 0.4s;
-}
-.fade-in-scroll:nth-child(5) {
-  transition-delay: 0.5s;
-}
-
-/* Screen heading global styles */
-.screen-heading {
-  text-align: center;
-  margin-bottom: 20px;
-}
-
-.screen-heading h2 {
-  font-size: 48px;
-  font-weight: 700;
-  color: var(--white);
-  position: relative;
-  display: inline-block;
-  margin-bottom: 10px;
-}
-
-.screen-heading h2::after {
+.about-section::before,
+.projects-section::before,
+.resume-section::before,
+.contact-section::before {
   content: "";
   position: absolute;
-  left: 0;
-  bottom: -10px;
-
-  width: 100%;
-  height: 4px;
-  border-radius: 999px;
-
-  background-color: var(--light-blue);
-  background-image: linear-gradient(
-    to bottom,
-    rgba(255, 255, 255, 0.45) 0%,
-    rgba(255, 255, 255, 0.25) 35%,
-    rgba(255, 255, 255, 0) 75%
-  );
-
-  box-shadow: 0 0 14px rgba(4, 195, 255, 0.35);
+  inset: -80px;
+  z-index: 0;
+  background-image: var(--halftone), var(--speedlines);
+  background-size: 9px 9px, auto;
+  opacity: 0.9;
+  animation: drift 7s linear infinite;
+  pointer-events: none;
 }
 
-/* Toast customization */
+@keyframes drift {
+  from { transform: translate(0, 0); }
+  to   { transform: translate(45px, 45px); }   /* one halftone+stripe period */
+}
+
+/* giant outlined watermark words (pure CSS, no markup needed) */
+.about-section::after,
+.projects-section::after,
+.resume-section::after,
+.contact-section::after {
+  position: absolute;
+  z-index: 0;
+  font-family: var(--font-display);
+  font-size: clamp(120px, 22vw, 340px);
+  line-height: 0.8;
+  letter-spacing: 6px;
+  color: transparent;
+  -webkit-text-stroke: 2px rgba(31, 143, 255, 0.06);
+  transform: rotate(-6deg);
+  pointer-events: none;
+  user-select: none;
+  white-space: nowrap;
+}
+.about-section::after    { content: "ABOUT";    bottom: 2%;  right: -4%; }
+.projects-section::after  { content: "PHANTOM"; top: 6%;     left: -3%; }
+.resume-section::after    { content: "JOURNEY"; bottom: 1%;  left: -3%; }
+.contact-section::after   { content: "CONTACT"; top: 8%;     right: -3%; }
+
+/* lift real content above the atmosphere */
+.about-container,
+.projects-container,
+.resume-container,
+.contact-container,
+.profile-container {
+  position: relative;
+  z-index: 1;
+}
+
+/* =========================================================
+   COMIC PANEL (generic .glass-card fallback)
+   Section-specific panels override geometry via compound
+   selectors (e.g. .about-card.glass-card) so order never bites.
+   ========================================================= */
+.glass-card {
+  position: relative;
+  background: var(--panel-bg);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  border: 3px solid var(--p5-ink);
+  box-shadow:
+    0 0 0 2px var(--p5-blue),
+    10px 10px 0 rgba(31, 143, 255, 0.22),
+    0 18px 50px rgba(0, 0, 0, 0.6);
+  clip-path: polygon(0 0, calc(100% - 22px) 0, 100% 22px, 100% 100%, 22px 100%, 0 calc(100% - 22px));
+}
+
+/* =========================================================
+   SCROLLBAR
+   ========================================================= */
+::-webkit-scrollbar { width: 12px; }
+::-webkit-scrollbar-track { background: var(--p5-black); }
+::-webkit-scrollbar-thumb {
+  background: var(--p5-blue);
+  border: 2px solid var(--p5-black);
+}
+::-webkit-scrollbar-thumb:hover { background: var(--p5-blue-bright); }
+
+/* =========================================================
+   BUTTONS — solid slanted "menu blocks" (NO border).
+   Hierarchy is by colour, not outline:
+   .btn          = dark block that swipes blue on hover (secondary)
+   .btn-chat     = solid blue primary (hero "Let's Chat")
+   .contact-btn  = solid blue primary (form submit)
+   ========================================================= */
+.btn {
+  --b-skew: var(--skew);
+  position: relative;
+  overflow: hidden;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transform: skewX(var(--b-skew));
+
+  padding: 15px 42px;
+  border: 2px solid var(--p5-paper);   /* crisp white keyline — contrasts dark rest AND blue hover */
+  border-radius: 0;
+  background: #141a29;
+  color: var(--p5-paper);
+
+  font-family: var(--font-display);    /* Anton — bold "main character" weight */
+  font-weight: 700;
+  font-style: italic;
+  font-size: 19px;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  cursor: pointer;
+
+  /* hard blue sticker offset so the chip floats off the dark page — no gray gloss */
+  box-shadow: 6px 6px 0 var(--p5-blue-deep);
+  transition: transform 0.18s var(--ease-slam),
+    box-shadow 0.18s var(--ease-slam), color 0.2s ease;
+}
+
+/* content sits above the fill layer, counter-skewed to read straight */
+.btn > * {
+  position: relative;
+  z-index: 1;
+  transform: skewX(calc(-1 * var(--b-skew)));
+}
+
+/* the blue fill wipes in from the left */
+.btn::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: -118%;            /* fully off-screen so no blue sliver peeks at the left edge */
+  width: 112%;
+  background: var(--p5-blue);
+  z-index: 0;
+  transition: left 0.24s var(--ease-slam);
+}
+
+.btn:hover {
+  transform: skewX(var(--b-skew)) translate(-3px, -3px);
+  box-shadow: 9px 9px 0 var(--p5-blue-deep);
+}
+.btn:hover::before { left: 0; }
+
+.btn:active {
+  transform: skewX(var(--b-skew)) translate(2px, 2px);
+  box-shadow: 3px 3px 0 var(--p5-blue-deep);
+}
+
+/* primary = solid blue at rest (form submit only) */
+.contact-btn { color: var(--p5-paper); }
+.contact-btn::before { left: 0; background: var(--p5-blue); }
+.contact-btn:hover::before { background: var(--p5-blue-bright); }
+.contact-btn:hover {
+  box-shadow: 8px 8px 0 var(--p5-black),
+    inset 0 2px 0 rgba(255, 255, 255, 0.35),
+    inset 0 -3px 0 rgba(0, 0, 0, 0.2);
+}
+
+/* legacy helpers kept for safety */
+.primary-btn { background: var(--p5-blue); }
+.outlined-btn { background: var(--p5-ink); }
+
+/* =========================================================
+   SCROLL-REVEAL — slam in from a skew
+   ========================================================= */
+.fade-in-scroll {
+  opacity: 0;
+  transform: translateX(-46px) skewX(6deg);
+  transition: opacity 0.5s var(--ease-slam), transform 0.5s var(--ease-slam);
+}
+.fade-in-scroll.fade-in-visible {
+  opacity: 1;
+  transform: translateX(0) skewX(0);
+}
+.fade-in-scroll:nth-child(1) { transition-delay: 0.05s; }
+.fade-in-scroll:nth-child(2) { transition-delay: 0.12s; }
+.fade-in-scroll:nth-child(3) { transition-delay: 0.19s; }
+.fade-in-scroll:nth-child(4) { transition-delay: 0.26s; }
+.fade-in-scroll:nth-child(5) { transition-delay: 0.33s; }
+
+/* inner fade used by resume tab panels */
+.fade-in {
+  animation: panelIn 0.45s var(--ease-slam) both;
+}
+@keyframes panelIn {
+  from { opacity: 0; transform: translateX(20px) skewX(3deg); }
+  to   { opacity: 1; transform: translateX(0) skewX(0); }
+}
+
+/* =========================================================
+   SCREEN HEADING — the signature layered, slanted title
+   ========================================================= */
+.screen-heading {
+  text-align: center;
+  margin-bottom: 30px;
+}
+
+/* section headers = same Persona "ransom note" tiles as the hero name.
+   Requires per-letter <span>s inside the h2 (spaces use <span class="sp">). */
+.screen-heading h2 {
+  position: relative;
+  display: inline-flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  gap: 5px;
+  margin-bottom: 18px;
+  padding: 0;
+
+  font-family: var(--font-display);
+  font-weight: 400;
+  font-size: 56px;
+  line-height: 1;
+  letter-spacing: 0;
+  text-transform: uppercase;
+  color: var(--p5-paper);
+
+  transform: none;
+  text-shadow: none;
+  -webkit-text-stroke: 0;
+}
+
+/* remove the old inverted square + jagged underline */
+.screen-heading h2::before,
+.screen-heading h2::after { content: none; display: none; }
+
+/* each letter tile */
+.screen-heading h2 span:not(.sp) {
+  display: inline-block;
+  padding: 0 10px;
+  line-height: 1.05;
+  -webkit-text-stroke: 0;
+  -webkit-text-fill-color: currentColor;
+  text-shadow: none;
+  border: 2px solid var(--p5-paper);
+  box-shadow: 4px 4px 0 var(--p5-black);
+}
+
+/* word break / space — invisible spacer */
+.screen-heading h2 span.sp {
+  display: inline-block;
+  width: 0.34em;
+  background: none;
+  border: none;
+  box-shadow: none;
+}
+
+/* alternating colorways + hand-cut tilts (cycled every 5 letters) */
+.screen-heading h2 span:not(.sp):nth-child(5n + 1) {
+  background: var(--p5-paper); color: var(--p5-ink);
+  transform: rotate(-6deg) translateY(2px);
+}
+.screen-heading h2 span:not(.sp):nth-child(5n + 2) {
+  background: var(--p5-ink); color: var(--p5-paper);
+  transform: rotate(5deg) translateY(-3px);
+}
+.screen-heading h2 span:not(.sp):nth-child(5n + 3) {
+  background: var(--p5-blue); color: var(--p5-paper);
+  border-color: var(--p5-paper);
+  transform: rotate(-3deg) translateY(1px);
+}
+.screen-heading h2 span:not(.sp):nth-child(5n + 4) {
+  background: var(--p5-paper); color: var(--p5-ink);
+  transform: rotate(7deg) translateY(-2px);
+}
+.screen-heading h2 span:not(.sp):nth-child(5n + 5) {
+  background: var(--p5-ink); color: var(--p5-paper);
+  transform: rotate(-5deg) translateY(2px);
+}
+
+/* =========================================================
+   TOASTS
+   ========================================================= */
 .Toastify__toast {
-  font-family: "Raleway", sans-serif;
-  border-radius: 12px;
-  backdrop-filter: blur(10px);
+  font-family: var(--font-ui);
+  letter-spacing: 0.5px;
+  border-radius: 0;
+  border: 2px solid var(--p5-black);
+  backdrop-filter: blur(8px);
 }
-
 .Toastify__toast--success {
-  background: rgba(4, 195, 255, 0.9);
+  background: var(--p5-blue);
+  color: var(--p5-paper);
 }
-
 .Toastify__toast--error {
-  background: rgba(255, 71, 87, 0.9);
+  background: var(--p5-black);
+  color: var(--p5-paper);
+  box-shadow: inset 0 0 0 2px var(--p5-blue);
 }
 
-/* Responsive */
+/* =========================================================
+   RESPONSIVE
+   ========================================================= */
 @media screen and (max-width: 768px) {
-  .screen-heading h2 {
-    font-size: 36px;
-  }
-
-  .btn {
-    padding: 12px 24px;
-    font-size: 13px;
-  }
+  .screen-heading h2 { font-size: 40px; }
+  .btn { padding: 12px 28px; font-size: 13px; }
+  .about-section::after,
+  .projects-section::after,
+  .resume-section::after,
+  .contact-section::after { font-size: 120px; }
 }
 
 @media screen and (max-width: 480px) {
-  .screen-heading h2 {
-    font-size: 28px;
+  .screen-heading h2 { font-size: 30px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
   }
 }

@@ -1,12 +1,12 @@
-/* Layout */
+/* =====================================================================
+   PROFILE (hero text + portrait)
+   ===================================================================== */
 
 .profile-container {
   width: 100%;
   max-width: 1400px;
   margin: 0 auto;
   padding: 0 48px;
-  position: relative;
-  z-index: 1;
 }
 
 .profile-content {
@@ -16,593 +16,709 @@
   align-items: center;
 }
 
-/* Text */
+/* ---------- Text ---------- */
 
 .profile-text {
   max-width: 640px;
-  animation: fadeInUp 1s ease-out;
+  animation: slamInLeft 0.7s var(--ease-slam) both;
 }
 
 .greeting {
   display: flex;
   align-items: center;
   gap: 15px;
-  margin-bottom: 20px;
+  margin-bottom: 16px;
 }
 
 .greeting h1 {
-  font-size: 48px;
-  font-weight: 700;
-  color: var(--white);
+  font-family: var(--font-display);
+  font-size: 58px;
+  line-height: 1.05;
+  font-weight: 400;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: var(--p5-paper);
   margin: 0;
+  font-style: italic;
+  transform: skewX(-6deg);
+  text-shadow: 4px 4px 0 var(--p5-black);
+  -webkit-text-stroke: 1px var(--p5-black);
 }
 
+/* highlighted name = Persona "ransom note" — each letter its own tilted tile.
+   Requires per-letter <span>s inside .highlight (see JSX). Falls back to a
+   plain blue plate if the letters aren't wrapped. */
 .highlight {
-  background-color: var(--light-blue);
-  background-image: linear-gradient(
-    to bottom,
-    rgba(255, 255, 255, 0.45) 0%,
-    rgba(255, 255, 255, 0.25) 40%,
-    rgba(255, 255, 255, 0) 80%
-  );
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  margin-left: 10px;
+  /* neutralize the inherited plate styling when letters ARE wrapped */
+  background: none;
+  border: none;
+  box-shadow: none;
+  padding: 0;
+  text-shadow: none;
+  transform: skewX(6deg);   /* counter the h1's -6deg so tiles keep their own tilts */
 }
 
-/* Role slider */
+/* each letter tile */
+.highlight span {
+  display: inline-block;
+  padding: 0 9px;
+  line-height: 1.05;
+  font-style: normal;        /* keep letters upright, not italic like the greeting */
+  -webkit-text-stroke: 0;
+  -webkit-text-fill-color: currentColor;
+  text-shadow: none;
+  border: 2px solid var(--p5-paper);
+  box-shadow: 4px 4px 0 var(--p5-black);
+}
+
+/* alternating colorways + hand-cut tilts (cycled every 5 letters) */
+.highlight span:nth-child(5n + 1) {
+  background: var(--p5-paper); color: var(--p5-ink);
+  transform: rotate(-7deg) translateY(2px);
+}
+.highlight span:nth-child(5n + 2) {
+  background: var(--p5-ink); color: var(--p5-paper);
+  transform: rotate(5deg) translateY(-3px);
+}
+.highlight span:nth-child(5n + 3) {
+  background: var(--p5-blue); color: var(--p5-paper);
+  border-color: var(--p5-paper);
+  transform: rotate(-3deg) translateY(1px);
+}
+.highlight span:nth-child(5n + 4) {
+  background: var(--p5-paper); color: var(--p5-ink);
+  transform: rotate(8deg) translateY(-2px);
+}
+.highlight span:nth-child(5n + 5) {
+  background: var(--p5-ink); color: var(--p5-paper);
+  transform: rotate(-5deg) translateY(2px);
+}
+
+/* ---------- Role slider ---------- */
 
 .role-container {
   display: flex;
   align-items: center;
-  gap: 0px;
-  margin: 20px 0;
-  font-size: 32px;
+  gap: 0;
+  margin: 22px 0;
+  font-family: var(--font-display);
+  font-size: 36px;
   font-weight: 600;
-  height: 50px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  height: 88px;
 }
 
 .role-text {
-  color: var(--white);
+  color: var(--p5-paper);
+  display: flex;
+  align-items: center;
+  white-space: nowrap;
+  /* match the greeting's look (size unchanged) */
+  font-style: italic;
+  transform: skewX(-6deg);
+  text-shadow: 4px 4px 0 var(--p5-black);
+  -webkit-text-stroke: 1px var(--p5-black);
+}
+
+/* counter the parent skew on the cursor is handled inside its own skew below */
+
+/* Persona 5 selection cursor — a chunky, slightly hand-cut arrowhead that
+   "stabs" toward the highlighted word, extruded like a P5 menu sticker. */
+.role-text::after {
+  content: "";
+  width: 28px;
+  height: 38px;
+  margin: 0 12px 0 16px;
+  background: var(--p5-blue);
+  /* solid, slightly asymmetric arrowhead with a sharp tip + concave tail */
+  clip-path: polygon(0% 3%, 56% 0%, 100% 50%, 54% 100%, 0% 97%, 26% 50%);
+  /* bright top-left edge + hard black cut-out offset = extruded P5 sticker */
+  filter:
+    drop-shadow(-1.5px -1.5px 0 var(--p5-blue-bright))
+    drop-shadow(3px 3px 0 var(--p5-black));
+  transform: skewX(-3deg);
+  transform-origin: center;
+  /* shares the 8.4s cycle loop so it springs in sync with each word change */
+  animation: cursorStab 8.4s infinite;
+}
+
+/* the cursor springs toward the word exactly as each new role slams in
+   (slideUp changes at ~31% / ~61% / ~94%), then eases back and rests. */
+@keyframes cursorStab {
+  0%   { transform: skewX(-3deg) translateX(0); }
+  31%  { transform: skewX(-3deg) translateX(0);
+         animation-timing-function: cubic-bezier(0.3, 1.6, 0.6, 1); }   /* fast spring out + overshoot */
+  34%  { transform: skewX(-3deg) translateX(7px);
+         animation-timing-function: cubic-bezier(0.4, 0, 0.3, 1); }      /* quick ease back */
+  39%  { transform: skewX(-3deg) translateX(0); }
+  61%  { transform: skewX(-3deg) translateX(0);
+         animation-timing-function: cubic-bezier(0.3, 1.6, 0.6, 1); }
+  64%  { transform: skewX(-3deg) translateX(7px);
+         animation-timing-function: cubic-bezier(0.4, 0, 0.3, 1); }
+  69%  { transform: skewX(-3deg) translateX(0); }
+  94%  { transform: skewX(-3deg) translateX(0);
+         animation-timing-function: cubic-bezier(0.3, 1.6, 0.6, 1); }
+  97%  { transform: skewX(-3deg) translateX(7px);
+         animation-timing-function: cubic-bezier(0.4, 0, 0.3, 1); }
+  100% { transform: skewX(-3deg) translateX(0); }
 }
 
 .slider {
-  height: 50px;
+  height: 88px;
   overflow: hidden;
 }
 
 .slide-track {
   display: flex;
   flex-direction: column;
-  animation: slideUp 9s infinite;
+  align-items: flex-start;   /* each row hugs its own text */
+  animation: slideUp 8.4s infinite var(--ease-slam);
 }
 
 .role {
-  height: 50px;
+  height: 88px;
   display: flex;
   align-items: center;
-  padding: 0 10px;
+  white-space: nowrap;
+  padding: 0 96px 0 0;   /* room for the magnified far edge so it isn't clipped */
   font-weight: 700;
+  /* right-taller wedge with the LEFT edge anchored (stays put by the chevron) */
+  transform: perspective(440px) rotateY(-32deg) skewX(-3deg);
+  transform-origin: left center;
 }
 
-.role.software-engineer {
-  color: #60a5fa;
-}
+/* bold comic treatment so it's not just flat blue: black outline + layered drop */
+.role.software-engineer,
+.role.curious,
 .role.enthusiast {
-  color: #f87171;
-}
-.role.curious {
-  color: #4ade80;
+  color: var(--p5-blue);
+  -webkit-text-stroke: 2px var(--p5-black);
+  paint-order: stroke fill;
+  text-shadow:
+    4px 4px 0 var(--p5-black),
+    8px 8px 0 var(--p5-blue-deep);
 }
 
+/* word SLIDES to the next at the start of each segment; the chevron glide
+   (cursorStab) follows in the gap before the next slide. */
 @keyframes slideUp {
-  0%,
-  30% {
-    transform: translateY(0);
-  }
-  33%,
-  63% {
-    transform: translateY(-50px);
-  }
-  66%,
-  96% {
-    transform: translateY(-100px);
-  }
-  100% {
-    transform: translateY(0);
-  }
+  0%, 31%   { transform: translateY(0); }
+  34%, 61%  { transform: translateY(-88px); }
+  64%, 94%  { transform: translateY(-176px); }
+  97%, 100% { transform: translateY(0); }
 }
 
-/* Tagline */
+/* ---------- Tagline ---------- */
 
 .tagline {
+  font-family: var(--font-body);
   font-size: 18px;
   color: var(--text-gray);
   line-height: 1.6;
-  margin: 30px 0;
+  margin: 28px 0;
   max-width: 600px;
+  padding-left: 16px;
+  border-left: 4px solid var(--p5-blue);
 }
 
-/* Social icons */
+/* ---------- Social icons ---------- */
 
-.social-links {
-  margin: 40px 0;
-}
+.social-links { margin: 38px 0; }
 
 .social-text {
-  font-size: 18px;
+  font-family: var(--font-ui);
+  font-size: 16px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
   color: var(--text-gray);
-  margin-bottom: 20px;
+  margin-bottom: 18px;
 }
 
-.colz {
-  display: flex;
-  gap: 20px;
-}
+.colz { display: flex; gap: 20px; }
 
 .colz a {
-  width: 50px;
-  height: 50px;
-  background-color: #1f2235;
+  width: 52px;
+  height: 52px;
+  background-color: var(--p5-ink);
   text-align: center;
-  line-height: 47.5px;
-  font-size: 25px;
+  line-height: 48px;
+  font-size: 24px;
   display: block;
-  border-radius: 50%;
+  border-radius: 0;
   position: relative;
   overflow: hidden;
-  border: 2px solid white;
+  border: 3px solid var(--p5-paper);
   z-index: 1;
-  transition: box-shadow 0.35s ease;
+  transform: rotate(-4deg);
+  transition: box-shadow 0.3s ease, transform 0.25s var(--ease-pop), background-color 0.3s ease;
 }
 
 .colz a .icon {
   position: relative;
-  color: white;
-  transition: transform 0.5s;
+  color: var(--p5-paper);
+  transition: transform 0.5s var(--ease-snap);
   z-index: 3;
 }
-
-.colz a:hover .icon {
-  transform: rotateY(360deg);
-}
+.colz a:hover .icon { transform: rotateY(360deg); }
 
 .colz a::before {
-  content: "";
-  position: absolute;
-  right: 100%;
-  top: 0;
-  width: 100%;
-  height: 100%;
-  z-index: 2;
-  background-image: linear-gradient(
-    to bottom,
-    rgba(255, 255, 255, 0.45) 0%,
-    rgba(255, 255, 255, 0.25) 18%,
-    rgba(255, 255, 255, 0) 45%
-  );
-  transition: right 0.5s ease;
-}
-
-.colz a:hover::before {
-  right: 0;
-}
-
-.colz .one a::before {
-  background-color: #dd4b39;
-}
-.colz .two a::before {
-  background-color: #0077b5;
-}
-.colz .three a::before {
-  background-color: black;
-}
-
-.colz a:hover {
-  box-shadow: 0 0 22px rgba(4, 195, 255, 0.45);
-}
-
-/* CTA buttons */
-
-.cta-buttons {
-  display: flex;
-  gap: 20px;
-  margin-top: 40px;
-}
-
-.btn {
-  position: relative;
-  overflow: hidden;
-  background: transparent;
-  border: 2px solid white;
-  color: var(--white);
-  font-size: 16px;
-  font-weight: 700;
-  padding: 14px 32px;
-  border-radius: 999px;
-  cursor: pointer;
-  z-index: 1;
-  transition: box-shadow 0.35s ease;
-}
-
-.btn::before {
   content: "";
   position: absolute;
   left: -100%;
   top: 0;
   width: 100%;
   height: 100%;
-  z-index: -1;
-  background-color: var(--light-blue);
-  background-image: linear-gradient(
-    to bottom,
-    rgba(255, 255, 255, 0.45) 0%,
-    rgba(255, 255, 255, 0.25) 18%,
-    rgba(255, 255, 255, 0) 45%
-  );
-  transition: left 0.4s ease;
+  z-index: 2;
+  background-color: var(--p5-blue);
+  transition: left 0.25s var(--ease-slam);
+}
+.colz a:hover::before { left: 0; }
+
+.colz a:hover {
+  transform: rotate(0deg) translateY(-4px);
+  box-shadow: 5px 5px 0 var(--p5-blue), 0 0 18px rgba(31, 143, 255, 0.55);
 }
 
-.btn:hover::before {
-  left: 0;
+/* ---------- CTA ---------- */
+
+.cta-buttons {
+  display: flex;
+  gap: 22px;
+  margin-top: 38px;
 }
 
-.btn:hover {
-  box-shadow: 0 0 26px rgba(4, 195, 255, 0.45);
-}
-
-/* =========================
-   PROFILE IMAGE
-   ========================= */
+/* =========================================================
+   PORTRAIT — angular comic frame + rotating blue glow + burst
+   ========================================================= */
 
 .profile-image-container {
   display: flex;
   justify-content: center;
   align-items: center;
+  position: relative;
+  transform: rotate(-15deg);   /* tilt the whole portrait unit counterclockwise */
+  transition: transform 0.4s var(--ease-pop);
+  cursor: pointer;
+}
+/* once revealed (Persona mode), the portrait snaps upright + pops forward */
+.profile-image-container.revealed { transform: rotate(0deg) scale(1.04); }
+/* a quick shake on the actual toggle moment (added/removed by JS, see JSX) */
+.profile-image-container.summoning { animation: summonShake 0.45s var(--ease-slam); }
+@keyframes summonShake {
+  0%   { transform: rotate(-15deg) scale(1); }
+  25%  { transform: rotate(6deg) scale(1.08); }
+  50%  { transform: rotate(-4deg) scale(1.05); }
+  75%  { transform: rotate(2deg) scale(1.06); }
+  100% { transform: rotate(0deg) scale(1.04); }
 }
 
 .profile-image {
   position: relative;
   width: 400px;
   height: 400px;
+  animation: slamInRight 0.7s var(--ease-slam) both;
 }
 
-/* PHOTO — always clean */
+/* soft pulse aura behind the portrait */
+.profile-image::before {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 116%;
+  height: 116%;
+  transform: translate(-50%, -50%);
+  z-index: 0;
+  border-radius: 50%;
+  background: radial-gradient(
+    circle,
+    rgba(31, 143, 255, 0.55) 0%,
+    rgba(31, 143, 255, 0.18) 45%,
+    rgba(31, 143, 255, 0) 70%
+  );
+  filter: blur(26px);
+  animation: glowPulse 4.5s ease-in-out infinite;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+}
+.profile-image-container.revealed .profile-image::before { opacity: 1; }
+
+/* speed-line burst behind the frame — fires on the summon */
+.profile-image::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 160%;
+  height: 160%;
+  z-index: -1;
+  transform: translate(-50%, -50%) scale(0.6);
+  background: repeating-conic-gradient(from 0deg at 50% 50%,
+    rgba(31, 143, 255, 0.6) 0deg 1.4deg, transparent 1.4deg 6deg);
+  -webkit-mask: radial-gradient(circle, transparent 30%, #000 44%, transparent 76%);
+          mask: radial-gradient(circle, transparent 30%, #000 44%, transparent 76%);
+  opacity: 0;
+  pointer-events: none;
+}
+.profile-image-container.summoning .profile-image::after {
+  animation: raysPop 0.55s var(--ease-pop);
+}
+@keyframes raysPop {
+  0%   { opacity: 0;   transform: translate(-50%, -50%) scale(0.5) rotate(-10deg); }
+  55%  { opacity: 0.9; transform: translate(-50%, -50%) scale(1.08) rotate(5deg); }
+  100% { opacity: 0;   transform: translate(-50%, -50%) scale(1.2) rotate(0deg); }
+}
+
 .image-wrapper {
   position: relative;
   z-index: 2;
-
   width: 100%;
   height: 100%;
-  border-radius: 50%;
   overflow: hidden;
-
-  border: 3px solid var(--light-blue);
-  background-color: #000; /* blocks glow bleed */
+  background-color: #000;
+  clip-path: polygon(14% 0, 100% 0, 100% 86%, 86% 100%, 0 100%, 0 14%);
+  border: 4px solid var(--p5-blue);
+  box-shadow: 12px 12px 0 var(--p5-black), 0 0 28px rgba(31, 143, 255, 0.35);
+  transition: box-shadow 0.35s var(--ease-slam), border-color 0.25s ease;
+}
+.profile-image-container.revealed .image-wrapper {
+  border-color: var(--p5-blue-bright);
+  box-shadow: 16px 16px 0 var(--p5-black), 0 0 55px rgba(31, 143, 255, 0.85);
 }
 
-/* IMAGE */
+/* base photo (Home.png) — BURNS AWAY from the bottom-left on reveal */
 .profile-picture {
+  position: absolute;
+  inset: 0;
   width: 100%;
   height: 100%;
-  background-image: url("../../assets/Home.jpg");
+  background-image: url("../../assets/Home.png");
   background-size: cover;
   background-position: center;
+  filter: contrast(1.05) saturate(1.05);
+  z-index: 2;
+  /* fully visible at rest; the burn eats the base from the BOTTOM-LEFT upward.
+     Gradient: transparent toward bottom-left, opaque toward top-right. */
+  -webkit-mask: linear-gradient(228deg,
+    transparent 0%, transparent 45%, #000 68%, #000 100%);
+          mask: linear-gradient(228deg,
+    transparent 0%, transparent 45%, #000 68%, #000 100%);
+  -webkit-mask-size: 360% 360%;
+          mask-size: 360% 360%;
+  -webkit-mask-position: 0% 100%;   /* burn not started — full image shown */
+          mask-position: 0% 100%;
+  transition: -webkit-mask-position 1.15s linear, mask-position 1.15s linear;
+}
+/* revealed: slide the transparent band fully across (BL → TR) → base burned off */
+.profile-image-container.revealed .profile-picture {
+  -webkit-mask-position: 200% -100%;
+          mask-position: 200% -100%;
 }
 
-/* ROTATING GLOW — BACKGROUND ONLY */
-.glow-effect {
+/* PERSONA layer (Home-Persona.png) sits UNDER the burning base and is uncovered
+   as the base burns away. Requires <div class="profile-picture-persona">. */
+.profile-picture-persona {
   position: absolute;
-  z-index: 1; /* behind image */
-
-  top: 50%;
-  left: 50%;
-
-  width: 120%;
-  height: 120%;
-
-  transform: translate(-50%, -50%);
-  border-radius: 50%;
-
-  background: conic-gradient(
-    from 0deg,
-    rgba(4, 195, 255, 0.8),
-    rgba(0, 102, 255, 0.6),
-    rgba(4, 195, 255, 0.8)
-  );
-
-  filter: blur(35px);
-  opacity: 0.75;
-
-  animation: rotateGlow 6s linear infinite;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  background-image: url("../../assets/Home-Persona.png");
+  background-size: cover;
+  background-position: center;
+  z-index: 1;            /* beneath the base */
   pointer-events: none;
 }
 
-/* smooth rotation */
-@keyframes rotateGlow {
-  to {
-    transform: translate(-50%, -50%) rotate(360deg);
-  }
+/* ---- THE FLAME ---- a stack of flickering blue tongues riding the burn edge,
+   roughened by an SVG turbulence filter for organic, intricate licking shapes.
+   It travels along the same diagonal as the burn mask. */
+.profile-flame {
+  position: absolute;
+  left: -55%;
+  bottom: -55%;
+  width: 150%;
+  height: 150%;
+  z-index: 4;
+  pointer-events: none;
+  opacity: 0;
+  /* multiple radial "tongues" of blue fire, layered hot-core → cool tips */
+  background:
+    radial-gradient(60% 80% at 30% 100%, rgba(180,225,255,0.95) 0%, rgba(92,176,255,0.6) 30%, transparent 62%),
+    radial-gradient(45% 90% at 50% 100%, rgba(255,255,255,0.9) 0%, rgba(120,200,255,0.55) 28%, transparent 60%),
+    radial-gradient(55% 75% at 68% 100%, rgba(31,143,255,0.85) 0%, rgba(31,143,255,0.4) 34%, transparent 64%),
+    radial-gradient(80% 60% at 50% 100%, rgba(10,63,158,0.8) 0%, rgba(10,63,158,0.25) 45%, transparent 72%);
+  /* the turbulence filter (defined in JSX SVG) carves flame-like edges */
+  filter: url(#flameTurb) blur(0.4px) drop-shadow(0 0 18px rgba(31,143,255,0.8));
+  mix-blend-mode: screen;
+  transform: rotate(42deg);   /* aim the tongues up-and-right along the burn line */
+  transform-origin: 30% 100%;
+}
+/* during the burn: flame ignites, sweeps diagonally bottom-left → top-right, fades */
+.profile-image-container.summoning .profile-flame {
+  animation: flameSweep 1.25s ease-in forwards, flameFlicker 0.12s steps(2) infinite;
+}
+/* sweep the flame across the frame */
+@keyframes flameSweep {
+  0%   { opacity: 0;    transform: rotate(42deg) translate(-30%, 40%) scale(0.65); }
+  12%  { opacity: 1; }
+  85%  { opacity: 1;    transform: rotate(42deg) translate(60%, -90%) scale(1.15); }
+  100% { opacity: 0;    transform: rotate(42deg) translate(80%, -120%) scale(1.2); }
+}
+/* rapid flicker = the turbulence seed shifting feel, via tiny scale/skew jitter */
+@keyframes flameFlicker {
+  0%   { filter: url(#flameTurb) blur(0.4px) drop-shadow(0 0 16px rgba(31,143,255,0.8)); }
+  100% { filter: url(#flameTurb2) blur(0.6px) drop-shadow(0 0 22px rgba(120,200,255,0.9)); }
 }
 
-/* =========================
-   SCROLL ARROWS
-   ========================= */
+/* a bright EMBER LINE that glows right at the burn edge as it travels */
+.profile-flame::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(42deg,
+    transparent 38%, rgba(255,255,255,0.9) 47%, rgba(120,200,255,0.9) 50%, transparent 60%);
+  mix-blend-mode: screen;
+  filter: blur(2px);
+}
+
+/* soft full-frame ignition flash when the burn fires */
+.image-wrapper::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 5;
+  background: radial-gradient(circle at 25% 85%,
+    rgba(120,200,255,0.9), rgba(31,143,255,0.3) 45%, transparent 70%);
+  opacity: 0;
+  pointer-events: none;
+}
+.profile-image-container.summoning .image-wrapper::after {
+  animation: igniteFlash 1.1s ease-out;
+}
+@keyframes igniteFlash {
+  0%   { opacity: 0; }
+  15%  { opacity: 0.7; }
+  60%  { opacity: 0.25; }
+  100% { opacity: 0; }
+}
+
+/* ---- subtle click affordance: a small ember dot + faint label, low-key ---- */
+.persona-hint {
+  position: absolute;
+  bottom: 10px;
+  right: 8px;
+  z-index: 6;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 9px;
+  font-family: var(--font-ui, sans-serif);
+  font-size: 10px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: rgba(238, 243, 251, 0.7);
+  background: rgba(11, 13, 20, 0.45);
+  backdrop-filter: blur(2px);
+  border: 1px solid rgba(92, 176, 255, 0.5);
+  pointer-events: none;
+  opacity: 0.7;
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}
+/* a tiny pulsing blue ember as the "interactive" cue */
+.persona-hint::before {
+  content: "";
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--p5-blue-bright);
+  box-shadow: 0 0 6px var(--p5-blue-bright);
+  animation: emberPulse 1.6s ease-in-out infinite;
+}
+@keyframes emberPulse {
+  0%, 100% { opacity: 0.4; transform: scale(0.8); }
+  50%      { opacity: 1;   transform: scale(1.25); }
+}
+/* retire the hint once revealed */
+.profile-image-container.revealed .persona-hint {
+  opacity: 0;
+  transform: translateY(4px);
+}
+
+/* second, slower breathing layer for subtle depth (no rotation) */
+.glow-effect {
+  position: absolute;
+  z-index: 1;
+  top: 50%;
+  left: 50%;
+  width: 104%;
+  height: 104%;
+  transform: translate(-50%, -50%);
+  border-radius: 50%;
+  background: radial-gradient(
+    circle,
+    rgba(92, 176, 255, 0.4) 0%,
+    rgba(31, 143, 255, 0) 65%
+  );
+  filter: blur(18px);
+  opacity: 0.8;
+  animation: glowPulse 4.5s ease-in-out infinite reverse;
+  pointer-events: none;
+}
+
+@keyframes glowPulse {
+  0%, 100% { opacity: 0.55; transform: translate(-50%, -50%) scale(1); }
+  50%      { opacity: 0.9;  transform: translate(-50%, -50%) scale(1.05); }
+}
+
+/* =========================================================
+   SCROLL INDICATOR — maximalist P5: a stack of extruded chevrons
+   that cascade downward, with a slow springy bob.
+   (Markup: .scroll-arrows > span × 3 — the spans are the chevrons.)
+   ========================================================= */
 
 .scroll-arrows {
   position: absolute;
-  bottom: px;
+  bottom: 22px;
   left: 50%;
-  transform: translateX(-50%);
+  margin-left: -58px;            /* center (half of width) — keeps transform free for the bob */
+  transform: skewX(-8deg);
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 6px;
+  gap: 4px;
+  padding: 12px 0 16px;
+  width: 116px;
   pointer-events: none;
+  z-index: 2;
+  animation: scrollBob 2s var(--ease-snap) infinite;
 }
 
+/* the three chevrons — bold extruded P5 arrowheads that cascade down */
 .scroll-arrows span {
-  width: 18px;
-  height: 18px;
-  border-bottom: 2px solid var(--light-blue);
-  border-right: 2px solid var(--light-blue);
-  transform: rotate(45deg);
+  width: 30px;
+  height: 16px;
+  background: var(--p5-blue);
+  clip-path: polygon(0 0, 50% 70%, 100% 0, 100% 30%, 50% 100%, 0 30%);
+  filter:
+    drop-shadow(-1px -1px 0 var(--p5-blue-bright))
+    drop-shadow(2px 2px 0 var(--p5-black));
   opacity: 0;
-  animation: arrowPulse 2s infinite;
+  animation: chevCascade 1.5s var(--ease-slam) infinite;
+}
+.scroll-arrows span:nth-child(1) { animation-delay: 0s;    }
+.scroll-arrows span:nth-child(2) { animation-delay: 0.18s; width: 24px; }
+.scroll-arrows span:nth-child(3) { animation-delay: 0.36s; width: 18px; }
+
+/* each chevron fades in at the top, falls, and fades out at the bottom */
+@keyframes chevCascade {
+  0%   { opacity: 0; transform: translateY(-10px) scaleY(0.5); }
+  30%  { opacity: 1; transform: translateY(0) scaleY(1); }
+  60%  { opacity: 1; transform: translateY(6px) scaleY(1); }
+  100% { opacity: 0; transform: translateY(16px) scaleY(0.5); }
 }
 
-.scroll-arrows span:nth-child(1) {
-  animation-delay: 0s;
-}
-.scroll-arrows span:nth-child(2) {
-  animation-delay: 0.2s;
-}
-.scroll-arrows span:nth-child(3) {
-  animation-delay: 0.4s;
+/* whole unit gives a slow, springy bob */
+@keyframes scrollBob {
+  0%, 100% { transform: skewX(-8deg) translateY(0); }
+  50%      { transform: skewX(-8deg) translateY(7px); }
 }
 
-@keyframes arrowPulse {
-  0% {
-    opacity: 0;
-    transform: rotate(45deg) translate(0, 0);
-  }
-  30% {
-    opacity: 1;
-  }
-  60% {
-    opacity: 0;
-    transform: rotate(45deg) translate(6px, 6px);
-  }
-  100% {
-    opacity: 0;
-  }
-}
+/* =========================================================
+   CTA ICON ENTRANCES (text counter-skewed via .btn > * )
+   ========================================================= */
 
-/* =========================
-   VIEW PROJECTS — CORRECT ARROW POSITIONING
-   ========================= */
-
-.btn-arrow {
-  position: relative;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-/* centered text */
-.btn-arrow .btn-text {
-  display: inline-block;
-  transition: transform 0.35s ease;
-}
-
-/* subtle left shift on hover */
-.btn-arrow:hover .btn-text {
-  transform: translateX(-6px);
-}
-
-/* Font Awesome arrow */
-.btn-arrow::after {
-  content: "\f061"; /* fa-arrow-right */
-  font-family: "Font Awesome 6 Free";
-  font-weight: 900;
-
-  position: absolute;
-  right: 20px;
-  top: 50%;
-
-  transform: translateY(-50%) translateX(-6px);
-  opacity: 0;
-
-  color: white;
-  font-size: 15px;
-
-  transition: opacity 0.25s ease, transform 0.35s ease;
-}
-
-/* slide arrow in */
-.btn-arrow:hover::after {
-  opacity: 1;
-  transform: translateY(-50%) translateX(0);
-}
-
-/* =========================
-   LET'S CHAT — FLOAT + ROTATE ICON ENTRANCE
-   ========================= */
-
-.btn-chat {
-  position: relative;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-/* centered text */
+.btn-arrow .btn-text,
 .btn-chat .btn-text {
   display: inline-block;
-  transition: transform 0.35s ease;
+  transition: transform 0.3s var(--ease-snap);
 }
 
-/* same left nudge */
-.btn-chat:hover .btn-text {
-  transform: translateX(-6px);
-}
-
-/* chat bubble materializes */
+/* Persona selection cursor — a flex item placed BEFORE the label (order:-1) so
+   it always hugs the centred text at any button width. Collapsed at rest, it
+   opens a slot on hover (pushing the label right), italic-slanted to match. */
+.btn-arrow:not(.contact-btn)::after,
 .btn-chat::after {
-  content: "\f4ad"; /* fa-comment-dots */
-  font-family: "Font Awesome 6 Free";
-  font-weight: 900;
-
-  position: absolute;
-  right: 18px;
-  top: 50%;
-
-  color: white;
-  font-size: 15px;
-
+  content: "";
+  order: -1;
+  flex: 0 0 auto;
+  width: 0;
+  height: 16px;
+  margin-right: 0;
+  background: var(--p5-paper);
+  clip-path: polygon(0 0, 60% 0, 100% 50%, 60% 100%, 0 100%, 40% 50%);
+  filter: drop-shadow(1.5px 1.5px 0 var(--p5-black));
   opacity: 0;
-  transform: translateY(-40%) scale(0.3) rotate(40deg);
-
-  transition: opacity 0.25s ease, transform 0.45s cubic-bezier(0.22, 1, 0.36, 1);
+  z-index: 1;
+  transform: skewX(-5deg) translateX(-6px) scale(0.85);
+  transition: width 0.26s var(--ease-slam), margin 0.26s var(--ease-slam),
+    opacity 0.2s ease, transform 0.32s var(--ease-pop);
+  pointer-events: none;
 }
-
-/* float + rotate into place */
+.btn-arrow:not(.contact-btn):hover::after,
 .btn-chat:hover::after {
+  width: 13px;
+  margin-right: 10px;
   opacity: 1;
-  transform: translateY(-50%) scale(1) rotate(0deg);
+  transform: skewX(-5deg) translateX(0) scale(1);
 }
 
-/* =========================
-   ANIMATIONS
-   ========================= */
+/* =========================================================
+   ENTRANCE KEYFRAMES
+   ========================================================= */
 
-@keyframes fadeInUp {
-  from {
-    opacity: 0;
-    transform: translateY(30px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+@keyframes slamInLeft {
+  0%   { opacity: 0; transform: translateX(-60px) skewX(8deg); }
+  100% { opacity: 1; transform: translateX(0) skewX(0); }
+}
+@keyframes slamInRight {
+  0%   { opacity: 0; transform: translateX(60px) skewX(-8deg); }
+  100% { opacity: 1; transform: translateX(0) skewX(0); }
 }
 
-/* =========================
+/* =========================================================
    RESPONSIVE
-   ========================= */
+   ========================================================= */
 
 @media screen and (max-width: 968px) {
-  .profile-container {
-    padding: 0 24px;
+  .profile-container { padding: 0 24px; }
+  .profile-content { grid-template-columns: 1fr; text-align: center; }
+  .profile-text { margin: 0 auto; }
+  .greeting, .role-container { justify-content: center; }
+  .slider { border-bottom: none; }
+  .tagline {
+    border-left: none;
+    border-top: 4px solid var(--p5-blue);
+    padding-left: 0;
+    padding-top: 14px;
   }
-
-  .profile-content {
-    grid-template-columns: 1fr;
-    text-align: center;
-  }
-
-  .profile-text {
-    margin: 0 auto;
-  }
-
-  .greeting,
-  .role-container {
-    justify-content: center;
-  }
-
-  /* .tagline {
-    margin-left: auto;
-    margin-right: auto;
-  } */
-
-  .colz {
-    justify-content: center;
-  }
-
-  .cta-buttons {
-    flex-direction: column;
-    align-items: center;
-  }
-
-  .btn {
-    max-width: 220px;
-    width: auto;
-  }
-
-  /* 🔥 FIX: arrows no longer overlap image */
+  .colz { justify-content: center; }
+  .cta-buttons { flex-direction: column; align-items: center; }
+  .btn { max-width: 250px; width: auto; }
   .scroll-arrows {
     position: relative;
     bottom: auto;
     left: auto;
-    transform: none;
-    margin-top: 48px;
-    margin-bottom: 16px;
+    margin: 48px auto 16px;   /* in-flow + horizontally centered */
   }
 }
 
-/* =========================
-   MOBILE DEVICES (Phones)
-   ========================= */
-
 @media screen and (max-width: 550px) {
-  /* 1. Resize the profile image to fit the screen */
-  .profile-image {
-    width: 280px; /* Smaller fixed size */
-    height: 280px; /* Keep it square */
-    /* OR use fluid sizing:
-    width: 100%;
-    max-width: 300px;
-    height: auto;
-    aspect-ratio: 1/1; 
-    */
-  }
-
-  /* 2. Scale down the main heading */
-  .greeting h1 {
-    font-size: 32px; /* Down from 48px */
-  }
-
-  /* 3. Scale down the role slider text */
-  .role-container {
-    font-size: 22px; /* Down from 32px */
-    height: 35px; /* Adjust height for smaller text */
-    flex-wrap: wrap; /* Allow wrapping if needed */
-  }
-
-  /* Adjust the slider container height to match text */
-  .slider,
-  .role {
-    height: 35px;
-  }
-
-  /* Update animation for new height */
-  /* Since the height changed from 50px to 35px, 
-     we need to adjust the translate values */
+  .profile-image { width: 280px; height: 280px; }
+  .greeting h1 { font-size: 36px; }
+  .role-container { font-size: 26px; height: 68px; flex-wrap: wrap; }
+  .slider, .role { height: 68px; }
+  .role-text::after { width: 20px; height: 26px; margin: 0 10px 0 12px; }
   @keyframes slideUp {
-    0%,
-    30% {
-      transform: translateY(0);
-    }
-    33%,
-    63% {
-      transform: translateY(-35px);
-    }
-    66%,
-    96% {
-      transform: translateY(-70px);
-    }
-    100% {
-      transform: translateY(0);
-    }
+    0%, 31%   { transform: translateY(0); }
+    34%, 61%  { transform: translateY(-68px); }
+    64%, 94%  { transform: translateY(-136px); }
+    97%, 100% { transform: translateY(0); }
   }
-
-  /* 4. Adjust margins */
-  .tagline {
-    font-size: 16px;
-    margin: 20px 0;
-  }
-
-  .profile-container {
-    padding: 0 20px; /* Slightly less padding to give content more room */
-  }
+  .tagline { font-size: 16px; margin: 20px 0; }
+  .profile-container { padding: 0 20px; }
 }

@@ -1,20 +1,17 @@
-/* Section: layout */
+/* =====================================================================
+   CONTACT
+   ===================================================================== */
 
 .contact-section {
   min-height: 100vh;
   padding: 40px 20px;
-  background: #0a0e27;
+  background-color: var(--p5-ink);
+  background-image: linear-gradient(135deg, #07090f 0%, #0a1426 50%, #07090f 100%);
   display: flex;
   align-items: center;
 }
 
-.contact-container {
-  max-width: 1400px;
-  width: 100%;
-  margin: 0 auto;
-}
-
-/* Content grid */
+.contact-container { max-width: 1400px; width: 100%; margin: 0 auto; }
 
 .contact-content {
   display: grid;
@@ -22,151 +19,111 @@
   gap: 40px;
 }
 
-/* Left: contact info */
+/* ---------- Left: info panel (compound beats .glass-card) ---------- */
 
+.contact-info.glass-card,
 .contact-info {
   padding: 40px;
   display: flex;
   flex-direction: column;
-  gap: 30px;
-  background: rgba(255, 255, 255, 0.04);
-  border: 2px solid rgba(4, 195, 255, 0.2);
-  border-radius: 24px;
-  backdrop-filter: blur(16px);
+  gap: 26px;
+
+  background: var(--panel-bg);
+  border: 3px solid var(--p5-ink);
+  box-shadow: 0 0 0 2px var(--p5-blue), 10px 10px 0 rgba(31, 143, 255, 0.22);
+  clip-path: polygon(0 0, calc(100% - 22px) 0, 100% 22px, 100% 100%, 22px 100%, 0 calc(100% - 22px));
 }
 
 .contact-info h3 {
-  font-size: 30px;
-  font-weight: 700;
-  color: var(--white);
+  font-family: var(--font-display);
+  font-size: 32px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: var(--p5-paper);
+  text-shadow: 3px 3px 0 var(--p5-blue);
+  transform: skewX(-5deg);
 }
 
 .contact-description {
+  font-family: var(--font-body);
   font-size: 18px;
   line-height: 1.7;
   color: var(--text-gray);
 }
 
-/* Email + envelope */
+.email-section { margin-top: 4px; }
 
 .email-text {
-  font-size: 18px;
+  font-family: var(--font-ui);
+  font-size: 16px;
+  letter-spacing: 1px;
   color: var(--text-gray);
-  margin-bottom: 30px;
+  margin-bottom: 16px;
 }
 
-/* Variables */
+/* ---------- Envelope (blue / ink / paper) ---------- */
 :root {
-  --envelope-color: #4a90e2;
-  --envelope-inside: #205c9e;
-  --paper: #dbeeff;
-  --text: black;
+  --envelope-color: var(--p5-blue);
+  --envelope-inside: #0a3f9e;
+  --paper: var(--p5-paper);
+  --text: var(--p5-black);
   --shadow-color: rgba(0, 0, 0, 0.5);
 }
 
-/* Envelope container */
-/* Update .mail to have cursor: pointer (Vital for iOS tap detection) */
 .mail {
   position: relative;
   width: 200px;
   height: 130px;
   background: var(--envelope-inside);
-  border-bottom-left-radius: 5px;
-  border-bottom-right-radius: 5px;
-  margin: 10px auto;
-  margin-top: 50px;
-  cursor: pointer; /* CHANGED: default -> pointer */
+  border-radius: 0;
+  margin: 50px auto 10px;
+  cursor: pointer;
   transition: transform 0.2s ease;
-  box-shadow: 0 10px 40px rgba(4, 195, 255, 0.6);
+  box-shadow: 6px 6px 0 var(--p5-black), 0 10px 40px rgba(31, 143, 255, 0.5);
   animation: float 1.5s ease-in-out infinite, shake 2s ease-in-out infinite;
 }
 
-/* Pause animations on Hover OR if class is 'is-open' */
 .mail:hover,
 .mail.is-open {
-  transform: scale(1.02);
+  transform: scale(1.05);
   animation-play-state: paused;
+  box-shadow: 8px 8px 0 var(--p5-black), 0 0 55px rgba(31, 143, 255, 0.85);
 }
 
-/* 1. Open the Lid (Triggered by Hover OR Class) */
 .mail:hover .cover::before,
 .mail.is-open .cover::before {
   transform: rotateX(180deg);
   z-index: 1;
   filter: drop-shadow(0 -2px 3px rgba(0, 0, 0, 0.3));
-
-  /* OPENING LOGIC */
-  transition: transform 0.4s ease-in-out 0s, z-index 0s linear 0.2s,
-    filter 0.4s ease-in-out 0s;
+  transition: transform 0.4s ease-in-out 0s, z-index 0s linear 0.2s, filter 0.4s ease-in-out 0s;
 }
 
-/* 2. Slide the Letter Up (Triggered by Hover OR Class) */
 .mail:hover .letter,
-.mail.is-open .letter {
-  top: -80px;
-  transition-delay: 0.2s;
-}
+.mail.is-open .letter { top: -84px; transform: rotate(-2deg); transition-delay: 0.18s; }
 
-/* Hide Click Hint when Open */
 .letter:hover .click-hint,
-.mail.is-open .click-hint {
-  opacity: 0;
-  animation-play-state: paused;
-}
+.mail.is-open .click-hint { opacity: 0; animation-play-state: paused; }
 
-/* Float animation */
 @keyframes float {
-  0%,
-  100% {
-    top: 0;
-  }
-  50% {
-    top: -15px;
-  }
+  0%, 100% { top: 0; }
+  50%      { top: -15px; }
 }
-
-/* Shake animation */
 @keyframes shake {
-  /* Stay still for the first 70% of the time (Wait approx 2.1s) */
-  0%,
-  70% {
-    transform: rotate(0deg);
-  }
-
-  /* The "Wobble" 
-     Notice the gaps are 5% apart now (instead of 2-3%), 
-     making the movement much more fluid. 
-  */
-  75% {
-    transform: rotate(-4deg);
-  }
-  80% {
-    transform: rotate(4deg);
-  }
-  85% {
-    transform: rotate(-3deg);
-  }
-  90% {
-    transform: rotate(2deg);
-  }
-  95% {
-    transform: rotate(-1deg);
-  }
-
-  /* Settle gently back to 0 */
-  100% {
-    transform: rotate(0deg);
-  }
+  0%, 70% { transform: rotate(0deg); }
+  75% { transform: rotate(-4deg); }
+  80% { transform: rotate(4deg); }
+  85% { transform: rotate(-3deg); }
+  90% { transform: rotate(2deg); }
+  95% { transform: rotate(-1deg); }
+  100% { transform: rotate(0deg); }
 }
 
-/* Layer 3: pocket */
+/* pocket */
 .mail::before {
   content: "";
   position: absolute;
-  bottom: 0;
-  left: 0;
-  width: 0;
-  height: 0;
+  bottom: 0; left: 0;
+  width: 0; height: 0;
   border-left: 100px solid var(--envelope-color);
   border-right: 100px solid var(--envelope-color);
   border-bottom: 75px solid var(--envelope-color);
@@ -174,434 +131,277 @@
   z-index: 10;
 }
 
-/* Layer 2: letter */
+/* wax-seal star stamp (Phantom Thieves calling card) */
+.mail::after {
+  content: "\2605";                /* ★ */
+  position: absolute;
+  left: 50%;
+  top: 58%;
+  transform: translate(-50%, -50%) rotate(-6deg);
+  z-index: 16;
+
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  background: var(--p5-paper);
+  color: var(--p5-blue);
+  font-size: 22px;
+  border-radius: 50%;
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.45), 0 0 0 3px var(--p5-blue);
+  transition: opacity 0.25s ease, transform 0.35s var(--ease-slam);
+}
+
+/* seal "breaks" away when the letter opens */
+.mail:hover::after,
+.mail.is-open::after {
+  opacity: 0;
+  transform: translate(-50%, -120%) rotate(-40deg) scale(0.5);
+}
+
+/* letter */
 .letter {
   position: absolute;
-  top: 5px;
-  left: 10px;
-  width: 180px;
-  height: 110px;
+  top: 5px; left: 10px;
+  width: 180px; height: 110px;
   background-color: var(--paper);
-  background-image: radial-gradient(
-      circle at 100% 150%,
-      transparent 20%,
-      rgba(0, 0, 0, 0.04) 21%,
-      rgba(0, 0, 0, 0.04) 34%,
-      transparent 35%,
-      transparent
-    ),
-    radial-gradient(
-      circle at 0% 150%,
-      transparent 20%,
-      rgba(0, 0, 0, 0.04) 21%,
-      rgba(0, 0, 0, 0.04) 34%,
-      transparent 35%,
-      transparent
-    );
+  background-image:
+    radial-gradient(circle at 100% 150%, transparent 20%, rgba(0,0,0,0.04) 21%, rgba(0,0,0,0.04) 34%, transparent 35%, transparent),
+    radial-gradient(circle at 0% 150%, transparent 20%, rgba(0,0,0,0.04) 21%, rgba(0,0,0,0.04) 34%, transparent 35%, transparent);
   background-size: 30px 30px;
-  border-radius: 10px;
-  box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.1);
+  border-radius: 0;
+  box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.15);
   overflow: hidden;
   padding: 5px;
   box-sizing: border-box;
-
   z-index: 5;
-
-  /* CLOSING LOGIC */
-  transition: top 0.3s ease-in-out;
+  transition: top 0.45s var(--ease-pop), transform 0.45s var(--ease-pop);
   transition-delay: 0s;
 }
 
 .letter h1 {
-  /* Center the span inside the border box */
   margin: 0;
-  width: 100%;
-  height: 100%;
+  width: 100%; height: 100%;
   display: flex;
   align-items: center;
   justify-content: center;
-
-  /* The Border stays on the H1 (the box) */
   border: 3px double var(--envelope-inside);
-  border-radius: 10px;
+  border-radius: 0;
   box-sizing: border-box;
 }
 
-/* Update the selector to target the 'a' tag */
 .letter h1 a {
   position: relative;
+  font-family: var(--font-ui);
   font-size: 13px;
-  font-weight: bold;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
   cursor: pointer;
   text-decoration: none;
-
-  /* BASE STATE: Standard Text Color */
   color: var(--text);
-
-  /* INSTANT: No transition property */
   transition: none;
 }
-
-/* Update the pseudo-element selector (The Underline) */
 .letter h1 a::after {
   content: "";
   position: absolute;
-  left: 0;
-  bottom: -3px;
-  width: 100%;
-  height: 2px;
-  background: #04c3ff; /* Matches the bright blue */
-
-  /* Start hidden */
+  left: 0; bottom: -3px;
+  width: 100%; height: 3px;
+  background: var(--p5-blue);
   transform: scaleX(0);
   transform-origin: left;
-
-  /* INSTANT: No transition property */
   transition: none;
 }
+.letter h1 a:hover { color: var(--p5-blue); }
+.letter h1 a:hover::after { transform: scaleX(1); }
 
-/* TRIGGER (Hovering the link) */
-.letter h1 a:hover {
-  /* Snap to blue instantly */
-  color: #04c3ff;
-}
-
-.letter h1 a:hover::after {
-  /* Snap underline to full width instantly */
-  transform: scaleX(1);
-}
-
-/* =========================
-   LAYER 1: THE LID
-   ========================= */
+/* lid */
 .cover::before {
   content: "";
   position: absolute;
-  top: 0;
-  left: 0;
-
-  /* Triangle pointing down */
+  top: 0; left: 0;
   border-left: 100px solid transparent;
   border-right: 100px solid transparent;
   border-top: 75px solid var(--envelope-color);
   border-bottom: 75px solid transparent;
-
   transform-origin: top;
   z-index: 20;
-
   filter: drop-shadow(0 2px 3px rgba(0, 0, 0, 0.3));
-
-  /* CLOSING LOGIC */
-  transition: transform 0.4s ease-in-out 0.2s, z-index 0s linear 0.5s,
-    filter 0.4s ease-in-out 0.3s;
+  transition: transform 0.4s ease-in-out 0.2s, z-index 0s linear 0.5s, filter 0.4s ease-in-out 0.3s;
 }
-
-/* =========================
-   ANIMATIONS (HOVER STATES)
-   ========================= */
-
-/* 1. Open the Lid */
 .mail:hover .cover::before {
   transform: rotateX(180deg);
   z-index: 1;
   filter: drop-shadow(0 -2px 3px rgba(0, 0, 0, 0.3));
-
-  /* OPENING LOGIC */
-  transition: transform 0.4s ease-in-out 0s, z-index 0s linear 0.2s,
-    filter 0.4s ease-in-out 0s;
+  transition: transform 0.4s ease-in-out 0s, z-index 0s linear 0.2s, filter 0.4s ease-in-out 0s;
 }
+.mail:hover .letter { top: -84px; transform: rotate(-2deg); transition-delay: 0.18s; }
 
-/* 2. Slide the Letter Up */
-.mail:hover .letter {
-  top: -80px;
-  transition-delay: 0.2s;
-}
-
-/* =========================
-   CLICK HINT (Hand + Ripple)
-   ========================= */
-
+/* click hint */
 .click-hint {
   position: absolute;
-  /* 1. MOVE CLOSER: Position near the center (where the text is) */
-  top: 50%;
-  left: 50%;
-
-  /* 2. OFFSET: Nudge it just to the right of the word "CodePen" 
-     Adjust these pixels if your text length changes */
-  margin-top: 2px;
-  margin-left: 28px;
-
-  width: 0;
-  height: 0;
+  top: 50%; left: 50%;
+  margin-top: 2px; margin-left: 28px;
+  width: 0; height: 0;
   z-index: 20;
   pointer-events: none;
-
   display: flex;
   align-items: center;
   justify-content: center;
-
   transition: opacity 0.3s ease;
 }
-
-/* THE HAND ICON */
 .click-hint i {
-  color: var(--text);
+  color: var(--p5-black);
   font-size: 18px;
   position: absolute;
-  top: 0;
-  left: 0;
+  top: 0; left: 0;
   z-index: 2;
   text-shadow: 1px 1px 2px rgba(255, 255, 255, 0.8);
-
-  /* 3. ALIGNMENT: Shift the icon so the "Finger Tip" (top-left of icon) 
-     is exactly at the center of our container (0,0) */
   transform-origin: top left;
-
-  /* Animation: Tap Hand */
   animation: tapHand 2s ease-in-out infinite;
 }
-
-/* THE RIPPLE EFFECT */
 .hint-ripple {
   position: absolute;
-  top: 1px;
-  left: 5px;
-
-  /* Center the ripple exactly on the 0,0 point (where the finger lands) */
+  top: 1px; left: 5px;
   transform: translate(-50%, -50%);
-
-  width: 5px;
-  height: 5px;
+  width: 5px; height: 5px;
   border-radius: 50%;
-  border: 2px solid #008cff;
+  border: 2px solid var(--p5-blue);
   opacity: 0;
   z-index: 1;
-
-  /* Animation: Ripple Expand */
   animation: rippleExpand 2s ease-out infinite;
   animation-delay: 0.15s;
 }
-
-/* =========================
-   ANIMATION KEYFRAMES
-   ========================= */
-
 @keyframes tapHand {
-  0% {
-    /* Hand is pulled back (down-right) */
-    transform: translate(12px, 12px) scale(1) rotate(-10deg);
-  }
-  50% {
-    /* Hand touches the spot (0,0) */
-    transform: translate(0, 0) scale(0.9) rotate(0deg);
-  }
-  100% {
-    /* Hand pulls back */
-    transform: translate(12px, 12px) scale(1) rotate(-10deg);
-  }
+  0%   { transform: translate(12px, 12px) scale(1) rotate(-10deg); }
+  50%  { transform: translate(0, 0) scale(0.9) rotate(0deg); }
+  100% { transform: translate(12px, 12px) scale(1) rotate(-10deg); }
 }
-
 @keyframes rippleExpand {
-  0%,
-  45% {
-    width: 2px;
-    height: 2px;
-    opacity: 0;
-    border-width: 3px;
-  }
-  50% {
-    /* Starts exactly when hand touches (50%) */
-    opacity: 1;
-  }
-  100% {
-    /* Expands OUT from the finger tip */
-    width: 35px;
-    height: 35px;
-    opacity: 0;
-    border-width: 0px;
-  }
+  0%, 45% { width: 2px; height: 2px; opacity: 0; border-width: 3px; }
+  50%     { opacity: 1; }
+  100%    { width: 35px; height: 35px; opacity: 0; border-width: 0px; }
 }
+.letter:hover .click-hint { opacity: 0; animation-play-state: paused; }
 
-/* INTERACTION LOGIC: Hide when user hovers the letter */
-.letter:hover .click-hint {
-  opacity: 0;
-  animation-play-state: paused;
-}
+/* ---------- Right: form panel ---------- */
 
-/* =========================
-   RIGHT — FORM
-   ========================= */
-
+.contact-form-wrapper.glass-card,
 .contact-form-wrapper {
   padding: 40px;
-  background: rgba(255, 255, 255, 0.04);
-  border: 2px solid rgba(4, 195, 255, 0.2);
-  border-radius: 24px;
-  backdrop-filter: blur(16px);
+  background: var(--panel-bg);
+  border: 3px solid var(--p5-ink);
+  box-shadow: 0 0 0 2px var(--p5-blue), 10px 10px 0 rgba(31, 143, 255, 0.22);
+  clip-path: polygon(0 0, calc(100% - 22px) 0, 100% 22px, 100% 100%, 22px 100%, 0 calc(100% - 22px));
 }
 
-form {
-  display: flex;
-  flex-direction: column;
-  gap: 25px;
-}
+form { display: flex; flex-direction: column; gap: 24px; }
 
-.form-group {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-}
+.form-group { display: flex; flex-direction: column; gap: 8px; }
 
 .form-group label {
-  font-size: 18px;
-  font-weight: 600;
-  color: var(--white);
+  font-family: var(--font-ui);
+  font-size: 16px;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: var(--p5-paper);
 }
 
-.required {
-  color: var(--light-blue);
-  font-size: 35px;
-  line-height: 1;
-  position: relative;
-  top: 10px;
-}
+.required { color: var(--p5-blue); font-size: 34px; line-height: 1; position: relative; top: 10px; }
 
 .form-group input,
 .form-group textarea {
   width: 100%;
   padding: 14px 18px;
   background: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  border-radius: 12px;
-  color: var(--white);
+  border: 2px solid rgba(31, 143, 255, 0.3);
+  border-left: 4px solid var(--p5-blue);
+  border-radius: 0;
+  color: var(--p5-paper);
   font-size: 15px;
-  font-family: "Raleway", sans-serif;
-  transition: all 0.3s ease;
+  font-family: var(--font-body);
+  transition: all 0.25s var(--ease-snap);
 }
-
-.form-group textarea {
-  resize: vertical;
-}
+.form-group textarea { resize: vertical; }
 
 .form-group input::placeholder,
-.form-group textarea::placeholder {
-  color: rgba(255, 255, 255, 0.35);
-}
+.form-group textarea::placeholder { color: rgba(238, 243, 251, 0.35); }
 
 .form-group input:focus,
 .form-group textarea:focus {
-  background: rgba(255, 255, 255, 0.08);
-  border-color: var(--light-blue);
-  box-shadow: 0 0 0 3px rgba(4, 195, 255, 0.1);
+  background: rgba(31, 143, 255, 0.08);
+  border-color: var(--p5-blue);
+  box-shadow: 4px 4px 0 var(--p5-blue-deep);
+  transform: translateX(-2px);
 }
 
-/* =========================
-   CTA — USES PROFILE BUTTON SYSTEM
-   ========================= */
+/* ---------- Submit (primary handled in App.css; add paper-plane) ---------- */
 
-.contact-btn {
-  margin-top: 10px;
-  align-self: flex-start;
-}
+.contact-btn { margin-top: 10px; align-self: flex-start; }
 
-/* paper plane icon (replaces arrow) */
-/* =========================
-   CONTACT BUTTON ICON — CHAT-STYLE ROTATION
-   ========================= */
+.contact-btn .btn-text { transition: transform 0.3s var(--ease-snap); }
+.contact-btn:hover .btn-text { transform: skewX(8deg) translateX(-6px); }
 
+/* overrides the arrow from .btn-arrow (loads later) */
 .contact-btn::after {
-  content: "\f1d8"; /* fa-paper-plane */
+  content: "\f1d8";                 /* fa-paper-plane */
   font-family: "Font Awesome 6 Free";
   font-weight: 900;
-
   position: absolute;
   right: 18px;
   top: 50%;
-
-  color: white;
+  color: var(--p5-paper);
   font-size: 15px;
-
   opacity: 0;
-  transform: translateY(-40%) scale(0.3) rotate(-270deg);
-
-  transition: opacity 0.25s ease, transform 0.55s cubic-bezier(0.22, 1, 0.36, 1);
-
+  transform: skewX(8deg) translateY(-40%) scale(0.3) rotate(-270deg);
+  transition: opacity 0.25s ease, transform 0.5s var(--ease-pop);
   pointer-events: none;
 }
-
-/* text nudge */
-.contact-btn .btn-text {
-  transition: transform 0.35s ease;
-}
-
-.contact-btn:hover .btn-text {
-  transform: translateX(-6px);
-}
-
 .contact-btn:hover::after,
 .contact-btn:focus-visible::after {
   opacity: 1;
-  transform: translateY(-50%) scale(1) rotate(0deg);
+  transform: skewX(8deg) translateY(-50%) scale(1) rotate(0deg);
 }
 
-.contact-btn:disabled {
-  opacity: 0.6;
-  cursor: not-allowed;
-  box-shadow: none;
-}
+.contact-btn:disabled { opacity: 0.55; cursor: not-allowed; box-shadow: none; }
+.contact-btn:disabled::after { display: none; }
 
-.contact-btn:disabled::after {
-  display: none;
-}
-
-/* =========================
-   FOOTER
-   ========================= */
+/* ---------- Footer ---------- */
 
 .footer {
-  margin-top: 40px; /* matches About / Projects rhythm */
+  margin-top: 40px;
   padding-top: 30px;
-  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  border-top: 3px solid var(--p5-blue);
   text-align: center;
 }
-
 .footer p {
-  font-size: 14px;
+  font-family: var(--font-ui);
+  font-size: 13px;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
   color: var(--text-gray);
 }
 
-/* =========================
+/* =====================================================================
    RESPONSIVE
-   ========================= */
+   ===================================================================== */
 
 @media screen and (max-width: 968px) {
-  .contact-content {
-    grid-template-columns: 1fr;
-    gap: 30px;
-  }
-
-  .contact-info {
-    text-align: center;
-  }
+  .contact-content { grid-template-columns: 1fr; gap: 30px; }
+  .contact-info { text-align: center; }
+  .contact-info h3 { align-self: center; }
 }
 
 @media screen and (max-width: 768px) {
-  .contact-info,
-  .contact-form-wrapper {
-    padding: 30px;
-  }
-
-  .contact-btn {
-    align-self: center;
-  }
+  .contact-info, .contact-form-wrapper { padding: 30px; }
+  .contact-btn { align-self: center; }
 }
 
 @media screen and (max-width: 480px) {
-  .contact-info,
-  .contact-form-wrapper {
-    padding: 25px;
-  }
+  .contact-info, .contact-form-wrapper { padding: 25px; }
 
   .contact-btn {
     width: fit-content;
@@ -611,78 +411,36 @@ form {
     justify-content: center;
   }
 
-  /* --- FIXED ENVELOPE SCALING --- */
-
-  /* 1. Shrink Container */
-  .mail {
-    width: 120px;
-    height: 80px;
-  }
-
-  /* 2. Resize the Body Flaps (The Triangle Math) */
-  /* Width is 120px, so Left/Right borders must be 60px (120/2) */
+  .mail { width: 120px; height: 80px; }
   .mail::before {
     border-left: 60px solid var(--envelope-color);
     border-right: 60px solid var(--envelope-color);
-    border-bottom: 45px solid var(--envelope-color); /* Scaled from 75 */
-    border-top: 35px solid transparent; /* Scaled from 55 */
+    border-bottom: 45px solid var(--envelope-color);
+    border-top: 35px solid transparent;
   }
-
-  /* 3. Resize the Lid (The Triangle Math) */
+  .mail::after { width: 26px; height: 26px; font-size: 14px; box-shadow: 0 2px 5px rgba(0,0,0,0.45), 0 0 0 2px var(--p5-blue); }
   .cover::before {
     border-left: 60px solid transparent;
     border-right: 60px solid transparent;
-    border-top: 45px solid var(--envelope-color); /* Scaled from 75 */
+    border-top: 45px solid var(--envelope-color);
     border-bottom: 45px solid transparent;
   }
-
-  /* 4. Resize the Letter */
-  .letter {
-    width: 104px;
-    height: 72px;
-    left: 8px; /* Recenter based on new width */
-    top: 5px;
-    padding: 2px;
-  }
-
-  /* 5. Adjust the "Fly Up" height so it doesn't leave the screen */
-  .mail:hover .letter {
-    top: -40px; /* Reduced from -80px */
-  }
-
-  .letter h1 {
-    /* Reduce the decorative border thickness to save space */
-    border-width: 1px;
-    /* Allow text to center properly */
-    padding: 0 2px;
-  }
-
+  .letter { width: 104px; height: 72px; left: 8px; top: 5px; padding: 2px; }
+  .mail:hover .letter { top: -42px; transform: rotate(-2deg); }
+  .letter h1 { border-width: 1px; padding: 0 2px; }
   .letter h1 a {
-    font-size: 8px; /* Small legible font */
-
-    /* CRITICAL: Force long text (like emails) to wrap onto new lines */
+    font-size: 8px;
     word-break: break-all;
     white-space: normal;
-
     line-height: 1.1;
     text-align: center;
   }
-
-  /* 6. Hide the "Click Hint" text/hand on very small screens if it gets in the way */
   .click-hint {
-    display: flex; /* Bring it back */
-    transform: scale(0.6); /* Shrink hand/ripple to 60% size */
-
-    /* Re-center it because scaling messes up alignment slightly */
-    margin-left: 0;
-    margin-top: 0;
-    top: 50%;
-    left: 50%;
+    display: flex;
+    transform: scale(0.6);
+    margin-left: 0; margin-top: 0;
+    top: 50%; left: 50%;
   }
-
-  /* Update this specific rule to include the class */
   .mail:hover .letter,
-  .mail.is-open .letter {
-    top: -40px;
-  }
+  .mail.is-open .letter { top: -42px; transform: rotate(-2deg); }
 }

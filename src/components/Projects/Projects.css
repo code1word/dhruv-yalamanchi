@@ -1,115 +1,100 @@
+/* =====================================================================
+   PROJECTS
+   ===================================================================== */
+
 .projects-section {
   min-height: 100vh;
   padding: 40px 20px;
-  background: #0a0e27;
+  background-color: var(--p5-ink);
+  background-image: linear-gradient(135deg, #07090f 0%, #0a1426 50%, #07090f 100%);
 }
 
-.projects-container {
-  max-width: 1400px;
-  margin: 0 auto;
-}
+.projects-container { max-width: 1400px; margin: 0 auto; }
 
-/* Featured note (centered) */
+/* ---------- Featured legend: a Persona "calling card" ---------- */
 
 .featured-note {
-  width: fit-content; /* shrink to content */
-  margin: -20px auto 40px;
-  display: flex;
+  position: relative;
+  width: fit-content;
+  margin: 4px auto 46px;
+  display: inline-flex;
   align-items: center;
-  justify-content: center; /* restores horizontal centering */
-  gap: 0;
-  cursor: pointer;
+  gap: 14px;
+  padding: 12px 26px 12px 16px;
+
+  /* black card, white trim, blue drop = a tossed calling card */
+  background: var(--p5-black);
+  border: 2px solid var(--p5-paper);
+  transform: rotate(-2.5deg);
+  box-shadow: 7px 7px 0 var(--p5-blue);
+  cursor: default;
+  transition: transform 0.22s var(--ease-pop), box-shadow 0.22s ease;
 }
 
-/* Star + question icon */
+/* small "speed-line" accent across the card corner */
+.featured-note::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: repeating-linear-gradient(
+    -45deg, transparent 0 7px, rgba(31, 143, 255, 0.12) 7px 8px
+  );
+  pointer-events: none;
+}
 
+.featured-note:hover {
+  transform: rotate(-2.5deg) translateY(-3px) scale(1.02);
+  box-shadow: 10px 10px 0 var(--p5-blue-deep);
+}
+
+/* the star: a blue stamp identical in spirit to the card badges */
 .featured-icon {
   position: relative;
   display: flex;
   align-items: center;
   justify-content: center;
-
-  transition: transform 0.4s ease;
+  width: 36px;
+  height: 36px;
+  flex-shrink: 0;
+  background: var(--p5-blue);
+  border: 2px solid var(--p5-paper);
+  transform: rotate(-8deg);
+  box-shadow: 2px 2px 0 rgba(0, 0, 0, 0.6);
 }
 
-/* star */
+.featured-icon .featured-star,
 .featured-icon .fa-star {
-  color: #fbbf24;
-  font-size: 38px;
+  color: var(--p5-paper);
+  font-size: 18px;
   animation: twinkle 2s ease-in-out infinite;
 }
 
-/* question icon (Font Awesome) */
-.question-mark {
-  position: absolute;
-  right: -18px;
-  top: 6px;
-
-  font-size: 16px;
-  color: rgba(255, 255, 255, 0.6);
-
-  animation: questionPulse 1.6s ease-in-out infinite;
-  transition: opacity 0.35s ease 0.08s;
-
-  pointer-events: none;
-}
-
-/* pulse */
-@keyframes questionPulse {
-  0%,
-  100% {
-    opacity: 0.3;
-  }
-  50% {
-    opacity: 0.9;
-  }
-}
-
-/* Featured text (revealed by expansion) */
+/* the old question-mark gimmick is retired */
+.question-mark { display: none; }
 
 .featured-text {
-  max-width: 0;
-  overflow: hidden;
+  font-family: var(--font-ui);
+  font-size: 16px;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: var(--p5-paper);
   white-space: nowrap;
-
-  opacity: 0;
-  margin-left: 0;
-
-  font-size: 26px;
-  font-weight: 600;
-  color: var(--white);
-
-  transition: max-width 0.7s ease, opacity 0.25s ease, margin-left 0.35s ease;
 }
 
-/* Hover interaction */
-
-/* hide question mark on hover */
-.featured-note:hover .question-mark {
-  animation: none;
-  opacity: 0;
+/* makes the legend read clearly: "[★] = NOTABLE PROJECT" */
+.featured-text::before {
+  content: "= ";
+  color: var(--p5-blue);
+  font-weight: 700;
 }
-
-/* reveal text */
-.featured-note:hover .featured-text {
-  max-width: 220px;
-  opacity: 1;
-  margin-left: 10px;
-}
-
-/* Star animation */
 
 @keyframes twinkle {
-  0%,
-  100% {
-    opacity: 1;
-    transform: scale(1);
-  }
-  50% {
-    opacity: 0.5;
-    transform: scale(0.9);
-  }
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50%      { opacity: 0.6; transform: scale(0.88); }
 }
+
+/* ---------- Grid ---------- */
 
 .projects-grid {
   display: grid;
@@ -118,136 +103,135 @@
   margin-top: 40px;
 }
 
+/* ---------- Card (comic panel; compound beats generic .glass-card) ---------- */
+
+.project-card.glass-card,
 .project-card {
   position: relative;
   overflow: hidden;
   aspect-ratio: 1;
-  transition: all 0.4s ease;
   cursor: pointer;
-  border: 2px solid rgba(4, 195, 255, 0.2);
-  background-clip: padding-box, border-box;
+
+  background: var(--panel-bg);
+  border: 3px solid var(--p5-ink);
+  box-shadow: 0 0 0 2px var(--p5-blue), 8px 8px 0 var(--p5-black);
+  clip-path: polygon(0 0, 100% 0, 100% calc(100% - 24px), calc(100% - 24px) 100%, 0 100%);
+  transition: transform 0.25s var(--ease-pop), box-shadow 0.3s ease;
 }
 
 .project-card:hover {
-  transform: translateY(-10px);
-  box-shadow: 0 15px 40px rgba(4, 195, 255, 0.2);
+  transform: translate(-4px, -8px) rotate(-1deg);
+  box-shadow: 0 0 0 2px var(--p5-blue), 14px 16px 0 var(--p5-blue-deep);
 }
+
+/* ---------- Featured badge (blue star chip) ---------- */
 
 .featured-badge {
   position: absolute;
-  top: 20px;
-  right: 20px;
+  top: 18px;
+  right: 18px;
   width: 50px;
   height: 50px;
-  background: linear-gradient(135deg, #fbbf24, #f59e0b);
-  border-radius: 50%;
+  background: var(--p5-blue);
+  border: 3px solid var(--p5-paper);
+  border-radius: 0;
+  transform: rotate(-8deg);
   display: flex;
   align-items: center;
   justify-content: center;
   z-index: 10;
-  box-shadow: 0 4px 15px rgba(251, 191, 36, 0.4);
-  animation: pulse 2s ease-in-out infinite;
-  transition: opacity 0.3s ease, transform 0.3s ease;
+  box-shadow: 3px 3px 0 var(--p5-black);
+  animation: badgePulse 2s ease-in-out infinite;
+  transition: opacity 0.3s ease, transform 0.3s var(--ease-pop);
+}
+.featured-badge i { color: var(--p5-paper); font-size: 22px; }
+
+@keyframes badgePulse {
+  0%, 100% { transform: rotate(-8deg) scale(1); }
+  50%      { transform: rotate(-8deg) scale(1.12); }
 }
 
-.featured-badge i {
-  color: var(--white);
-  font-size: 24px;
-}
+/* ---------- Image ---------- */
 
-@keyframes pulse {
-  0%,
-  100% {
-    transform: scale(1);
-  }
-  50% {
-    transform: scale(1.1);
-  }
-}
-
-.project-image {
-  width: 100%;
-  height: 100%;
-  position: relative;
-  overflow: hidden;
-}
+.project-image { width: 100%; height: 100%; position: relative; overflow: hidden; }
 
 .project-image img {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  transition: transform 0.4s ease;
+  transition: transform 0.4s var(--ease-snap), filter 0.4s ease;
 }
-
 .project-card:hover .project-image img {
-  transform: scale(1.1);
-  filter: blur(3px);
+  transform: scale(1.12);
+  filter: grayscale(0.15) contrast(1.1);
 }
-
 .project-card:hover .featured-badge {
   opacity: 0;
-  transform: scale(0.85);
+  transform: rotate(-8deg) scale(0.8);
   pointer-events: none;
 }
+
+/* ---------- Overlay (blue/ink wash slams in) ---------- */
 
 .project-overlay {
   position: absolute;
   inset: 0;
-  background: linear-gradient(
-    to bottom,
-    rgba(10, 14, 39, 0.7),
-    rgba(10, 14, 39, 0.95)
-  );
+  background: linear-gradient(150deg, rgba(10, 63, 158, 0.94), rgba(5, 6, 8, 0.97));
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 30px;
+  padding: 28px;
   opacity: 0;
-  transition: opacity 0.4s ease;
+  transition: opacity 0.3s var(--ease-slam);
 }
-
-.project-card:hover .project-overlay {
-  opacity: 1;
-}
+.project-card:hover .project-overlay { opacity: 1; }
 
 .project-info {
   text-align: center;
-  transform: translateY(20px);
-  transition: transform 0.4s ease;
+  transform: translateY(24px) skewX(-4deg);
+  transition: transform 0.35s var(--ease-pop);
 }
-
-.project-card:hover .project-info {
-  transform: translateY(0);
-}
+.project-card:hover .project-info { transform: translateY(0) skewX(0); }
 
 .project-info h3 {
-  font-size: 24px;
-  font-weight: 700;
-  color: var(--white);
+  font-family: var(--font-display);
+  font-size: 26px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: var(--p5-paper);
   margin-bottom: 10px;
+  text-shadow: 2px 2px 0 var(--p5-black);
 }
 
+/* notched comic flag */
 .project-tech {
-  font-size: 13px;
+  font-family: var(--font-ui);
+  font-size: 12px;
   font-weight: 600;
-  color: var(--light-blue);
-  margin-bottom: 15px;
-  font-style: italic;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: var(--p5-paper);
+  background: var(--p5-blue);
+  display: inline-block;
+  padding: 4px 14px;
+  margin-bottom: 14px;
+  transform: skewX(-8deg);
+  box-shadow: 2px 2px 0 var(--p5-black);
 }
 
 .project-description {
-  font-size: 14px;
+  font-family: var(--font-body);
+  font-size: 13.5px;
   line-height: 1.6;
-  color: var(--text-gray);
+  color: var(--p5-paper);
   margin-bottom: 20px;
   display: -webkit-box;
+  -webkit-line-clamp: 5;
   -webkit-box-orient: vertical;
   overflow: hidden;
 }
 
-/* =========================
-   PROJECT LINKS — MATCH SOCIAL ICON STYLE
-   ========================= */
+/* ---------- Links ---------- */
 
 .project-links {
   display: flex;
@@ -259,136 +243,86 @@
 .project-link {
   position: relative;
   overflow: hidden;
-
   height: 50px;
-  min-width: 50px; /* initial circle */
+  min-width: 50px;
   padding: 0;
-
   display: inline-flex;
   align-items: center;
   justify-content: center;
 
-  border-radius: 999px;
-  border: 2px solid white;
-  background-color: #1f2235;
+  border-radius: 0;
+  border: 3px solid var(--p5-paper);
+  background-color: var(--p5-ink);
 
-  color: white;
+  color: var(--p5-paper);
   text-decoration: none;
+  font-family: var(--font-ui);
   font-size: 13px;
   font-weight: 600;
+  letter-spacing: 1px;
+  text-transform: uppercase;
 
-  transition: padding 0.4s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.35s ease,
-    transform 0.35s ease;
+  transform: rotate(-3deg);
+  transition: padding 0.35s var(--ease-slam), box-shadow 0.3s ease,
+    transform 0.3s var(--ease-pop), background-color 0.3s ease;
 }
 
-/* icon — MATCH social icon sizing exactly */
 .project-link i {
-  font-size: 25px; /* ⬅ matches .colz a */
+  font-size: 24px;
   line-height: 1;
   display: flex;
   align-items: center;
   justify-content: center;
-
   position: relative;
   z-index: 3;
-
-  transition: transform 0.5s; /* same duration */
+  transition: transform 0.5s var(--ease-snap);
 }
+.project-link:hover i { transform: rotateY(360deg); }
 
-/* rotate icon */
-.project-link:hover i {
-  transform: rotateY(360deg);
-}
-
-/* hidden text */
 .project-link span {
   max-width: 0;
   opacity: 0;
   overflow: hidden;
   white-space: nowrap;
   margin-left: 0;
-
-  transition: max-width 0.4s ease, opacity 0.25s ease, margin-left 0.35s ease;
-
   position: relative;
   z-index: 3;
+  transition: max-width 0.35s var(--ease-slam), opacity 0.25s ease, margin-left 0.35s ease;
 }
 
-/* glossy fill — SAME logic as .colz */
 .project-link::before {
   content: "";
   position: absolute;
-  right: 100%;
+  left: -100%;
   top: 0;
-
   width: 100%;
   height: 100%;
-
   z-index: 2;
-
-  background-image: linear-gradient(
-    to bottom,
-    rgba(255, 255, 255, 0.45) 0%,
-    rgba(255, 255, 255, 0.25) 18%,
-    rgba(255, 255, 255, 0) 45%
-  );
-
-  transition: right 0.5s ease;
+  background-color: var(--p5-blue);
+  transition: left 0.3s var(--ease-slam);
 }
-
-/* =========================
-   HOVER STATE
-   ========================= */
 
 .project-link:hover {
-  padding: 0 10px;
-  box-shadow: 0 0 22px rgba(4, 195, 255, 0.45);
-  transform: translateY(-2px);
+  padding: 0 14px;
+  transform: rotate(0deg) translateY(-3px);
+  box-shadow: 4px 4px 0 var(--p5-blue-deep);
 }
+.project-link:hover::before { left: 0; }
+.project-link:hover span { max-width: 170px; opacity: 1; margin-left: 10px; }
 
-/* fill slides in (same as socials) */
-.project-link:hover::before {
-  right: 0;
-}
+/* variants */
+.project-link.github-link::before { background-color: var(--p5-black); }
+.project-link.site-link::before,
+.project-link.demo-link::before { background-color: var(--p5-blue); }
 
-/* reveal text */
-.project-link:hover span {
-  max-width: 160px;
-  opacity: 1;
-  margin-left: 10px;
-}
-
-/* =========================
-   VARIANTS
-   ========================= */
-
-.project-link.github-link::before {
-  background-color: black;
-}
-
-.project-link:not(.github-link)::before {
-  background-color: var(--light-blue);
-}
-
-/* =========================
-   RESPONSIVE
-   ========================= */
+/* ---------- Responsive ---------- */
 
 @media screen and (max-width: 1200px) {
-  .projects-grid {
-    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-  }
+  .projects-grid { grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); }
 }
-
 @media screen and (max-width: 768px) {
-  .projects-grid {
-    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-    gap: 20px;
-  }
+  .projects-grid { grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 20px; }
 }
-
 @media screen and (max-width: 640px) {
-  .projects-grid {
-    grid-template-columns: 1fr;
-  }
+  .projects-grid { grid-template-columns: 1fr; }
 }

@@ -1,5 +1,6 @@
 import React from "react";
 import "./Projects.css";
+import RansomHeading from "../RansomHeading";
 
 // Load project images via Vite's import.meta.glob (bundles assets).
 const _images = import.meta.glob("../../assets/Projects/*.{png,jpg,jpeg,svg}", {
@@ -154,7 +155,7 @@ export default function Projects(props) {
     <section className="projects-section" id={props.id || ""}>
       <div className="projects-container">
         <div className="screen-heading fade-in-scroll">
-          <h2>Projects</h2>
+          <RansomHeading>Projects</RansomHeading>
         </div>
 
         <div className="featured-note fade-in-scroll">

@@ -2,6 +2,7 @@ import React, { useState, useRef } from "react";
 import emailjs from "@emailjs/browser";
 import { toast } from "react-toastify";
 import "./ContactMe.css";
+import RansomHeading from "../RansomHeading";
 
 export default function ContactMe(props) {
   const formRef = useRef();
@@ -35,7 +36,7 @@ export default function ContactMe(props) {
     <section className="contact-section" id={props.id || ""}>
       <div className="contact-container">
         <div className="screen-heading fade-in-scroll">
-          <h2>Get In Touch</h2>
+          <RansomHeading>Get In Touch</RansomHeading>
         </div>
 
         <div className="contact-content">

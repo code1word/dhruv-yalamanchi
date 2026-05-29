@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import "./Resume.css";
+import RansomHeading from "../RansomHeading";
 
 // Dynamically import all SVGs/Images
 const _assets = import.meta.glob("../../assets/Resume/*.{svg,png,jpg,jpeg}", {
@@ -115,7 +116,7 @@ export default function Resume(props) {
     <section className="resume-section" id={props.id || ""}>
       <div className="resume-container">
         <div className="screen-heading fade-in-scroll">
-          <h2>My Journey</h2>
+          <RansomHeading>My Journey</RansomHeading>
         </div>
 
         <div className="resume-content fade-in-scroll">

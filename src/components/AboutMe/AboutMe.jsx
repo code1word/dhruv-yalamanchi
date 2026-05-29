@@ -1,5 +1,6 @@
 import React from "react";
 import "./AboutMe.css";
+import RansomHeading from "../RansomHeading";
 
 export default function AboutMe(props) {
   const highlights = [
@@ -21,7 +22,7 @@ export default function AboutMe(props) {
     <section className="about-section" id={props.id || ""}>
       <div className="about-container">
         <div className="screen-heading fade-in-scroll">
-          <h2>About Me</h2>
+          <RansomHeading>About Me</RansomHeading>
         </div>
 
         <div className="about-content fade-in-scroll">
