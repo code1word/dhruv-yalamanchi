@@ -424,7 +424,7 @@
 @media screen and (max-width: 640px) {
   .projects-grid { grid-template-columns: 1fr; }
   .project-card.glass-card,
-  .project-card { aspect-ratio: 4 / 3; }   /* wider on phones: more room, less tall */
+  .project-card { aspect-ratio: 4 / 4; }   /* wider on phones: more room, less tall */
 }
 
 /* ---------- Reduced motion: no slam, just a clean fade ---------- */
