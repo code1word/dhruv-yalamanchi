@@ -331,11 +331,24 @@
     padding-left: 0;
     padding-top: 14px;
   }
+
+  /* Role lines wrap to two lines on narrow screens. With line-height:1.0 the
+     first line's downward extrude crashed into the second line. Open the
+     leading and collapse the two-layer extrude to ONE tight offset so the
+     shadow can't bleed onto the wrapped line. */
+  .highlight-role {
+    font-size: 26px;
+    line-height: 1.18;
+    -webkit-text-stroke: 0.6px var(--p5-black);
+    text-shadow: 2px 2px 0 var(--p5-blue-deep);
+  }
 }
 
 @media screen and (max-width: 480px) {
   .about-card.glass-card,
   .about-card { padding: 28px; }
   .about-image { height: 340px; min-height: 340px; width: 100%; max-width: none; }
-  .highlight-item span { font-size: 14px; }
+  /* scope to the kicker only — don't shrink the big role line */
+  .highlight-detail { font-size: 12px; }
+  .highlight-role { font-size: 23px; }
 }

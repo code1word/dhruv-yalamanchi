@@ -577,6 +577,21 @@
   .role-container { font-size: 26px; height: 68px; flex-wrap: wrap; }
   .slider, .role { height: 68px; }
   .role-text::after { width: 20px; height: 26px; margin: 0 10px 0 12px; }
+
+  /* The 3D rotateY wedge + heavy 8px ghost shadow overflow the narrow column
+     and collide with the underline. Flatten to a simple light skew and a
+     single tight shadow so each word sits cleanly on one line. */
+  .role {
+    padding-right: 0;
+    transform: skewX(-6deg);
+  }
+  .role.software-engineer,
+  .role.curious,
+  .role.enthusiast {
+    -webkit-text-stroke: 1.2px var(--p5-black);
+    text-shadow: 3px 3px 0 var(--p5-blue-deep);
+  }
+
   @keyframes slideUp {
     0%, 31%   { transform: translateY(0); }
     34%, 61%  { transform: translateY(-68px); }
