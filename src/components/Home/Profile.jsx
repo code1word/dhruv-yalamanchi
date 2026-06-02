@@ -1,79 +1,16 @@
-import React, { useState } from "react";
+import React from "react";
 import "./Profile.css";
 import ScrollService from "../../utilities/ScrollService";
 
 export default function Profile() {
-  const [revealed, setRevealed] = useState(false);
-  const [summoning, setSummoning] = useState(false);
-
-  const togglePersona = () => {
-    // restart the one-shot burn animation each click
-    setSummoning(false);
-    requestAnimationFrame(() => setSummoning(true));
-    setRevealed((r) => !r);
-    setTimeout(() => setSummoning(false), 1300);
-  };
-
   return (
     <div className="profile-container fade-in-scroll">
-      {/* SVG turbulence filters that give the flame its intricate, licking edges */}
-      <svg width="0" height="0" style={{ position: "absolute" }} aria-hidden="true">
-        <defs>
-          <filter id="flameTurb">
-            <feTurbulence
-              type="fractalNoise"
-              baseFrequency="0.018 0.04"
-              numOctaves="3"
-              seed="3"
-              result="n"
-            >
-              <animate
-                attributeName="baseFrequency"
-                dur="0.6s"
-                values="0.018 0.04;0.03 0.06;0.018 0.04"
-                repeatCount="indefinite"
-              />
-            </feTurbulence>
-            <feDisplacementMap
-              in="SourceGraphic"
-              in2="n"
-              scale="42"
-              xChannelSelector="R"
-              yChannelSelector="G"
-            />
-          </filter>
-          <filter id="flameTurb2">
-            <feTurbulence
-              type="fractalNoise"
-              baseFrequency="0.024 0.05"
-              numOctaves="3"
-              seed="8"
-              result="n"
-            >
-              <animate
-                attributeName="seed"
-                dur="0.5s"
-                values="8;14;8"
-                repeatCount="indefinite"
-              />
-            </feTurbulence>
-            <feDisplacementMap
-              in="SourceGraphic"
-              in2="n"
-              scale="50"
-              xChannelSelector="R"
-              yChannelSelector="G"
-            />
-          </filter>
-        </defs>
-      </svg>
-
       <div className="profile-content">
         {/* Profile text */}
         <div className="profile-text">
           <div className="greeting">
             <h1>
-              Hello, I'm{" "}
+              <span className="greeting-lead">Hello, I'm</span>{" "}
               <span className="highlight">
                 <span>D</span><span>H</span><span>R</span><span>U</span><span>V</span>
               </span>
@@ -151,35 +88,14 @@ export default function Profile() {
           </div>
         </div>
 
-        {/* Image — click to burn-reveal the Persona portrait */}
-        <div
-          className={
-            "profile-image-container" +
-            (revealed ? " revealed" : "") +
-            (summoning ? " summoning" : "")
-          }
-          onClick={togglePersona}
-          role="button"
-          tabIndex={0}
-          aria-pressed={revealed}
-          aria-label="Reveal Persona portrait"
-          onKeyDown={(e) => {
-            if (e.key === "Enter" || e.key === " ") {
-              e.preventDefault();
-              togglePersona();
-            }
-          }}
-        >
+        {/* Profile portrait */}
+        <div className="profile-image-container">
           <div className="profile-image">
             <div className="image-wrapper">
-              {/* persona layer sits UNDER the base and is uncovered as it burns */}
-              <div className="profile-picture-persona"></div>
               <div className="profile-picture"></div>
-              <div className="profile-flame"></div>
             </div>
             <div className="glow-effect"></div>
           </div>
-          <span className="persona-hint">Tap</span>
         </div>
       </div>
 

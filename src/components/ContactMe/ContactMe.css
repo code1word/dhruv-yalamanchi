@@ -1,64 +1,164 @@
 /* =====================================================================
    CONTACT
+   Aligned to the site's panel language: paper border + flat hard blue-deep
+   offset, square corners (no clip-path notch, no double ring, no blur).
    ===================================================================== */
 
 .contact-section {
   min-height: 100vh;
   padding: 40px 20px;
-  background-color: var(--p5-ink);
-  background-image: linear-gradient(135deg, #07090f 0%, #0a1426 50%, #07090f 100%);
+  background: transparent;
   display: flex;
   align-items: center;
 }
 
-.contact-container { max-width: 1400px; width: 100%; margin: 0 auto; }
+.contact-container { max-width: 1300px; width: 100%; margin: 0 auto; }
 
-.contact-content {
+/* =====================================================================
+   ONE UNIFIED PANEL — intro collage (left) + clean form (right), split by a
+   divider. Same panel language as About/Resume: paper border, flat hard
+   blue-deep offset, square corners.
+   ===================================================================== */
+.contact-panel.glass-card,
+.contact-panel {
+  position: relative;
   display: grid;
-  grid-template-columns: 1fr 1.5fr;
-  gap: 40px;
+  grid-template-columns: 0.72fr 1.45fr;
+  /* frame + hard blue offset are drawn as clipped pseudo-elements below (the
+     same papercut language as the About card), so the cut-corner offset
+     actually renders. A shadow on THIS element would be clipped away. */
+  background: none;
+  border: none;
+  box-shadow: none;
+  clip-path: none;
+  backdrop-filter: none;
+}
+/* paper sheet, cut to the corner silhouette (top-right + bottom-left open).
+   No offset shadow — just the clean papercut frame. */
+.contact-panel::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  box-sizing: border-box;
+  clip-path: polygon(0 0, calc(100% - 26px) 0, 100% 26px, 100% 100%, 26px 100%, 0 calc(100% - 26px));
+  z-index: -1;
+  background: var(--panel-bg);
+  border: 3px solid var(--p5-paper);
 }
 
-/* ---------- Left: info panel (compound beats .glass-card) ---------- */
-
-.contact-info.glass-card,
-.contact-info {
-  padding: 40px;
+/* ---------- Intro zone: a hand-assembled collage ---------- */
+.contact-intro {
+  position: relative;
+  padding: 44px 40px;
   display: flex;
   flex-direction: column;
+  justify-content: center;     /* center the cluster — no top/bottom void */
   gap: 26px;
-
-  background: var(--panel-bg);
-  border: 3px solid var(--p5-ink);
-  box-shadow: 0 0 0 2px var(--p5-blue), 10px 10px 0 rgba(31, 143, 255, 0.22);
-  clip-path: polygon(0 0, calc(100% - 22px) 0, 100% 22px, 100% 100%, 22px 100%, 0 calc(100% - 22px));
+  border-right: 3px dashed rgba(238, 243, 251, 0.16);   /* the seam between zones */
 }
 
-.contact-info h3 {
+/* heading — a tilted ransom headline, anchored top-left */
+.contact-intro h3 {
   font-family: var(--font-display);
-  font-size: 32px;
+  font-style: italic;
+  font-size: 34px;
+  line-height: 0.95;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  color: var(--p5-paper);
+  -webkit-text-stroke: 0.6px var(--p5-black);
+  paint-order: stroke fill;
+  text-shadow: 3px 3px 0 var(--p5-black);
+  margin: 0;
+  align-self: flex-start;
+  transform: rotate(-3deg);
+}
+
+/* blurb — a slightly opposite-tilted scrap, nudged right */
+.contact-description {
+  font-family: var(--font-body);
+  font-size: 18.5px;
+  line-height: 1.6;
+  color: var(--text-gray);
+  max-width: 88%;
+  padding-left: 15px;
+  border-left: 5px solid var(--p5-blue);
+  align-self: flex-start;
+  margin-left: 14px;
+  transform: rotate(1.2deg);
+}
+
+/* =====================================================================
+   COLLAGE — the envelope is the centerpiece (it reveals the EMAIL, its
+   natural job). The four social buttons sit below as a clean labelled row.
+   Tap-only reveal (no hover-open). Vertical stack fills the narrow column.
+   ===================================================================== */
+.connect-collage {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 30px;
+  padding-top: 10px;
+  align-self: center;
+  width: 100%;
+}
+
+/* the envelope, pasted at a hand-cut angle (it animates INSIDE this wrapper,
+   so the static tilt and the float/shake don't fight) */
+.envelope-block {
+  position: relative;
+  z-index: 2;                /* opened card rises above the social row, never behind it */
+  transform: rotate(-4deg);
+  margin-top: 24px;          /* a little separation from the socials above */
+}
+.socials-block { position: relative; z-index: 1; }
+.connect-collage .mail { margin: 0; }
+
+/* the "or find me on" social row, leaning slightly the other way */
+.socials-block {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+}
+.socials-block .colz { gap: 16px; }
+.socials-block .colz > div { position: relative; }
+
+/* Instagram brand fill for the shared .colz button (.one/.two/.three live in
+   Profile.css; Instagram only appears here) */
+.colz .four a::before {
+  background: linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%);
+}
+
+/* small label scraps — tilted P5 stickers */
+.email-text {
+  font-family: var(--font-ui);
+  font-size: 12px;
+  font-weight: 700;
   letter-spacing: 1px;
   text-transform: uppercase;
   color: var(--p5-paper);
-  text-shadow: 3px 3px 0 var(--p5-blue);
-  transform: skewX(-5deg);
+  background: var(--p5-blue);
+  padding: 4px 11px;
+  box-shadow: 3px 3px 0 var(--p5-black);
+  white-space: nowrap;
 }
+.email-text > span { display: inline-block; transform: skewX(8deg); }
 
-.contact-description {
-  font-family: var(--font-body);
-  font-size: 18px;
-  line-height: 1.7;
-  color: var(--text-gray);
+/* "or email me" sticker tacked to the envelope's top-left; fades out on open
+   so it never overlaps the revealed email card */
+.envelope-block .email-text {
+  position: absolute;
+  z-index: 30;
+  top: -18px;
+  left: -20px;
+  transform: skewX(-8deg) rotate(-8deg);
+  transition: opacity 0.2s ease;
 }
-
-.email-section { margin-top: 4px; }
-
-.email-text {
-  font-family: var(--font-ui);
-  font-size: 16px;
-  letter-spacing: 1px;
-  color: var(--text-gray);
-  margin-bottom: 16px;
+.envelope-block.is-open .email-text { opacity: 0; }
+/* "or find me on" sits above the social row */
+.socials-block .email-text {
+  transform: skewX(-8deg) rotate(2deg);
 }
 
 /* ---------- Envelope (blue / ink / paper) ---------- */
@@ -68,6 +168,7 @@
   --paper: var(--p5-paper);
   --text: var(--p5-black);
   --shadow-color: rgba(0, 0, 0, 0.5);
+  --p5-red: #ff3b4e;
 }
 
 .mail {
@@ -76,33 +177,23 @@
   height: 130px;
   background: var(--envelope-inside);
   border-radius: 0;
-  margin: 50px auto 10px;
+  margin: 0 auto;
   cursor: pointer;
-  transition: transform 0.2s ease;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
   box-shadow: 6px 6px 0 var(--p5-black), 0 10px 40px rgba(31, 143, 255, 0.5);
   animation: float 1.5s ease-in-out infinite, shake 2s ease-in-out infinite;
 }
 
-.mail:hover,
+/* OPEN state (tap-only — toggled by JS adding .is-open; no :hover here) */
 .mail.is-open {
   transform: scale(1.05);
   animation-play-state: paused;
   box-shadow: 8px 8px 0 var(--p5-black), 0 0 55px rgba(31, 143, 255, 0.85);
 }
-
-.mail:hover .cover::before,
-.mail.is-open .cover::before {
-  transform: rotateX(180deg);
-  z-index: 1;
-  filter: drop-shadow(0 -2px 3px rgba(0, 0, 0, 0.3));
-  transition: transform 0.4s ease-in-out 0s, z-index 0s linear 0.2s, filter 0.4s ease-in-out 0s;
+.mail:focus-visible {
+  outline: 3px solid var(--p5-blue-bright);
+  outline-offset: 6px;
 }
-
-.mail:hover .letter,
-.mail.is-open .letter { top: -84px; transform: rotate(-2deg); transition-delay: 0.18s; }
-
-.letter:hover .click-hint,
-.mail.is-open .click-hint { opacity: 0; animation-play-state: paused; }
 
 @keyframes float {
   0%, 100% { top: 0; }
@@ -118,7 +209,8 @@
   100% { transform: rotate(0deg); }
 }
 
-/* pocket */
+/* pocket — the front flap that the letter slides up out of (sits ABOVE the
+   letter so the email card emerges from inside) */
 .mail::before {
   content: "";
   position: absolute;
@@ -131,93 +223,135 @@
   z-index: 10;
 }
 
-/* wax-seal star stamp (Phantom Thieves calling card) */
-.mail::after {
-  content: "\2605";                /* ★ */
-  position: absolute;
-  left: 50%;
-  top: 58%;
-  transform: translate(-50%, -50%) rotate(-6deg);
-  z-index: 16;
-
-  width: 40px;
-  height: 40px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  background: var(--p5-paper);
-  color: var(--p5-blue);
-  font-size: 22px;
-  border-radius: 50%;
-  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.45), 0 0 0 3px var(--p5-blue);
-  transition: opacity 0.25s ease, transform 0.35s var(--ease-slam);
-}
-
-/* seal "breaks" away when the letter opens */
-.mail:hover::after,
-.mail.is-open::after {
-  opacity: 0;
-  transform: translate(-50%, -120%) rotate(-40deg) scale(0.5);
-}
-
-/* letter */
+/* letter — the ransom-note CARD itself. Torn/cut paper silhouette, heavy
+   halftone, layered scraps behind. It ALWAYS stays behind the front pocket
+   (z5 < pocket z10) so it reads as sliding OUT, not appearing on top. */
 .letter {
   position: absolute;
-  top: 5px; left: 10px;
-  width: 180px; height: 110px;
+  top: 14px; left: 10px;
+  width: 180px; height: 104px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 7px;
+  padding: 12px 12px 0;
   background-color: var(--paper);
   background-image:
-    radial-gradient(circle at 100% 150%, transparent 20%, rgba(0,0,0,0.04) 21%, rgba(0,0,0,0.04) 34%, transparent 35%, transparent),
-    radial-gradient(circle at 0% 150%, transparent 20%, rgba(0,0,0,0.04) 21%, rgba(0,0,0,0.04) 34%, transparent 35%, transparent);
-  background-size: 30px 30px;
+    /* halftone dot texture for the ransom-paper feel */
+    radial-gradient(rgba(11,13,20,0.12) 1px, transparent 1.5px),
+    radial-gradient(circle at 100% 150%, transparent 20%, rgba(0,0,0,0.05) 21%, rgba(0,0,0,0.05) 34%, transparent 35%, transparent),
+    radial-gradient(circle at 0% 150%, transparent 20%, rgba(0,0,0,0.05) 21%, rgba(0,0,0,0.05) 34%, transparent 35%, transparent);
+  background-size: 6px 6px, 30px 30px, 30px 30px;
+  border: 2px solid var(--p5-ink);
   border-radius: 0;
-  box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.15);
-  overflow: hidden;
-  padding: 5px;
+  box-shadow: 3px 3px 0 var(--p5-black);   /* hard cut-and-paste offset */
   box-sizing: border-box;
-  z-index: 5;
-  transition: top 0.45s var(--ease-pop), transform 0.45s var(--ease-pop);
-  transition-delay: 0s;
+  z-index: 5;                  /* PERMANENTLY behind the pocket (z10) */
+  /* CLOSING order (base state) = reverse of opening: the card drops back FIRST
+     with no delay, so the lid never shuts on top of a still-raised card. */
+  transition: top 0.4s var(--ease-pop) 0s, transform 0.4s var(--ease-pop) 0s;
+}
+.mail.is-open .letter {
+  top: -52px;                  /* slides up; lower half stays behind the pocket */
+  transform: rotate(-2deg);
+  /* OPENING: card rises AFTER the lid has flipped (0.24s delay). */
+  transition: top 0.4s var(--ease-pop) 0.24s, transform 0.4s var(--ease-pop) 0.24s;
 }
 
-.letter h1 {
-  margin: 0;
-  width: 100%; height: 100%;
+/* ransom "header" slab on the card */
+.letter-head {
+  font-family: var(--font-ui);
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: var(--p5-paper);
+  background: var(--p5-blue);
+  padding: 2px 8px;
+  transform: skewX(-8deg) rotate(-2deg);
+  box-shadow: 2px 2px 0 var(--p5-black);
+  white-space: nowrap;
+}
+
+/* the email — a clean underlined link on the ransom card */
+/* email + copy button sit in a row; the whole cluster fades with the card */
+.letter .mail-email-row {
   display: flex;
   align-items: center;
   justify-content: center;
-  border: 3px double var(--envelope-inside);
-  border-radius: 0;
-  box-sizing: border-box;
+  gap: 6px;
+  width: 100%;
+  /* always present on the card — it simply rides up with the card on open */
 }
 
-.letter h1 a {
-  position: relative;
+.letter .mail-email {
   font-family: var(--font-ui);
-  font-size: 13px;
+  font-size: 11.5px;
   font-weight: 700;
-  letter-spacing: 0.5px;
+  letter-spacing: 0.2px;
   text-transform: uppercase;
-  cursor: pointer;
+  text-align: center;
+  line-height: 1.2;
+  white-space: nowrap;
+  color: var(--p5-ink);
   text-decoration: none;
-  color: var(--text);
-  transition: none;
+  border-bottom: 2.5px solid var(--p5-blue);
+  padding: 1px 3px 2px;
+  cursor: pointer;
+  transition: color 0.18s ease, background-color 0.18s ease;
 }
-.letter h1 a::after {
-  content: "";
-  position: absolute;
-  left: 0; bottom: -3px;
-  width: 100%; height: 3px;
-  background: var(--p5-blue);
-  transform: scaleX(0);
-  transform-origin: left;
-  transition: none;
+/* subtle clickable signal: the blue underline "fills" behind the text */
+.letter .mail-email:hover,
+.letter .mail-email:focus-visible {
+  color: var(--p5-paper);
+  background-color: var(--p5-blue);
+  outline: none;
 }
-.letter h1 a:hover { color: var(--p5-blue); }
-.letter h1 a:hover::after { transform: scaleX(1); }
 
-/* lid */
+/* little copy-to-clipboard square that swaps to a check on click */
+.letter .copy-btn {
+  position: relative;
+  flex-shrink: 0;
+  width: 22px; height: 22px;
+  display: grid;
+  place-items: center;
+  padding: 0;
+  background: var(--p5-paper);
+  color: var(--p5-ink);
+  border: 2px solid var(--p5-ink);
+  box-shadow: 2px 2px 0 var(--p5-black);
+  cursor: pointer;
+  font-size: 11px;
+  transition: transform 0.12s var(--ease-pop), box-shadow 0.12s var(--ease-pop),
+              background-color 0.15s ease, color 0.15s ease;
+}
+.letter .copy-btn:hover {
+  transform: translate(-1px, -1px);
+  box-shadow: 3px 3px 0 var(--p5-black);
+}
+.letter .copy-btn:active { transform: translate(1px, 1px); box-shadow: 1px 1px 0 var(--p5-black); }
+.letter .copy-btn:focus-visible { outline: 2px solid var(--p5-blue-bright); outline-offset: 2px; }
+
+/* the two glyphs share the same cell; we cross-fade/scale between them */
+.letter .copy-btn .copy-icon,
+.letter .copy-btn .check-icon {
+  grid-area: 1 / 1;
+  pointer-events: none;
+  transition: opacity 0.18s ease, transform 0.18s var(--ease-pop);
+}
+.letter .copy-btn .check-icon { opacity: 0; transform: scale(0.4) rotate(-20deg); }
+/* copied state: square turns blue, copy icon out, check pops in */
+.letter .copy-btn.is-copied {
+  background: var(--p5-blue);
+  color: var(--p5-paper);
+}
+.letter .copy-btn.is-copied .copy-icon { opacity: 0; transform: scale(0.4) rotate(20deg); }
+.letter .copy-btn.is-copied .check-icon { opacity: 1; transform: scale(1) rotate(0deg); }
+
+/* lid — STEP 1: flips open first (no delay), the trigger for the sequence.
+   Sharp flip. The z-index swap happens mid-flip (when the flap is edge-on),
+   symmetric both directions so closing mirrors opening. */
 .cover::before {
   content: "";
   position: absolute;
@@ -229,79 +363,105 @@
   transform-origin: top;
   z-index: 20;
   filter: drop-shadow(0 2px 3px rgba(0, 0, 0, 0.3));
-  transition: transform 0.4s ease-in-out 0.2s, z-index 0s linear 0.5s, filter 0.4s ease-in-out 0.3s;
+  /* CLOSING: lid waits only briefly for the card, THEN flips shut (sooner). */
+  transition: transform 0.3s var(--ease-slam) 0.12s, z-index 0s linear 0.26s, filter 0.3s ease 0.12s;
 }
-.mail:hover .cover::before {
+.mail.is-open .cover::before {
   transform: rotateX(180deg);
-  z-index: 1;
+  z-index: 1;                  /* drop behind so the lifted card clears it */
   filter: drop-shadow(0 -2px 3px rgba(0, 0, 0, 0.3));
-  transition: transform 0.4s ease-in-out 0s, z-index 0s linear 0.2s, filter 0.4s ease-in-out 0s;
+  /* OPENING: lid flips immediately; z-index drops to back mid-flip. */
+  transition: transform 0.32s var(--ease-slam) 0s, z-index 0s linear 0.16s, filter 0.32s ease 0s;
 }
-.mail:hover .letter { top: -84px; transform: rotate(-2deg); transition-delay: 0.18s; }
 
-/* click hint */
+/* tap hint — just the finger glyph (no disc), with a hard P5 offset right on
+   the icon. The poke is timed to the envelope's 2s shake so they hit together.
+   Above the pocket/lid (z30) so it reads while closed; hidden on open. */
 .click-hint {
   position: absolute;
-  top: 50%; left: 50%;
-  margin-top: 2px; margin-left: 28px;
-  width: 0; height: 0;
-  z-index: 20;
+  top: 52%; left: 54%;
+  z-index: 30;
   pointer-events: none;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: opacity 0.3s ease;
+  transition: opacity 0.2s ease;
 }
 .click-hint i {
-  color: var(--p5-black);
-  font-size: 18px;
-  position: absolute;
-  top: 0; left: 0;
-  z-index: 2;
-  text-shadow: 1px 1px 2px rgba(255, 255, 255, 0.8);
-  transform-origin: top left;
-  animation: tapHand 2s ease-in-out infinite;
+  display: block;
+  font-size: 38px;
+  color: var(--p5-paper);
+  /* a clean, even outline drawn directly around the glyph, + one hard P5 offset */
+  -webkit-text-stroke: 2px var(--p5-black);
+  paint-order: stroke fill;
+  filter: drop-shadow(2.5px 2.5px 0 var(--p5-black));
+  transform-origin: 35% 0%;
+  /* same 2s period as .shake; the jab lands with the shake's first jerk (~75%) */
+  animation: p5Poke 2s ease-in-out infinite;
 }
-.hint-ripple {
+@keyframes p5Poke {
+  0%, 70%, 100% { transform: rotate(-4deg) translateY(0) scale(1); }
+  76%           { transform: rotate(-4deg) translateY(8px) scale(0.85); }  /* SNAP down on the shake jerk */
+  85%           { transform: rotate(-4deg) translateY(-3px) scale(1.05); } /* spring back */
+  92%           { transform: rotate(-4deg) translateY(0) scale(1); }
+}
+.mail.is-open .click-hint { opacity: 0; }
+
+/* impact burst at the fingertip — flashes the instant the poke lands (~76%),
+   synced to the same 2s shake period. A hard ring + four spark ticks. */
+.hint-impact {
   position: absolute;
-  top: 1px; left: 5px;
-  transform: translate(-50%, -50%);
-  width: 5px; height: 5px;
-  border-radius: 50%;
-  border: 2px solid var(--p5-blue);
+  top: 0px; left: 8px;        /* sits at the fingertip */
+  width: 10px; height: 10px;
+  pointer-events: none;
+  z-index: -1;
+}
+.hint-impact::before,
+.hint-impact::after {
+  content: "";
+  position: absolute;
+  top: 50%; left: 50%;
+  transform: translate(-50%, -50%) scale(0);
   opacity: 0;
-  z-index: 1;
-  animation: rippleExpand 2s ease-out infinite;
-  animation-delay: 0.15s;
 }
-@keyframes tapHand {
-  0%   { transform: translate(12px, 12px) scale(1) rotate(-10deg); }
-  50%  { transform: translate(0, 0) scale(0.9) rotate(0deg); }
-  100% { transform: translate(12px, 12px) scale(1) rotate(-10deg); }
+/* expanding hard ring */
+.hint-impact::before {
+  width: 14px; height: 14px;
+  border: 2.5px solid var(--p5-blue-bright);
+  border-radius: 50%;
+  animation: p5Impact 2s ease-out infinite;
 }
-@keyframes rippleExpand {
-  0%, 45% { width: 2px; height: 2px; opacity: 0; border-width: 3px; }
-  50%     { opacity: 1; }
-  100%    { width: 35px; height: 35px; opacity: 0; border-width: 0px; }
+/* four-point spark cross */
+.hint-impact::after {
+  width: 26px; height: 26px;
+  background:
+    linear-gradient(var(--p5-paper), var(--p5-paper)) center/2.5px 100% no-repeat,
+    linear-gradient(var(--p5-paper), var(--p5-paper)) center/100% 2.5px no-repeat;
+  animation: p5Spark 2s ease-out infinite;
 }
-.letter:hover .click-hint { opacity: 0; animation-play-state: paused; }
+@keyframes p5Impact {
+  0%, 74%   { transform: translate(-50%, -50%) scale(0);   opacity: 0; }
+  78%       { transform: translate(-50%, -50%) scale(0.5); opacity: 1; }
+  90%, 100% { transform: translate(-50%, -50%) scale(1.8); opacity: 0; }
+}
+@keyframes p5Spark {
+  0%, 74%   { transform: translate(-50%, -50%) scale(0)    rotate(0deg);   opacity: 0; }
+  78%       { transform: translate(-50%, -50%) scale(0.55) rotate(10deg);  opacity: 0.95; }
+  88%, 100% { transform: translate(-50%, -50%) scale(1.15) rotate(25deg);  opacity: 0; }
+}
 
-/* ---------- Right: form panel ---------- */
+/* ---------- Form zone (right half of the unified panel) ---------- */
 
-.contact-form-wrapper.glass-card,
-.contact-form-wrapper {
-  padding: 40px;
-  background: var(--panel-bg);
-  border: 3px solid var(--p5-ink);
-  box-shadow: 0 0 0 2px var(--p5-blue), 10px 10px 0 rgba(31, 143, 255, 0.22);
-  clip-path: polygon(0 0, calc(100% - 22px) 0, 100% 22px, 100% 100%, 22px 100%, 0 calc(100% - 22px));
+.contact-form-zone {
+  padding: 44px 40px;
+  display: flex;
+  align-items: center;       /* center the form in the zone's height */
 }
-
-form { display: flex; flex-direction: column; gap: 24px; }
+form { display: flex; flex-direction: column; gap: 22px; width: 100%; }
 
 .form-group { display: flex; flex-direction: column; gap: 8px; }
 
 .form-group label {
+  display: flex;
+  align-items: center;
+  gap: 6px;
   font-family: var(--font-ui);
   font-size: 16px;
   font-weight: 700;
@@ -310,7 +470,7 @@ form { display: flex; flex-direction: column; gap: 24px; }
   color: var(--p5-paper);
 }
 
-.required { color: var(--p5-blue); font-size: 34px; line-height: 1; position: relative; top: 10px; }
+.required { color: var(--p5-blue); font-size: 22px; line-height: 0; }
 
 .form-group input,
 .form-group textarea {
@@ -323,58 +483,171 @@ form { display: flex; flex-direction: column; gap: 24px; }
   color: var(--p5-paper);
   font-size: 15px;
   font-family: var(--font-body);
-  transition: all 0.25s var(--ease-snap);
+  transition: background 0.25s var(--ease-snap), border-color 0.25s var(--ease-snap),
+    box-shadow 0.25s var(--ease-snap), transform 0.25s var(--ease-snap);
 }
-.form-group textarea { resize: vertical; }
+.form-group textarea { resize: vertical; min-height: 130px; }
 
 .form-group input::placeholder,
 .form-group textarea::placeholder { color: rgba(238, 243, 251, 0.35); }
 
 .form-group input:focus,
 .form-group textarea:focus {
+  outline: none;
   background: rgba(31, 143, 255, 0.08);
   border-color: var(--p5-blue);
   box-shadow: 4px 4px 0 var(--p5-blue-deep);
   transform: translateX(-2px);
 }
 
-/* ---------- Submit (primary handled in App.css; add paper-plane) ---------- */
-
-.contact-btn { margin-top: 10px; align-self: flex-start; }
-
-.contact-btn .btn-text { transition: transform 0.3s var(--ease-snap); }
-.contact-btn:hover .btn-text { transform: skewX(8deg) translateX(-6px); }
-
-/* overrides the arrow from .btn-arrow (loads later) */
-.contact-btn::after {
-  content: "\f1d8";                 /* fa-paper-plane */
-  font-family: "Font Awesome 6 Free";
-  font-weight: 900;
-  position: absolute;
-  right: 18px;
-  top: 50%;
+/* ----- Validation error state ----- */
+.form-group input.has-error,
+.form-group textarea.has-error {
+  border-color: var(--p5-red, #ff3b4e);
+  border-left-color: var(--p5-red, #ff3b4e);
+  background: rgba(255, 59, 78, 0.07);
+}
+.form-group input.has-error:focus,
+.form-group textarea.has-error:focus {
+  border-color: var(--p5-red, #ff3b4e);
+  box-shadow: 4px 4px 0 #7a0d18;
+}
+/* inline message — a small tilted red scrap that snaps in */
+.field-error {
+  display: inline-block;
+  align-self: flex-start;
+  margin-top: 2px;
+  padding: 3px 9px;
+  font-family: var(--font-ui, var(--font-body));
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.4px;
+  text-transform: uppercase;
   color: var(--p5-paper);
-  font-size: 15px;
+  background: var(--p5-red, #ff3b4e);
+  box-shadow: 2px 2px 0 var(--p5-black);
+  transform: skewX(-6deg) rotate(-1deg);
+  animation: errPop 0.22s var(--ease-pop, ease-out);
+}
+@keyframes errPop {
+  0%   { opacity: 0; transform: skewX(-6deg) rotate(-1deg) translateY(-4px) scale(0.96); }
+  100% { opacity: 1; transform: skewX(-6deg) rotate(-1deg) translateY(0) scale(1); }
+}
+
+/* ----- Autofill fix -----
+   Browsers paint a white/yellow box + black text over autofilled inputs. The
+   box can't be unset directly, so we mask it with a huge inset box-shadow in
+   our field color and pin the text fill to paper; the long transition keeps it
+   from flashing white on focus/submit. */
+.form-group input:-webkit-autofill,
+.form-group input:-webkit-autofill:hover,
+.form-group input:-webkit-autofill:focus,
+.form-group input:-webkit-autofill:active,
+.form-group textarea:-webkit-autofill,
+.form-group textarea:-webkit-autofill:hover,
+.form-group textarea:-webkit-autofill:focus {
+  -webkit-text-fill-color: var(--p5-paper);
+  caret-color: var(--p5-paper);
+  -webkit-box-shadow: 0 0 0 1000px #0e1626 inset;
+  box-shadow: 0 0 0 1000px #0e1626 inset;
+  border-left: 4px solid var(--p5-blue);
+  transition: background-color 600000s 0s, color 600000s 0s;
+}
+.form-group input:-webkit-autofill:focus,
+.form-group textarea:-webkit-autofill:focus {
+  -webkit-box-shadow: 0 0 0 1000px #0e1626 inset, 4px 4px 0 var(--p5-blue-deep);
+  box-shadow: 0 0 0 1000px #0e1626 inset, 4px 4px 0 var(--p5-blue-deep);
+}
+.form-group input:autofill,
+.form-group textarea:autofill {
+  color: var(--p5-paper);
+  box-shadow: 0 0 0 1000px #0e1626 inset;
+}
+
+/* =====================================================================
+   SUBMIT — built to behave exactly like the hero "View Projects" /
+   "Let's Chat" buttons. Profile.css deliberately excludes .contact-btn from
+   its chevron rule, so the Persona selection-cursor is defined here, scoped
+   to .contact-btn, matching the hero geometry 1:1. Sending / sent feedback is
+   expressed THROUGH that same chevron + the label — no foreign elements.
+   ===================================================================== */
+
+.contact-btn {
+  align-self: flex-start;     /* sized to its content, anchored left — not a banner */
+  margin-top: 6px;
+}
+.contact-btn .btn-text {
+  display: inline-block;
+  transition: transform 0.3s var(--ease-snap);
+}
+
+/* Persona selection cursor — identical to the hero buttons: a flex item placed
+   BEFORE the label (order:-1), collapsed at rest, opening a slot on hover. */
+.contact-btn::after {
+  content: "";
+  order: -1;
+  flex: 0 0 auto;
+  width: 0;
+  height: 16px;
+  margin-right: 0;
+  background: var(--p5-paper);
+  clip-path: polygon(0 0, 60% 0, 100% 50%, 60% 100%, 0 100%, 40% 50%);
+  filter: drop-shadow(1.5px 1.5px 0 var(--p5-black));
   opacity: 0;
-  transform: skewX(8deg) translateY(-40%) scale(0.3) rotate(-270deg);
-  transition: opacity 0.25s ease, transform 0.5s var(--ease-pop);
+  z-index: 1;
+  transform: skewX(-5deg) translateX(-6px) scale(0.85);
+  transition: width 0.26s var(--ease-slam), margin 0.26s var(--ease-slam),
+    opacity 0.2s ease, transform 0.32s var(--ease-pop);
   pointer-events: none;
 }
-.contact-btn:hover::after,
-.contact-btn:focus-visible::after {
+.contact-btn:hover:not(:disabled)::after,
+.contact-btn:focus-visible:not(:disabled)::after {
+  width: 13px;
+  margin-right: 10px;
   opacity: 1;
-  transform: skewX(8deg) translateY(-50%) scale(1) rotate(0deg);
+  transform: skewX(-5deg) translateX(0) scale(1);
 }
 
-.contact-btn:disabled { opacity: 0.55; cursor: not-allowed; box-shadow: none; }
-.contact-btn:disabled::after { display: none; }
+/* SENDING: pin the chevron in and give it a soft pulse so it reads as
+   "working" — still just the chevron, nothing the hero buttons lack. */
+.contact-btn.is-sending { cursor: progress; }
+.contact-btn.is-sending::after {
+  width: 13px;
+  margin-right: 10px;
+  opacity: 1;
+  animation: sendPulse 0.7s ease-in-out infinite;
+}
+@keyframes sendPulse {
+  0%, 100% { opacity: 0.45; transform: skewX(-5deg) translateX(0) scale(0.9); }
+  50%      { opacity: 1;    transform: skewX(-5deg) translateX(3px) scale(1.05); }
+}
+
+/* SENT: deep-blue confirm tint; chevron stabs in and stays, label confirms. */
+.contact-btn.is-sent { cursor: default; }
+.contact-btn.is-sent::before { left: 0; background: var(--p5-blue-deep); }
+.contact-btn.is-sent::after {
+  width: 13px;
+  margin-right: 10px;
+  opacity: 1;
+  transform: skewX(-5deg) translateX(4px) scale(1.05);
+  animation: sentStab 0.4s var(--ease-pop);
+}
+@keyframes sentStab {
+  0%   { transform: skewX(-5deg) translateX(-6px) scale(0.7); opacity: 0; }
+  60%  { transform: skewX(-5deg) translateX(6px) scale(1.15); opacity: 1; }
+  100% { transform: skewX(-5deg) translateX(4px) scale(1.05); opacity: 1; }
+}
+
+.contact-btn:disabled { opacity: 0.95; }
 
 /* ---------- Footer ---------- */
 
 .footer {
   margin-top: 40px;
   padding-top: 30px;
-  border-top: 3px solid var(--p5-blue);
+  /* a quiet divider, not an accent — matches the dashed seam tint inside the
+     panel so it reads as a separator above the low-emphasis copyright. */
+  border-top: 2px solid rgba(238, 243, 251, 0.16);
   text-align: center;
 }
 .footer p {
@@ -390,57 +663,34 @@ form { display: flex; flex-direction: column; gap: 24px; }
    ===================================================================== */
 
 @media screen and (max-width: 968px) {
-  .contact-content { grid-template-columns: 1fr; gap: 30px; }
-  .contact-info { text-align: center; }
-  .contact-info h3 { align-self: center; }
+  .contact-panel.glass-card,
+  .contact-panel { grid-template-columns: 1fr; }
+  .contact-intro {
+    align-items: center;
+    text-align: center;
+    border-right: none;
+    border-bottom: 3px dashed rgba(238, 243, 251, 0.16);   /* seam flips to horizontal */
+  }
+  .contact-intro h3 { align-self: center; transform: rotate(-2deg); }
+  .contact-description {
+    border-left: none;
+    border-top: 5px solid var(--p5-blue);
+    padding-left: 0;
+    padding-top: 14px;
+    margin-left: 0;
+    max-width: 100%;
+    transform: rotate(0.8deg);
+  }
+  .connect-collage { flex: none; margin-top: 12px; gap: 26px 30px; }
 }
 
 @media screen and (max-width: 768px) {
-  .contact-info, .contact-form-wrapper { padding: 30px; }
-  .contact-btn { align-self: center; }
+  .contact-intro, .contact-form-zone { padding: 30px; }
 }
 
 @media screen and (max-width: 480px) {
-  .contact-info, .contact-form-wrapper { padding: 25px; }
+  .contact-intro, .contact-form-zone { padding: 25px; }
 
-  .contact-btn {
-    width: fit-content;
-    margin: 10px auto 0 auto;
-    align-self: center;
-    display: inline-flex;
-    justify-content: center;
-  }
-
-  .mail { width: 120px; height: 80px; }
-  .mail::before {
-    border-left: 60px solid var(--envelope-color);
-    border-right: 60px solid var(--envelope-color);
-    border-bottom: 45px solid var(--envelope-color);
-    border-top: 35px solid transparent;
-  }
-  .mail::after { width: 26px; height: 26px; font-size: 14px; box-shadow: 0 2px 5px rgba(0,0,0,0.45), 0 0 0 2px var(--p5-blue); }
-  .cover::before {
-    border-left: 60px solid transparent;
-    border-right: 60px solid transparent;
-    border-top: 45px solid var(--envelope-color);
-    border-bottom: 45px solid transparent;
-  }
-  .letter { width: 104px; height: 72px; left: 8px; top: 5px; padding: 2px; }
-  .mail:hover .letter { top: -42px; transform: rotate(-2deg); }
-  .letter h1 { border-width: 1px; padding: 0 2px; }
-  .letter h1 a {
-    font-size: 8px;
-    word-break: break-all;
-    white-space: normal;
-    line-height: 1.1;
-    text-align: center;
-  }
-  .click-hint {
-    display: flex;
-    transform: scale(0.6);
-    margin-left: 0; margin-top: 0;
-    top: 50%; left: 50%;
-  }
-  .mail:hover .letter,
-  .mail.is-open .letter { top: -42px; transform: rotate(-2deg); }
+  /* the envelope keeps its full size here (single column = room), so the 2x2
+     social grid inside the letter stays legible and tappable */
 }

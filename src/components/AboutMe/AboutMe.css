@@ -7,8 +7,7 @@
   padding: 40px 0;
   display: flex;
   align-items: center;
-  background-color: var(--p5-ink);
-  background-image: linear-gradient(135deg, #07090f 0%, #0a1426 50%, #07090f 100%);
+  background: transparent;
 }
 
 .about-container {
@@ -28,19 +27,45 @@
 .about-card.glass-card,
 .about-card {
   position: relative;
+  isolation: isolate;        /* contains the negative-z frame/shadow pseudos */
   display: grid;
   grid-template-columns: 420px 1fr;
   gap: 60px;
   padding: 48px;
-
-  background: var(--panel-bg);
-  border: 3px solid var(--p5-ink);
-  box-shadow:
-    0 0 0 2px var(--p5-blue),
-    12px 12px 0 rgba(31, 143, 255, 0.22),
-    0 20px 60px rgba(0, 0, 0, 0.55);
-  clip-path: polygon(0 0, calc(100% - 26px) 0, 100% 26px, 100% 100%, 26px 100%, 0 calc(100% - 26px));
   align-items: stretch;
+
+  /* The frame (paper border + fill) and the flat hard blue offset are drawn as
+     pseudo-elements below, NOT as border + shadow here. This card is clip-
+     cornered, and clip-path is applied AFTER filter/box-shadow in the render
+     order — so any shadow on THIS element is clipped away (which is exactly why
+     the old drop-shadow never showed). The pseudos sit on the UN-clipped card
+     and carry their OWN clip-path, so the cut-corner offset actually renders. */
+  background: none;
+  border: none;
+  box-shadow: none;
+  backdrop-filter: none;
+}
+
+/* papercut frame + hard offset, both cut to the same corner silhouette */
+.about-card::before,
+.about-card::after {
+  content: "";
+  position: absolute;        /* absolute => not a grid item; stays out of layout */
+  inset: 0;
+  box-sizing: border-box;
+  clip-path: polygon(0 0, calc(100% - 26px) 0, 100% 26px, 100% 100%, 26px 100%, 0 calc(100% - 26px));
+}
+/* the visible sheet: panel fill + paper border, behind the content */
+.about-card::before {
+  z-index: -1;
+  background: var(--panel-bg);
+  border: 3px solid var(--p5-paper);
+}
+/* the flat blue offset (no blur) — same language as the image frame + slabs */
+.about-card::after {
+  z-index: -2;
+  background: var(--p5-blue-deep);
+  transform: translate(12px, 12px);
 }
 
 /* ---------- Image (angular papercut frame) ---------- */
@@ -52,9 +77,9 @@
   min-height: 520px;
   overflow: hidden;
 
-  clip-path: polygon(8% 0, 100% 0, 100% 92%, 92% 100%, 0 100%, 0 8%);
-  border: 4px solid var(--p5-blue);
-  box-shadow: 10px 10px 0 var(--p5-black);
+  border: 5px solid var(--p5-paper);
+  box-shadow: inset 0 0 0 3px var(--p5-black), 8px 8px 0 var(--p5-blue);
+  transform: rotate(1deg);
 
   background-image: url("../../assets/AboutMe/AboutMePhoto.jpg");
   background-size: cover;
@@ -63,17 +88,6 @@
   filter: contrast(1.05) saturate(1.05);
 }
 
-/* blue duotone sheen on hover */
-.about-image::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(135deg, rgba(31, 143, 255, 0.4), rgba(31, 143, 255, 0.05));
-  mix-blend-mode: screen;
-  opacity: 0;
-  transition: opacity 0.35s var(--ease-snap);
-}
-.about-card:hover .about-image::after { opacity: 1; }
 
 /* ---------- Details ---------- */
 
@@ -84,12 +98,19 @@
   gap: 30px;
 }
 
+/* blue bar down the left edge of the get-to-know-me paragraph */
+.about-text {
+  padding-left: 18px;
+  border-left: 5px solid var(--p5-blue);
+}
+
 .about-text p {
   font-family: var(--font-body);
   font-size: 18px;
   line-height: 1.75;
   color: var(--text-gray);
 }
+.about-text p + p { margin-top: 18px; }
 
 /* ---------- Highlights ---------- */
 
@@ -97,76 +118,180 @@
 
 .highlights-heading {
   font-family: var(--font-ui);
-  font-size: 17px;
-  font-weight: 700;
-  letter-spacing: 1px;
+  font-size: 16px;
+  font-weight: 400;
+  letter-spacing: 2px;
   text-transform: uppercase;
-  color: var(--p5-paper);
-  margin-bottom: 20px;
-  padding-left: 12px;
-  border-left: 4px solid var(--p5-blue);
-  line-height: 1.4;
+  color: var(--text-gray);
+  margin-bottom: 24px;
 }
 
 .highlights-grid {
-  display: grid;
-  gap: 14px;
-}
-
-/* angled tag rows that snap on hover */
-.highlight-item {
   display: flex;
-  align-items: center;
-  gap: 14px;
-  padding: 13px 20px;
-
-  background: rgba(255, 255, 255, 0.03);
-  border: 2px solid rgba(31, 143, 255, 0.25);
-  border-left: 4px solid var(--p5-blue);
-  transform: skewX(-7deg);
-  transition: transform 0.2s var(--ease-pop), background 0.3s ease,
-    border-color 0.3s ease, box-shadow 0.3s ease;
+  flex-direction: column;
+  gap: 16px;
+  padding: 4px 6px 10px;
+  counter-reset: hl;
 }
 
-.highlight-item > * { transform: skewX(7deg); }
-
+/* one SHARED slant is the spine — every row leans the same way (a system,
+   not random tilts). Energy comes from the big number + bold type, not chaos. */
+.highlight-item {
+  counter-increment: hl;
+  position: relative;
+  display: flex;
+  align-items: stretch;
+  gap: 0;
+  transform: skewX(-9deg);
+  transition: transform 0.2s var(--ease-pop), box-shadow 0.2s var(--ease-pop);
+  /* match the site's hard blue offset (see .about-card / image frame) */
+  box-shadow: 8px 8px 0 var(--p5-blue-deep);
+}
 .highlight-item:hover {
-  background: rgba(31, 143, 255, 0.12);
-  border-color: var(--p5-blue);
-  transform: skewX(-7deg) translateX(8px);
-  box-shadow: -5px 5px 0 var(--p5-blue-deep);
+  transform: skewX(-9deg) translate(-4px, -4px);
+  box-shadow: 12px 12px 0 var(--p5-blue-deep);
 }
 
-/* icon = blue knockout chip */
-.highlight-icon {
-  width: 32px;
-  height: 32px;
-  border-radius: 0;
-  background: var(--p5-blue);
-  box-shadow: 2px 2px 0 var(--p5-black);
+/* big numbered tab — the P5 "menu index" */
+.highlight-num {
+  position: relative;
+  flex-shrink: 0;
+  width: 72px;
   display: flex;
   align-items: center;
   justify-content: center;
-  flex-shrink: 0;
+  background-color: var(--p5-ink);
+  /* P5 halftone — fine dot screen over the ink tab */
+  background-image: radial-gradient(var(--p5-blue-deep) 1.1px, transparent 1.3px);
+  background-size: 7px 7px;
+  border: 3px solid var(--p5-blue);
+  border-right: none;
+  transition: background-color 0.2s ease, border-color 0.2s ease;
 }
-.highlight-item:hover .highlight-icon {
-  box-shadow: 2px 2px 0 var(--p5-black), 0 0 14px rgba(31, 143, 255, 0.75);
-}
-.highlight-item:hover span { color: var(--p5-paper); }
-
-.highlight-icon i {
-  display: block;
-  font-size: 13px;
+.highlight-index {
+  font-family: var(--font-display, sans-serif);
+  font-size: 46px;
+  font-style: italic;
+  font-weight: 700;
   line-height: 1;
-  color: var(--p5-paper);
+  color: var(--p5-blue-bright);
+  -webkit-text-stroke: 1.5px var(--p5-black);
+  paint-order: stroke fill;
+  text-shadow: 4px 4px 0 var(--p5-black);
+  transition: color 0.2s ease, text-shadow 0.2s ease;
 }
 
-.highlight-item span {
-  font-family: var(--font-ui);
-  font-size: 16px;
+/* big faded icon bleeding off the right edge — identical across all rows.
+   The parent row is skewed, which would distort the icon; we cancel that
+   inherited skew first (+9 on odd rows), then apply ONE clean italic lean.
+   Only the italic direction differs per row. */
+.highlight-icon {
+  position: absolute;
+  right: 14px;
+  top: 50%;
+  width: 100px;
+  height: 100px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  /* cancel parent's -9deg skew (+9), then lean -15deg = right slant (odd rows) */
+  transform: translateY(-50%) skewX(9deg) skewX(-15deg);
+  font-size: 84px;
+  color: var(--p5-blue-deep);
+  opacity: 0.32;
+  pointer-events: none;
+  z-index: 0;
+  transition: opacity 0.2s ease, color 0.2s ease;
+}
+.highlight-icon::before { display: block; line-height: 1; }
+
+/* the content slab — heavy blue fill, blue-family border to match the site */
+.highlight-body {
+  position: relative;
+  overflow: hidden;       /* clip the oversized icon so it bleeds off the edge */
+  flex: 1;
+  padding: 14px 24px;
+  background: var(--p5-blue);
+  border: 3px solid var(--p5-blue);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 3px;
+  transition: background 0.2s ease, border-color 0.2s ease;
+}
+/* keep the text above the icon */
+.highlight-role,
+.highlight-detail { position: relative; z-index: 1; }
+/* un-skew the inner content so text/number sit straight on the slanted slab
+   (exclude the icon — it manages its own skew) */
+.highlight-body > *:not(.highlight-icon),
+.highlight-index { transform: skewX(9deg); }
+
+/* ---- Even rows lean the OTHER way (alternating zigzag spine) ---- */
+.highlight-item:nth-child(even) {
+  transform: skewX(9deg);
+  box-shadow: -8px 8px 0 var(--p5-blue-deep);
+}
+.highlight-item:nth-child(even):hover {
+  transform: skewX(9deg) translate(4px, -4px);
+  box-shadow: -12px 12px 0 var(--p5-blue-deep);
+}
+/* even-row TEXT = reverse italic (leans the OPPOSITE direction from odd rows).
+   font-style:italic only leans one way, so we drop it and back-slant via skew.
+   Parent box is skewX(9deg); +6deg here nets ~+15deg = a clear backward lean. */
+.highlight-item:nth-child(even) .highlight-role,
+.highlight-item:nth-child(even) .highlight-detail {
+  font-style: normal;
+}
+.highlight-item:nth-child(even) .highlight-index { font-style: normal; }
+.highlight-item:nth-child(even) .highlight-body > *:not(.highlight-icon) { transform: skewX(6deg); }
+.highlight-item:nth-child(even) .highlight-index { transform: skewX(6deg); }
+/* icon italic mirrors on even rows — cancel parent's +9 skew, then lean +15 */
+.highlight-item:nth-child(even) .highlight-icon {
+  transform: translateY(-50%) skewX(-9deg) skewX(15deg);
+}
+
+/* role = BIG main-character display line; detail = sharp italic kicker */
+.highlight-role {
+  font-family: var(--font-display, sans-serif);
+  font-size: 30px;
+  font-weight: 700;
+  font-style: italic;
   letter-spacing: 0.5px;
-  color: var(--text-gray);
-  transition: color 0.3s ease;
+  text-transform: uppercase;
+  color: var(--p5-paper);
+  line-height: 1.0;
+  -webkit-text-stroke: 0.8px var(--p5-black);
+  paint-order: stroke fill;
+  /* two-layer extrude (black + blue-deep) — matches the hero role slider */
+  text-shadow: 2px 2px 0 var(--p5-black), 4px 4px 0 var(--p5-blue-deep);
+}
+.highlight-detail {
+  font-family: var(--font-ui);
+  font-size: 13px;
+  font-weight: 800;
+  font-style: italic;
+  letter-spacing: 1.4px;
+  text-transform: uppercase;
+  color: var(--p5-ink);
+  line-height: 1.3;
+}
+
+/* hover = P5 "menu selection": the index tab inverts (bright fill, dark digit)
+   while the body slab stays put — no full-slab flash. */
+.highlight-item:hover .highlight-num {
+  background: var(--p5-blue-bright);
+  border-color: var(--p5-blue-bright);
+}
+.highlight-item:hover .highlight-index {
+  color: var(--p5-ink);
+  -webkit-text-stroke: 0;
+  text-shadow: none;
+}
+/* the faded watermark icon wakes up */
+.highlight-item:hover .highlight-icon {
+  opacity: 0.5;
+  color: var(--p5-blue-bright);
 }
 
 /* ---------- Responsive ---------- */
@@ -195,6 +320,17 @@
   .about-container { padding: 0 24px; }
   .screen-heading h2 { margin-bottom: 30px; }
   .about-text p { font-size: 16px; }
+
+  /* trim the offset proportionally on the smaller card (flat, no blur) */
+  .about-card::after { transform: translate(8px, 8px); }
+
+  /* flip the bar from the left edge to a top edge (mirrors the hero tagline) */
+  .about-text {
+    border-left: none;
+    border-top: 5px solid var(--p5-blue);
+    padding-left: 0;
+    padding-top: 14px;
+  }
 }
 
 @media screen and (max-width: 480px) {

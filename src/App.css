@@ -66,15 +66,29 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   color: var(--white);
-  background-color: var(--p5-black);
-  background-image: linear-gradient(135deg, #06070b 0%, #0a1224 50%, #06070b 100%);
-  background-attachment: fixed;
   overflow-x: hidden;
+}
+
+/* ONE global, fixed background for the whole site (Profile's atmosphere):
+   gradient + halftone dots + speed-lines, painted once behind all content. */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  background-color: var(--p5-ink);
+  background-image:
+    var(--speedlines),
+    var(--halftone),
+    linear-gradient(135deg, #07090f 0%, #0b1a38 55%, #07090f 100%);
+  background-size: auto, 9px 9px, cover;
+  pointer-events: none;
 }
 
 .App {
   min-height: 100vh;
   position: relative;
+  z-index: 1;
 }
 
 /* =========================================================
@@ -90,21 +104,7 @@ body {
 .home-container {
   position: relative;
   overflow: hidden;
-}
-
-.about-section::before,
-.projects-section::before,
-.resume-section::before,
-.contact-section::before {
-  content: "";
-  position: absolute;
-  inset: -80px;
-  z-index: 0;
-  background-image: var(--halftone), var(--speedlines);
-  background-size: 9px 9px, auto;
-  opacity: 0.9;
-  animation: drift 7s linear infinite;
-  pointer-events: none;
+  background: transparent;
 }
 
 @keyframes drift {
@@ -131,7 +131,7 @@ body {
   white-space: nowrap;
 }
 .about-section::after    { content: "ABOUT";    bottom: 2%;  right: -4%; }
-.projects-section::after  { content: "PHANTOM"; top: 6%;     left: -3%; }
+.projects-section::after  { content: "PROJECTS"; top: 6%;     left: -3%; }
 .resume-section::after    { content: "JOURNEY"; bottom: 1%;  left: -3%; }
 .contact-section::after   { content: "CONTACT"; top: 8%;     right: -3%; }
 
@@ -241,15 +241,8 @@ body {
   box-shadow: 3px 3px 0 var(--p5-blue-deep);
 }
 
-/* primary = solid blue at rest (form submit only) */
-.contact-btn { color: var(--p5-paper); }
-.contact-btn::before { left: 0; background: var(--p5-blue); }
-.contact-btn:hover::before { background: var(--p5-blue-bright); }
-.contact-btn:hover {
-  box-shadow: 8px 8px 0 var(--p5-black),
-    inset 0 2px 0 rgba(255, 255, 255, 0.35),
-    inset 0 -3px 0 rgba(0, 0, 0, 0.2);
-}
+/* form submit — behaves exactly like the hero secondary .btn-arrow: dark at
+   rest, blue fill sweeps in on hover. No overrides needed beyond the base. */
 
 /* legacy helpers kept for safety */
 .primary-btn { background: var(--p5-blue); }
@@ -291,7 +284,8 @@ body {
 }
 
 /* section headers = same Persona "ransom note" tiles as the hero name.
-   Requires per-letter <span>s inside the h2 (spaces use <span class="sp">). */
+   Letters are grouped into .word spans (see RansomHeading.jsx) so a word
+   never breaks mid-way — only the gaps BETWEEN words can wrap. */
 .screen-heading h2 {
   position: relative;
   display: inline-flex;
@@ -319,9 +313,22 @@ body {
 .screen-heading h2::before,
 .screen-heading h2::after { content: none; display: none; }
 
+/* WORD GROUP — keeps a word's letter tiles on one line (no mid-word break);
+   the wrap happens between these groups. The right margin is the space. */
+.screen-heading h2 .word {
+  display: inline-flex;
+  flex-wrap: nowrap;
+  white-space: nowrap;
+  gap: 0;                  /* tiles overlap via negative margins below */
+  margin-right: 0.34em;   /* the inter-word space (replaces the old .sp tile) */
+}
+.screen-heading h2 .word:last-child { margin-right: 0; }
+
 /* each letter tile */
-.screen-heading h2 span:not(.sp) {
+.screen-heading h2 .word span {
   display: inline-block;
+  position: relative;
+  margin-left: -5px;      /* pull tiles together so they overlap slightly */
   padding: 0 10px;
   line-height: 1.05;
   -webkit-text-stroke: 0;
@@ -330,35 +337,35 @@ body {
   border: 2px solid var(--p5-paper);
   box-shadow: 4px 4px 0 var(--p5-black);
 }
+.screen-heading h2 .word span:first-child { margin-left: 0; }
 
-/* word break / space — invisible spacer */
-.screen-heading h2 span.sp {
-  display: inline-block;
-  width: 0.34em;
-  background: none;
-  border: none;
-  box-shadow: none;
-}
+/* randomized stacking so it's not a uniform left-over-right shingle — some
+   tiles sit on top of their neighbours, some behind (cycled every 5 letters) */
+.screen-heading h2 .word span:nth-child(5n + 1) { z-index: 3; }
+.screen-heading h2 .word span:nth-child(5n + 2) { z-index: 5; }
+.screen-heading h2 .word span:nth-child(5n + 3) { z-index: 1; }
+.screen-heading h2 .word span:nth-child(5n + 4) { z-index: 4; }
+.screen-heading h2 .word span:nth-child(5n + 5) { z-index: 2; }
 
 /* alternating colorways + hand-cut tilts (cycled every 5 letters) */
-.screen-heading h2 span:not(.sp):nth-child(5n + 1) {
+.screen-heading h2 .word span:nth-child(5n + 1) {
   background: var(--p5-paper); color: var(--p5-ink);
   transform: rotate(-6deg) translateY(2px);
 }
-.screen-heading h2 span:not(.sp):nth-child(5n + 2) {
+.screen-heading h2 .word span:nth-child(5n + 2) {
   background: var(--p5-ink); color: var(--p5-paper);
   transform: rotate(5deg) translateY(-3px);
 }
-.screen-heading h2 span:not(.sp):nth-child(5n + 3) {
+.screen-heading h2 .word span:nth-child(5n + 3) {
   background: var(--p5-blue); color: var(--p5-paper);
   border-color: var(--p5-paper);
   transform: rotate(-3deg) translateY(1px);
 }
-.screen-heading h2 span:not(.sp):nth-child(5n + 4) {
+.screen-heading h2 .word span:nth-child(5n + 4) {
   background: var(--p5-paper); color: var(--p5-ink);
   transform: rotate(7deg) translateY(-2px);
 }
-.screen-heading h2 span:not(.sp):nth-child(5n + 5) {
+.screen-heading h2 .word span:nth-child(5n + 5) {
   background: var(--p5-ink); color: var(--p5-paper);
   transform: rotate(-5deg) translateY(2px);
 }

@@ -9,12 +9,7 @@
   justify-content: center;
   padding: 40px 20px;
 
-  background-color: var(--p5-ink);
-  background-image:
-    var(--speedlines),
-    var(--halftone),
-    linear-gradient(135deg, #07090f 0%, #0b1a38 55%, #07090f 100%);
-  background-size: auto, 9px 9px, cover;
+  background: transparent;
 }
 
 /* big diagonal blue slash sweeping behind the hero */

@@ -160,7 +160,7 @@ export default function Projects(props) {
 
         <div className="featured-note fade-in-scroll">
           <div className="featured-icon" aria-label="Notable projects">
-            <i className="fa fa-star featured-star" />
+            <i className="fa-solid fa-star featured-star" />
             <i className="fa fa-question-circle question-mark" />
           </div>
 
@@ -175,61 +175,80 @@ export default function Projects(props) {
               }`}
               key={index}
             >
+              <img
+                className="project-thumb"
+                src={imageMap[project.image] || ""}
+                alt={project.title}
+                onError={(e) => {
+                  // hide image on error
+                  e.target.style.display = "none";
+                }}
+              />
+
               {project.featured && (
                 <div className="featured-badge">
                   <i className="fa fa-star"></i>
                 </div>
               )}
 
-              <div className="project-image">
-                <img
-                  src={imageMap[project.image] || ""}
-                  alt={project.title}
-                  onError={(e) => {
-                    // hide image on error
-                    e.target.style.display = "none";
-                  }}
-                />
-                <div className="project-overlay">
-                  <div className="project-info">
-                    <h3>{project.title}</h3>
-                    <p className="project-tech">{project.technologies}</p>
-                    <p className="project-description">{project.description}</p>
-                    <div className="project-links">
-                      {project.website && (
-                        <a
-                          href={project.website}
-                          target="_blank"
-                          rel="noreferrer"
-                          className="project-link site-link"
-                        >
-                          <i className="fa-solid fa-globe"></i>
-                          <span>Visit Site</span>
-                        </a>
-                      )}
+              {/* resting caption — name + tech over the thumbnail */}
+              <div className="project-caption">
+                <h3 className="project-name">{project.title}</h3>
+                <div className="project-tech">
+                  {project.technologies.split(",").map((tech, i) => (
+                    <span className="tech-chip" key={i}>
+                      {tech.trim()}
+                    </span>
+                  ))}
+                </div>
+              </div>
 
-                      {project.demo && (
-                        <a
-                          href={project.demo}
-                          target="_blank"
-                          rel="noreferrer"
-                          className="project-link demo-link"
-                        >
-                          <i className="fa fa-play-circle"></i>
-                          <span>Watch Demo</span>
-                        </a>
-                      )}
-
+              {/* hover overlay — full description + actions, slams in */}
+              <div className="project-overlay">
+                <div className="project-overlay-inner">
+                  <h3 className="project-name">{project.title}</h3>
+                  <div className="project-tech">
+                    {project.technologies.split(",").map((tech, i) => (
+                      <span className="tech-chip" key={i}>
+                        {tech.trim()}
+                      </span>
+                    ))}
+                  </div>
+                  <p className="project-description">{project.description}</p>
+                  <div className="project-links">
+                    {project.website && (
                       <a
-                        href={project.github}
+                        href={project.website}
                         target="_blank"
                         rel="noreferrer"
-                        className="project-link github-link"
+                        className="project-link site-link"
                       >
-                        <i className="fa-brands fa-github"></i>
-                        <span>View GitHub</span>
+                        <i className="fa-solid fa-globe"></i>
+                        <span>Visit Site</span>
                       </a>
-                    </div>
+                    )}
+
+                    {project.demo && (
+                      <a
+                        href={project.demo}
+                        target="_blank"
+                        rel="noreferrer"
+                        className="project-link demo-link"
+                      >
+                        <i className="fa fa-play-circle"></i>
+                        <span>Watch Demo</span>
+                      </a>
+                    )}
+
+                    <a
+                      href={project.github}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="project-link github-link"
+                    >
+                      <i className="fa-brands fa-github"></i>
+                      <span>View GitHub</span>
+                    </a>
                   </div>
                 </div>
               </div>

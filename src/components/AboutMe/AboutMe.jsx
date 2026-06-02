@@ -5,16 +5,24 @@ import RansomHeading from "../RansomHeading";
 export default function AboutMe(props) {
   const highlights = [
     {
-      text: "Member of Tau Beta Pi Engineering Honors Society",
-      icon: "fa-solid fa-award",
+      role: "Tau Beta Pi Member",
+      detail: "Engineering Honors Society",
+      icon: "fa-solid fa-star",
     },
     {
-      text: "Teaching Assistant for Artificial Intelligence and Computer Vision",
-      icon: "fa-solid fa-chalkboard-user",
+      role: "Teaching Assistant",
+      detail: "Artificial Intelligence & Computer Vision",
+      icon: "fa-solid fa-robot",
     },
     {
-      text: "Student Researcher at Columbia Vision and Imaging Lab",
-      icon: "fa-solid fa-eye",
+      role: "Student Researcher",
+      detail: "Columbia Vision and Imaging Lab",
+      icon: "fa-solid fa-camera-retro",
+    },
+    {
+      role: "Software Engineer",
+      detail: "Columbia BUILD Lab",
+      icon: "fa-solid fa-code",
     },
   ];
 
@@ -33,13 +41,12 @@ export default function AboutMe(props) {
               <div className="about-text">
                 <p>
                   I'm Dhruv, a software engineer at Bloomberg. I graduated with
-                  highest honors from Columbia University, earning a bachelor’s
-                  degree in computer science and applied math and a master’s
-                  degree in computer science. My interests sit at the
-                  intersection of applied AI, computer vision, and large-scale
-                  software systems. Outside of work, I enjoy going on walks,
-                  making origami, playing open-world adventure games, and
-                  meeting new people!
+                  highest honors from Columbia University, earning a B.S. in
+                  computer science and applied math and an M.S. in computer
+                  science. My interests sit at the intersection of applied AI,
+                  computer vision, and large-scale software systems. Outside of
+                  work, I enjoy going on walks, making origami, playing
+                  open-world adventure games, and meeting new people!
                 </p>
               </div>
 
@@ -51,10 +58,16 @@ export default function AboutMe(props) {
                 <div className="highlights-grid">
                   {highlights.map((item, index) => (
                     <div className="highlight-item" key={index}>
-                      <div className="highlight-icon">
-                        <i className={item.icon}></i>
+                      <div className="highlight-num">
+                        <span className="highlight-index">
+                          0{index + 1}
+                        </span>
                       </div>
-                      <span>{item.text}</span>
+                      <div className="highlight-body">
+                        <i className={`highlight-icon ${item.icon}`}></i>
+                        <span className="highlight-role">{item.role}</span>
+                        <span className="highlight-detail">{item.detail}</span>
+                      </div>
                     </div>
                   ))}
                 </div>

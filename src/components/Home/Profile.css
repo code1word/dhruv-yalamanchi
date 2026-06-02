@@ -45,6 +45,15 @@
   -webkit-text-stroke: 1px var(--p5-black);
 }
 
+/* lead-in ("Hello, I'm") = quiet kicker so the ransom name owns the line:
+   smaller, no outline stroke, lighter shadow. */
+.greeting-lead {
+  font-size: 34px;
+  -webkit-text-stroke: 0;
+  text-shadow: 2px 2px 0 var(--p5-black);
+  vertical-align: middle;
+}
+
 /* highlighted name = Persona "ransom note" — each letter its own tilted tile.
    Requires per-letter <span>s inside .highlight (see JSX). Falls back to a
    plain blue plate if the letters aren't wrapped. */
@@ -118,11 +127,12 @@
   display: flex;
   align-items: center;
   white-space: nowrap;
-  /* match the greeting's look (size unchanged) */
+  /* quiet kicker — matches .greeting-lead: light shadow, no outline stroke */
+  font-size: 0.85em;   /* a bit smaller than the role words; em keeps it subordinate at every breakpoint */
   font-style: italic;
   transform: skewX(-6deg);
-  text-shadow: 4px 4px 0 var(--p5-black);
-  -webkit-text-stroke: 1px var(--p5-black);
+  text-shadow: 2px 2px 0 var(--p5-black);
+  -webkit-text-stroke: 0;
 }
 
 /* counter the parent skew on the cursor is handled inside its own skew below */
@@ -244,28 +254,32 @@
 .colz a {
   width: 52px;
   height: 52px;
-  background-color: var(--p5-ink);
+  background-color: var(--p5-ink);     /* matches the Contact social tiles */
+  background-clip: padding-box;        /* clip bg inside the border so it can't fringe past the rotated edge */
   text-align: center;
-  line-height: 48px;
+  line-height: 46px;
   font-size: 24px;
   display: block;
   border-radius: 0;
   position: relative;
   overflow: hidden;
-  border: 3px solid var(--p5-paper);
+  border: 3px solid var(--p5-paper);   /* paper frame (was ink) */
   z-index: 1;
-  transform: rotate(-4deg);
-  transition: box-shadow 0.3s ease, transform 0.25s var(--ease-pop), background-color 0.3s ease;
+  transform: rotate(-3deg);
+  box-shadow: 3px 3px 0 var(--p5-blue-deep);   /* hard blue-deep offset like Contact */
+  transition: box-shadow 0.25s ease, transform 0.25s var(--ease-pop),
+    background-color 0.25s ease;
 }
 
 .colz a .icon {
   position: relative;
-  color: var(--p5-paper);
+  color: var(--p5-paper);              /* paper icon reads on the ink rest tile AND every hover fill */
   transition: transform 0.5s var(--ease-snap);
   z-index: 3;
 }
-.colz a:hover .icon { transform: rotateY(360deg); }
+.colz a:hover .icon { transform: rotateY(360deg); }   /* spin preserved */
 
+/* brand color slides in from the left on hover (signature colors kept) */
 .colz a::before {
   content: "";
   position: absolute;
@@ -274,15 +288,30 @@
   width: 100%;
   height: 100%;
   z-index: 2;
-  background-color: var(--p5-blue);
+  background-color: var(--p5-blue);    /* fallback; overridden per button below */
   transition: left 0.25s var(--ease-slam);
 }
 .colz a:hover::before { left: 0; }
 
+/* per-brand hover fills */
+.colz .one a::before   { background-color: #ea4335; }         /* Gmail red */
+.colz .two a::before   { background-color: #0a66c2; }         /* LinkedIn blue */
+.colz .three a::before { background-color: var(--p5-black); } /* GitHub black */
+
+/* straighten + lift like the Contact tiles, with the hard blue-deep offset */
 .colz a:hover {
-  transform: rotate(0deg) translateY(-4px);
-  box-shadow: 5px 5px 0 var(--p5-blue), 0 0 18px rgba(31, 143, 255, 0.55);
+  transform: rotate(0deg) translateY(-3px);
+  box-shadow: 5px 5px 0 var(--p5-blue-deep);
 }
+
+/* keyboard focus mirrors hover (tile straightens + lifts) plus a crisp ring */
+.colz a:focus-visible {
+  transform: rotate(0deg) translateY(-3px);
+  box-shadow: 5px 5px 0 var(--p5-blue-deep);
+  outline: 3px solid var(--p5-blue-bright);
+  outline-offset: 3px;
+}
+.colz a:focus-visible::before { left: 0; }
 
 /* ---------- CTA ---------- */
 
@@ -301,20 +330,7 @@
   justify-content: center;
   align-items: center;
   position: relative;
-  transform: rotate(-15deg);   /* tilt the whole portrait unit counterclockwise */
-  transition: transform 0.4s var(--ease-pop);
-  cursor: pointer;
-}
-/* once revealed (Persona mode), the portrait snaps upright + pops forward */
-.profile-image-container.revealed { transform: rotate(0deg) scale(1.04); }
-/* a quick shake on the actual toggle moment (added/removed by JS, see JSX) */
-.profile-image-container.summoning { animation: summonShake 0.45s var(--ease-slam); }
-@keyframes summonShake {
-  0%   { transform: rotate(-15deg) scale(1); }
-  25%  { transform: rotate(6deg) scale(1.08); }
-  50%  { transform: rotate(-4deg) scale(1.05); }
-  75%  { transform: rotate(2deg) scale(1.06); }
-  100% { transform: rotate(0deg) scale(1.04); }
+  transform: rotate(-5deg);   /* gentle 5° tilt — static */
 }
 
 .profile-image {
@@ -324,6 +340,18 @@
   animation: slamInRight 0.7s var(--ease-slam) both;
 }
 
+/* hard P5 offset shadow + glow, drawn behind the card so it never flips */
+.profile-image::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: var(--p5-black);
+  transform: translate(10px, 10px);
+  box-shadow: 0 0 28px rgba(31, 143, 255, 0.35);
+  transition: transform 0.3s var(--ease-slam), box-shadow 0.3s ease;
+  pointer-events: none;
+}
 /* soft pulse aura behind the portrait */
 .profile-image::before {
   content: "";
@@ -346,207 +374,29 @@
   pointer-events: none;
   transition: opacity 0.3s ease;
 }
-.profile-image-container.revealed .profile-image::before { opacity: 1; }
 
-/* speed-line burst behind the frame — fires on the summon */
-.profile-image::after {
-  content: "";
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  width: 160%;
-  height: 160%;
-  z-index: -1;
-  transform: translate(-50%, -50%) scale(0.6);
-  background: repeating-conic-gradient(from 0deg at 50% 50%,
-    rgba(31, 143, 255, 0.6) 0deg 1.4deg, transparent 1.4deg 6deg);
-  -webkit-mask: radial-gradient(circle, transparent 30%, #000 44%, transparent 76%);
-          mask: radial-gradient(circle, transparent 30%, #000 44%, transparent 76%);
-  opacity: 0;
-  pointer-events: none;
-}
-.profile-image-container.summoning .profile-image::after {
-  animation: raysPop 0.55s var(--ease-pop);
-}
-@keyframes raysPop {
-  0%   { opacity: 0;   transform: translate(-50%, -50%) scale(0.5) rotate(-10deg); }
-  55%  { opacity: 0.9; transform: translate(-50%, -50%) scale(1.08) rotate(5deg); }
-  100% { opacity: 0;   transform: translate(-50%, -50%) scale(1.2) rotate(0deg); }
-}
-
+/* portrait holder */
 .image-wrapper {
-  position: relative;
+  position: absolute;
+  inset: 0;
   z-index: 2;
   width: 100%;
   height: 100%;
-  overflow: hidden;
-  background-color: #000;
-  clip-path: polygon(14% 0, 100% 0, 100% 86%, 86% 100%, 0 100%, 0 14%);
-  border: 4px solid var(--p5-blue);
-  box-shadow: 12px 12px 0 var(--p5-black), 0 0 28px rgba(31, 143, 255, 0.35);
-  transition: box-shadow 0.35s var(--ease-slam), border-color 0.25s ease;
-}
-.profile-image-container.revealed .image-wrapper {
-  border-color: var(--p5-blue-bright);
-  box-shadow: 16px 16px 0 var(--p5-black), 0 0 55px rgba(31, 143, 255, 0.85);
 }
 
-/* base photo (Home.png) — BURNS AWAY from the bottom-left on reveal */
+/* the portrait — angular Persona frame */
 .profile-picture {
   position: absolute;
   inset: 0;
   width: 100%;
   height: 100%;
+  background-size: cover;
+  background-position: center;
+  border: 4px solid var(--p5-blue);
+  box-shadow: inset 0 0 0 2px var(--p5-black);
+  background-color: #000;
   background-image: url("../../assets/Home.png");
-  background-size: cover;
-  background-position: center;
   filter: contrast(1.05) saturate(1.05);
-  z-index: 2;
-  /* fully visible at rest; the burn eats the base from the BOTTOM-LEFT upward.
-     Gradient: transparent toward bottom-left, opaque toward top-right. */
-  -webkit-mask: linear-gradient(228deg,
-    transparent 0%, transparent 45%, #000 68%, #000 100%);
-          mask: linear-gradient(228deg,
-    transparent 0%, transparent 45%, #000 68%, #000 100%);
-  -webkit-mask-size: 360% 360%;
-          mask-size: 360% 360%;
-  -webkit-mask-position: 0% 100%;   /* burn not started — full image shown */
-          mask-position: 0% 100%;
-  transition: -webkit-mask-position 1.15s linear, mask-position 1.15s linear;
-}
-/* revealed: slide the transparent band fully across (BL → TR) → base burned off */
-.profile-image-container.revealed .profile-picture {
-  -webkit-mask-position: 200% -100%;
-          mask-position: 200% -100%;
-}
-
-/* PERSONA layer (Home-Persona.png) sits UNDER the burning base and is uncovered
-   as the base burns away. Requires <div class="profile-picture-persona">. */
-.profile-picture-persona {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  background-image: url("../../assets/Home-Persona.png");
-  background-size: cover;
-  background-position: center;
-  z-index: 1;            /* beneath the base */
-  pointer-events: none;
-}
-
-/* ---- THE FLAME ---- a stack of flickering blue tongues riding the burn edge,
-   roughened by an SVG turbulence filter for organic, intricate licking shapes.
-   It travels along the same diagonal as the burn mask. */
-.profile-flame {
-  position: absolute;
-  left: -55%;
-  bottom: -55%;
-  width: 150%;
-  height: 150%;
-  z-index: 4;
-  pointer-events: none;
-  opacity: 0;
-  /* multiple radial "tongues" of blue fire, layered hot-core → cool tips */
-  background:
-    radial-gradient(60% 80% at 30% 100%, rgba(180,225,255,0.95) 0%, rgba(92,176,255,0.6) 30%, transparent 62%),
-    radial-gradient(45% 90% at 50% 100%, rgba(255,255,255,0.9) 0%, rgba(120,200,255,0.55) 28%, transparent 60%),
-    radial-gradient(55% 75% at 68% 100%, rgba(31,143,255,0.85) 0%, rgba(31,143,255,0.4) 34%, transparent 64%),
-    radial-gradient(80% 60% at 50% 100%, rgba(10,63,158,0.8) 0%, rgba(10,63,158,0.25) 45%, transparent 72%);
-  /* the turbulence filter (defined in JSX SVG) carves flame-like edges */
-  filter: url(#flameTurb) blur(0.4px) drop-shadow(0 0 18px rgba(31,143,255,0.8));
-  mix-blend-mode: screen;
-  transform: rotate(42deg);   /* aim the tongues up-and-right along the burn line */
-  transform-origin: 30% 100%;
-}
-/* during the burn: flame ignites, sweeps diagonally bottom-left → top-right, fades */
-.profile-image-container.summoning .profile-flame {
-  animation: flameSweep 1.25s ease-in forwards, flameFlicker 0.12s steps(2) infinite;
-}
-/* sweep the flame across the frame */
-@keyframes flameSweep {
-  0%   { opacity: 0;    transform: rotate(42deg) translate(-30%, 40%) scale(0.65); }
-  12%  { opacity: 1; }
-  85%  { opacity: 1;    transform: rotate(42deg) translate(60%, -90%) scale(1.15); }
-  100% { opacity: 0;    transform: rotate(42deg) translate(80%, -120%) scale(1.2); }
-}
-/* rapid flicker = the turbulence seed shifting feel, via tiny scale/skew jitter */
-@keyframes flameFlicker {
-  0%   { filter: url(#flameTurb) blur(0.4px) drop-shadow(0 0 16px rgba(31,143,255,0.8)); }
-  100% { filter: url(#flameTurb2) blur(0.6px) drop-shadow(0 0 22px rgba(120,200,255,0.9)); }
-}
-
-/* a bright EMBER LINE that glows right at the burn edge as it travels */
-.profile-flame::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(42deg,
-    transparent 38%, rgba(255,255,255,0.9) 47%, rgba(120,200,255,0.9) 50%, transparent 60%);
-  mix-blend-mode: screen;
-  filter: blur(2px);
-}
-
-/* soft full-frame ignition flash when the burn fires */
-.image-wrapper::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  z-index: 5;
-  background: radial-gradient(circle at 25% 85%,
-    rgba(120,200,255,0.9), rgba(31,143,255,0.3) 45%, transparent 70%);
-  opacity: 0;
-  pointer-events: none;
-}
-.profile-image-container.summoning .image-wrapper::after {
-  animation: igniteFlash 1.1s ease-out;
-}
-@keyframes igniteFlash {
-  0%   { opacity: 0; }
-  15%  { opacity: 0.7; }
-  60%  { opacity: 0.25; }
-  100% { opacity: 0; }
-}
-
-/* ---- subtle click affordance: a small ember dot + faint label, low-key ---- */
-.persona-hint {
-  position: absolute;
-  bottom: 10px;
-  right: 8px;
-  z-index: 6;
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  padding: 4px 9px;
-  font-family: var(--font-ui, sans-serif);
-  font-size: 10px;
-  letter-spacing: 2px;
-  text-transform: uppercase;
-  color: rgba(238, 243, 251, 0.7);
-  background: rgba(11, 13, 20, 0.45);
-  backdrop-filter: blur(2px);
-  border: 1px solid rgba(92, 176, 255, 0.5);
-  pointer-events: none;
-  opacity: 0.7;
-  transition: opacity 0.3s ease, transform 0.3s ease;
-}
-/* a tiny pulsing blue ember as the "interactive" cue */
-.persona-hint::before {
-  content: "";
-  width: 6px;
-  height: 6px;
-  border-radius: 50%;
-  background: var(--p5-blue-bright);
-  box-shadow: 0 0 6px var(--p5-blue-bright);
-  animation: emberPulse 1.6s ease-in-out infinite;
-}
-@keyframes emberPulse {
-  0%, 100% { opacity: 0.4; transform: scale(0.8); }
-  50%      { opacity: 1;   transform: scale(1.25); }
-}
-/* retire the hint once revealed */
-.profile-image-container.revealed .persona-hint {
-  opacity: 0;
-  transform: translateY(4px);
 }
 
 /* second, slower breathing layer for subtle depth (no rotation) */
@@ -667,6 +517,19 @@
   transform: skewX(-5deg) translateX(0) scale(1);
 }
 
+/* keyboard focus for the CTAs: reveal the cursor like hover + a clear ring */
+.btn:focus-visible {
+  outline: 3px solid var(--p5-blue-bright);
+  outline-offset: 4px;
+}
+.btn-arrow:not(.contact-btn):focus-visible::after,
+.btn-chat:focus-visible::after {
+  width: 13px;
+  margin-right: 10px;
+  opacity: 1;
+  transform: skewX(-5deg) translateX(0) scale(1);
+}
+
 /* =========================================================
    ENTRANCE KEYFRAMES
    ========================================================= */
@@ -710,6 +573,7 @@
 @media screen and (max-width: 550px) {
   .profile-image { width: 280px; height: 280px; }
   .greeting h1 { font-size: 36px; }
+  .greeting-lead { font-size: 22px; }
   .role-container { font-size: 26px; height: 68px; flex-wrap: wrap; }
   .slider, .role { height: 68px; }
   .role-text::after { width: 20px; height: 26px; margin: 0 10px 0 12px; }
@@ -721,4 +585,23 @@
   }
   .tagline { font-size: 16px; margin: 20px 0; }
   .profile-container { padding: 0 20px; }
+}
+
+
+/* =========================================================
+   REDUCED MOTION — honor the OS "reduce motion" preference:
+   kill the infinite loops + entrance slams, keep states usable
+   ========================================================= */
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+  /* slider rests on the first role; keep the scroll chevrons visible
+     since their cascade loop is now stopped */
+  .scroll-arrows span { opacity: 1; }
 }

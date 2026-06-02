@@ -5,8 +5,7 @@
 .projects-section {
   min-height: 100vh;
   padding: 40px 20px;
-  background-color: var(--p5-ink);
-  background-image: linear-gradient(135deg, #07090f 0%, #0a1426 50%, #07090f 100%);
+  background: transparent;
 }
 
 .projects-container { max-width: 1400px; margin: 0 auto; }
@@ -17,12 +16,11 @@
   position: relative;
   width: fit-content;
   margin: 4px auto 46px;
-  display: inline-flex;
+  display: flex;            /* block-level flex so margin-inline:auto centers it */
   align-items: center;
   gap: 14px;
   padding: 12px 26px 12px 16px;
 
-  /* black card, white trim, blue drop = a tossed calling card */
   background: var(--p5-black);
   border: 2px solid var(--p5-paper);
   transform: rotate(-2.5deg);
@@ -30,8 +28,6 @@
   cursor: default;
   transition: transform 0.22s var(--ease-pop), box-shadow 0.22s ease;
 }
-
-/* small "speed-line" accent across the card corner */
 .featured-note::after {
   content: "";
   position: absolute;
@@ -41,13 +37,11 @@
   );
   pointer-events: none;
 }
-
 .featured-note:hover {
   transform: rotate(-2.5deg) translateY(-3px) scale(1.02);
   box-shadow: 10px 10px 0 var(--p5-blue-deep);
 }
 
-/* the star: a blue stamp identical in spirit to the card badges */
 .featured-icon {
   position: relative;
   display: flex;
@@ -61,15 +55,21 @@
   transform: rotate(-8deg);
   box-shadow: 2px 2px 0 rgba(0, 0, 0, 0.6);
 }
-
+.featured-icon::before {
+  content: "";
+  position: absolute;
+  inset: 3px;
+  border: 1.5px solid rgba(255, 255, 255, 0.55);
+  pointer-events: none;
+}
 .featured-icon .featured-star,
 .featured-icon .fa-star {
-  color: var(--p5-paper);
+  position: relative;
+  z-index: 1;
+  color: #fff;
   font-size: 18px;
-  animation: twinkle 2s ease-in-out infinite;
+  animation: twinkle 1.3s ease-in-out infinite;
 }
-
-/* the old question-mark gimmick is retired */
 .question-mark { display: none; }
 
 .featured-text {
@@ -81,8 +81,6 @@
   color: var(--p5-paper);
   white-space: nowrap;
 }
-
-/* makes the legend read clearly: "[★] = NOTABLE PROJECT" */
 .featured-text::before {
   content: "= ";
   color: var(--p5-blue);
@@ -91,173 +89,274 @@
 
 @keyframes twinkle {
   0%, 100% { opacity: 1; transform: scale(1); }
-  50%      { opacity: 0.6; transform: scale(0.88); }
+  50%      { opacity: 0.75; transform: scale(0.9); }
 }
 
-/* ---------- Grid ---------- */
+/* ---------- Grid (uniform) ---------- */
 
 .projects-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
-  gap: 30px;
+  grid-template-columns: repeat(auto-fill, minmax(330px, 1fr));
+  gap: 32px;
   margin-top: 40px;
+  align-items: start;        /* respect each card's fixed ratio; no stretching */
 }
 
-/* ---------- Card (comic panel; compound beats generic .glass-card) ---------- */
+/* =====================================================================
+   CARD — uniform "poster". Fixed 4:5 ratio => every card is identical
+   size regardless of text length (a true uniform grid). Same panel
+   language as About/Resume: paper border + flat hard blue-deep offset,
+   square corners (no clip-path, so no notched "triangle" + clean shadow).
+   ===================================================================== */
 
 .project-card.glass-card,
 .project-card {
   position: relative;
-  overflow: hidden;
-  aspect-ratio: 1;
-  cursor: pointer;
+  aspect-ratio: 4 / 5;       /* uniform height across the whole grid */
+  overflow: hidden;          /* the thumbnail/overlay are clipped to the frame */
+  isolation: isolate;
 
-  background: var(--panel-bg);
-  border: 3px solid var(--p5-ink);
-  box-shadow: 0 0 0 2px var(--p5-blue), 8px 8px 0 var(--p5-black);
-  clip-path: polygon(0 0, 100% 0, 100% calc(100% - 24px), calc(100% - 24px) 100%, 0 100%);
-  transition: transform 0.25s var(--ease-pop), box-shadow 0.3s ease;
+  background: var(--p5-black);
+  border: 3px solid var(--p5-paper);
+  box-shadow: 8px 8px 0 var(--p5-blue-deep);
+  transition: transform 0.25s var(--ease-pop), box-shadow 0.25s var(--ease-pop);
 }
 
+/* NOTABLE: blue ring outside the paper border — matches badge + legend */
+.project-card.featured {
+  box-shadow: 0 0 0 3px var(--p5-blue), 8px 8px 0 var(--p5-blue-deep);
+}
 .project-card:hover {
-  transform: translate(-4px, -8px) rotate(-1deg);
-  box-shadow: 0 0 0 2px var(--p5-blue), 14px 16px 0 var(--p5-blue-deep);
+  transform: translate(-5px, -5px);
+  box-shadow: 13px 13px 0 var(--p5-blue-deep);
+}
+.project-card.featured:hover {
+  box-shadow: 0 0 0 3px var(--p5-blue), 13px 13px 0 var(--p5-blue-deep);
 }
 
-/* ---------- Featured badge (blue star chip) ---------- */
+/* ---------- Thumbnail (fills the card at rest) ---------- */
 
+.project-thumb {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  z-index: 1;
+  transition: transform 0.5s var(--ease-snap), filter 0.4s ease;
+}
+.project-card:hover .project-thumb {
+  transform: scale(1.07);
+  filter: contrast(1.08) saturate(1.05) brightness(0.96);
+}
+
+/* featured badge — blue stamp pinned to the corner */
 .featured-badge {
   position: absolute;
-  top: 18px;
-  right: 18px;
-  width: 50px;
-  height: 50px;
+  top: 14px;
+  right: 14px;
+  width: 46px;
+  height: 46px;
   background: var(--p5-blue);
   border: 3px solid var(--p5-paper);
-  border-radius: 0;
   transform: rotate(-8deg);
   display: flex;
   align-items: center;
   justify-content: center;
-  z-index: 10;
+  z-index: 3;
   box-shadow: 3px 3px 0 var(--p5-black);
   animation: badgePulse 2s ease-in-out infinite;
   transition: opacity 0.3s ease, transform 0.3s var(--ease-pop);
 }
-.featured-badge i { color: var(--p5-paper); font-size: 22px; }
-
-@keyframes badgePulse {
-  0%, 100% { transform: rotate(-8deg) scale(1); }
-  50%      { transform: rotate(-8deg) scale(1.12); }
-}
-
-/* ---------- Image ---------- */
-
-.project-image { width: 100%; height: 100%; position: relative; overflow: hidden; }
-
-.project-image img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  transition: transform 0.4s var(--ease-snap), filter 0.4s ease;
-}
-.project-card:hover .project-image img {
-  transform: scale(1.12);
-  filter: grayscale(0.15) contrast(1.1);
+.featured-badge i { color: var(--p5-paper); font-size: 20px; position: relative; z-index: 1; }
+.featured-badge::before {
+  content: "";
+  position: absolute;
+  inset: 3px;
+  border: 1.5px solid rgba(255, 255, 255, 0.55);
+  pointer-events: none;
 }
 .project-card:hover .featured-badge {
   opacity: 0;
   transform: rotate(-8deg) scale(0.8);
-  pointer-events: none;
 }
 
-/* ---------- Overlay (blue/ink wash slams in) ---------- */
+@keyframes badgePulse {
+  0%, 100% { transform: rotate(-8deg) scale(1); }
+  50%      { transform: rotate(-8deg) scale(1.1); }
+}
+
+/* shared display name (caption + overlay) */
+.project-name {
+  font-family: var(--font-display);
+  font-style: italic;
+  font-weight: 700;
+  font-size: 22px;
+  letter-spacing: 1.4px;     /* the condensed display face reads squished tighter */
+  text-transform: uppercase;
+  color: var(--p5-paper);
+  margin: 0;
+  -webkit-text-stroke: 0.6px var(--p5-black);
+  paint-order: stroke fill;
+  text-shadow: 2px 2px 0 var(--p5-black);
+}
+
+/* ---------- Resting caption — name + tech over the thumbnail ---------- */
+
+.project-caption {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 2;
+  padding: 54px 18px 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 11px;
+  background: linear-gradient(
+    to top,
+    rgba(5, 6, 8, 0.97) 0%,
+    rgba(5, 6, 8, 0.78) 45%,
+    rgba(5, 6, 8, 0) 100%
+  );
+  transition: opacity 0.3s ease, transform 0.35s var(--ease-pop);
+}
+/* the caption's name carries a blue heading bar (site heading idiom) */
+.project-caption .project-name {
+  padding-left: 11px;
+  border-left: 5px solid var(--p5-blue);
+}
+/* clears out as the overlay takes over */
+.project-card:hover .project-caption {
+  opacity: 0;
+  transform: translateY(14px);
+}
+
+/* tech chips — clean rectangles (no notch) */
+.project-tech {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+.tech-chip {
+  font-family: var(--font-ui);
+  font-size: 10.5px;
+  font-weight: 600;
+  letter-spacing: 0.4px;
+  text-transform: uppercase;
+  color: var(--p5-paper);
+  background: rgba(31, 143, 255, 0.2);
+  border: 1.5px solid rgba(31, 143, 255, 0.55);
+  padding: 3px 8px;
+  /* bottom-right angular cut — same idiom as the Resume coursework chips */
+  clip-path: polygon(0 0, 100% 0, 100% calc(100% - 5px), calc(100% - 5px) 100%, 0 100%);
+  transition: background 0.2s ease, border-color 0.2s ease, transform 0.2s var(--ease-pop);
+}
+.tech-chip:hover {
+  background: rgba(31, 143, 255, 0.34);
+  border-color: var(--p5-blue);
+  transform: translateY(-2px);
+}
+
+/* =====================================================================
+   HOVER OVERLAY — full description + actions. Slams in like a P5 menu.
+   Direction CYCLES per card (left / bottom / right) via :nth-child so the
+   grid reveals with rhythm instead of one uniform motion.
+   ===================================================================== */
 
 .project-overlay {
   position: absolute;
   inset: 0;
-  background: linear-gradient(150deg, rgba(10, 63, 158, 0.94), rgba(5, 6, 8, 0.97));
+  z-index: 4;
   display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 28px;
+  background: linear-gradient(150deg, rgba(10, 63, 158, 0.97), rgba(5, 6, 8, 0.99));
   opacity: 0;
-  transition: opacity 0.3s var(--ease-slam);
+  /* default = slam from the LEFT with a diagonal skew (P5 wipe) */
+  transform: translateX(-101%) skewX(-7deg);
+  transition: transform 0.42s var(--ease-slam), opacity 0.2s ease;
 }
-.project-card:hover .project-overlay { opacity: 1; }
-
-.project-info {
-  text-align: center;
-  transform: translateY(24px) skewX(-4deg);
-  transition: transform 0.35s var(--ease-pop);
+.project-overlay-inner {
+  margin: auto;              /* centers when it fits; fills toward edges if long */
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  text-align: left;
+  gap: 13px;
+  padding: 26px;
 }
-.project-card:hover .project-info { transform: translateY(0) skewX(0); }
-
-.project-info h3 {
-  font-family: var(--font-display);
-  font-size: 26px;
-  letter-spacing: 1px;
-  text-transform: uppercase;
-  color: var(--p5-paper);
-  margin-bottom: 10px;
-  text-shadow: 2px 2px 0 var(--p5-black);
+.project-card:hover .project-overlay {
+  opacity: 1;
+  transform: translateX(0) skewX(0);
 }
 
-/* notched comic flag */
-.project-tech {
-  font-family: var(--font-ui);
-  font-size: 12px;
-  font-weight: 600;
-  letter-spacing: 1px;
-  text-transform: uppercase;
-  color: var(--p5-paper);
-  background: var(--p5-blue);
-  display: inline-block;
-  padding: 4px 14px;
-  margin-bottom: 14px;
-  transform: skewX(-8deg);
-  box-shadow: 2px 2px 0 var(--p5-black);
+/* per-card direction cycle */
+.project-card:nth-child(3n + 2) .project-overlay {
+  transform: translateY(101%) skewX(0);          /* slam UP from the bottom */
+}
+.project-card:nth-child(3n) .project-overlay {
+  transform: translateX(101%) skewX(7deg);       /* slam in from the RIGHT */
+}
+.project-card:nth-child(3n + 2):hover .project-overlay,
+.project-card:nth-child(3n):hover .project-overlay {
+  transform: translate(0) skewX(0);
 }
 
+/* inner content gives a small staggered settle as the panel lands */
+.project-overlay-inner > * {
+  opacity: 0;
+  transform: translateY(8px);
+  transition: opacity 0.28s ease, transform 0.28s var(--ease-pop);
+}
+.project-card:hover .project-overlay-inner > * {
+  opacity: 1;
+  transform: translateY(0);
+}
+.project-card:hover .project-overlay-inner .project-name { transition-delay: 0.1s; }
+.project-card:hover .project-overlay-inner .project-tech { transition-delay: 0.15s; }
+.project-card:hover .project-overlay-inner .project-description { transition-delay: 0.2s; }
+/* the action buttons are present from the start — they travel in WITH the
+   panel slam rather than fading in afterward (overrides the stagger above) */
+.project-overlay-inner .project-links {
+  opacity: 1;
+  transform: none;
+  transition: none;
+}
+
+/* full description — no clamp, no scroll; sized to fit the fixed card */
 .project-description {
   font-family: var(--font-body);
-  font-size: 13.5px;
-  line-height: 1.6;
+  font-size: 13px;
+  line-height: 1.55;
   color: var(--p5-paper);
-  margin-bottom: 20px;
-  display: -webkit-box;
-  -webkit-line-clamp: 5;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
+  margin: 0;
 }
 
-/* ---------- Links ---------- */
+/* ---------- Links (icon tiles expand to labels on hover) ---------- */
 
 .project-links {
   display: flex;
-  gap: 14px;
-  justify-content: center;
+  gap: 12px;
+  justify-content: flex-start;
   flex-wrap: wrap;
+  margin-top: 4px;
 }
-
 .project-link {
   position: relative;
   overflow: hidden;
-  height: 50px;
-  min-width: 50px;
+  height: 46px;
+  min-width: 46px;
   padding: 0;
   display: inline-flex;
   align-items: center;
   justify-content: center;
 
-  border-radius: 0;
   border: 3px solid var(--p5-paper);
   background-color: var(--p5-ink);
-
   color: var(--p5-paper);
   text-decoration: none;
   font-family: var(--font-ui);
-  font-size: 13px;
+  font-size: 12px;
   font-weight: 600;
   letter-spacing: 1px;
   text-transform: uppercase;
@@ -266,9 +365,8 @@
   transition: padding 0.35s var(--ease-slam), box-shadow 0.3s ease,
     transform 0.3s var(--ease-pop), background-color 0.3s ease;
 }
-
 .project-link i {
-  font-size: 24px;
+  font-size: 21px;
   line-height: 1;
   display: flex;
   align-items: center;
@@ -278,7 +376,6 @@
   transition: transform 0.5s var(--ease-snap);
 }
 .project-link:hover i { transform: rotateY(360deg); }
-
 .project-link span {
   max-width: 0;
   opacity: 0;
@@ -289,7 +386,6 @@
   z-index: 3;
   transition: max-width 0.35s var(--ease-slam), opacity 0.25s ease, margin-left 0.35s ease;
 }
-
 .project-link::before {
   content: "";
   position: absolute;
@@ -301,16 +397,18 @@
   background-color: var(--p5-blue);
   transition: left 0.3s var(--ease-slam);
 }
-
 .project-link:hover {
-  padding: 0 14px;
+  padding: 0 13px;
   transform: rotate(0deg) translateY(-3px);
   box-shadow: 4px 4px 0 var(--p5-blue-deep);
 }
 .project-link:hover::before { left: 0; }
-.project-link:hover span { max-width: 170px; opacity: 1; margin-left: 10px; }
+.project-link:hover span { max-width: 200px; opacity: 1; margin-left: 9px; }
+.project-link:focus-visible {
+  outline: 3px solid var(--p5-blue-bright);
+  outline-offset: 3px;
+}
 
-/* variants */
 .project-link.github-link::before { background-color: var(--p5-black); }
 .project-link.site-link::before,
 .project-link.demo-link::before { background-color: var(--p5-blue); }
@@ -318,11 +416,25 @@
 /* ---------- Responsive ---------- */
 
 @media screen and (max-width: 1200px) {
-  .projects-grid { grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); }
+  .projects-grid { grid-template-columns: repeat(auto-fill, minmax(310px, 1fr)); }
 }
 @media screen and (max-width: 768px) {
-  .projects-grid { grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 20px; }
+  .projects-grid { grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 22px; }
 }
 @media screen and (max-width: 640px) {
   .projects-grid { grid-template-columns: 1fr; }
+  .project-card.glass-card,
+  .project-card { aspect-ratio: 4 / 3; }   /* wider on phones: more room, less tall */
+}
+
+/* ---------- Reduced motion: no slam, just a clean fade ---------- */
+
+@media (prefers-reduced-motion: reduce) {
+  .project-overlay,
+  .project-card:nth-child(3n + 2) .project-overlay,
+  .project-card:nth-child(3n) .project-overlay {
+    transform: none;
+    transition: opacity 0.2s ease;
+  }
+  .project-overlay-inner > * { transform: none; }
 }
